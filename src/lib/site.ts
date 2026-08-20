@@ -11,8 +11,16 @@ export const SITE = {
   description:
     "Websites for South African small businesses, built by one person in days rather than months. AI speeds up the work — it does not do the work. Fixed price up front, from R5,500.",
 
-  /** The public-facing address. Set up as a forwarder to wherever you read mail. */
-  email: "hello@builtbyarealperson.com",
+  /**
+   * The address shown on the site and used as the reply-to.
+   *
+   * Env-driven on purpose: sending from a domain and RECEIVING at it are
+   * separate problems. Resend can send as hello@builtbyarealperson.com with no
+   * mailbox existing anywhere — but a `mailto:` to an address with no mailbox
+   * behind it bounces, and the bounce goes to the customer, not to us. So point
+   * this at an address that genuinely receives until the nice one does.
+   */
+  email: process.env.NEXT_PUBLIC_CONTACT_EMAIL || "hello@builtbyarealperson.com",
 
   /** Shown in the emails and on the booking step. Falls back to a mailto flow. */
   bookingUrl: process.env.NEXT_PUBLIC_BOOKING_URL || "",

@@ -62,6 +62,7 @@ deploy quietly lie to you.
 | `CRON_SECRET` | Yes | The follow-up route refuses to run rather than run unauthenticated. |
 | `FOLLOWUP_DELAY_MINUTES` | No | Defaults to 120. |
 | `NEXT_PUBLIC_BOOKING_URL` | No | The booking email falls back to asking the customer to reply with times. |
+| `NEXT_PUBLIC_CONTACT_EMAIL` | No | Falls back to `hello@builtbyarealperson.com`. Must be an address that actually **receives** — sending as an address and receiving at it are separate problems. |
 | `NEXT_PUBLIC_PHONE` | No | No phone number is shown anywhere. |
 
 ---
