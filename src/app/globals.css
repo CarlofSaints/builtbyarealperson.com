@@ -1,0 +1,161 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #05070b;
+  --color-ink-2: #090d14;
+  --color-surface: #0d131c;
+  --color-surface-2: #131b26;
+  --color-line: #1d2734;
+  --color-line-2: #2a3646;
+  --color-turq: #2ae8ce;
+  --color-turq-2: #16c4ad;
+  --color-pink: #ff5fa2;
+  --color-pink-2: #e0357f;
+  --color-text: #e9eff6;
+  --color-muted: #8ba0b8;
+  --color-muted-2: #5f7086;
+
+  --font-display: var(--font-bricolage), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --radius-xl2: 1.25rem;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background-color: var(--color-ink);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  /* `clip`, not `hidden`: `overflow-x: hidden` turns body into a scroll
+     container, which quietly breaks `position: sticky` on the header. */
+  overflow-x: clip;
+}
+
+::selection {
+  background: var(--color-turq);
+  color: #05070b;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ---- utilities ---- */
+
+.u-grad-text {
+  background: linear-gradient(100deg, var(--color-turq) 0%, #7de0d6 35%, var(--color-pink) 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.u-hairline {
+  border: 1px solid var(--color-line);
+}
+
+/* Soft ambient glow used behind hero + section anchors */
+.u-glow::before {
+  content: "";
+  position: absolute;
+  inset: -20% -10% auto -10%;
+  height: 60%;
+  background:
+    radial-gradient(55% 60% at 20% 30%, rgba(42, 232, 206, 0.16) 0%, transparent 70%),
+    radial-gradient(45% 55% at 80% 20%, rgba(255, 95, 162, 0.14) 0%, transparent 70%);
+  filter: blur(20px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Subtle dot grid */
+.u-grid {
+  background-image: radial-gradient(rgba(139, 160, 184, 0.12) 1px, transparent 1px);
+  background-size: 28px 28px;
+  mask-image: linear-gradient(180deg, rgba(0,0,0,0.9), transparent 78%);
+  -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,0.9), transparent 78%);
+}
+
+/* Gradient-bordered card */
+.u-card {
+  position: relative;
+  background: linear-gradient(180deg, rgba(19, 27, 38, 0.9) 0%, rgba(13, 19, 28, 0.9) 100%);
+  border: 1px solid var(--color-line);
+  border-radius: 1.25rem;
+}
+.u-card-lift {
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 220ms ease, box-shadow 220ms ease;
+}
+.u-card-lift:hover {
+  transform: translateY(-3px);
+  border-color: var(--color-line-2);
+  box-shadow: 0 18px 50px -24px rgba(42, 232, 206, 0.35);
+}
+
+/* Focus ring, consistent everywhere */
+.u-focus:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+button:focus-visible,
+a:focus-visible {
+  outline: 2px solid var(--color-turq);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Reveal-on-scroll.
+   Starts hidden and is revealed by the Reveal component. A <noscript> block in
+   the document head overrides this for anyone without JS, so a crawler or a
+   blocked script never gets a blank page. */
+.u-reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 600ms ease, transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.u-reveal.is-in {
+  opacity: 1;
+  transform: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .u-reveal { opacity: 1; transform: none; }
+}
+
+/* number tick animation for the live total */
+@keyframes u-pop {
+  0% { transform: scale(1); }
+  40% { transform: scale(1.045); }
+  100% { transform: scale(1); }
+}
+.u-pop { animation: u-pop 320ms cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+/* Marquee for the trust strip */
+@keyframes u-marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.u-marquee { animation: u-marquee 38s linear infinite; }
+.u-marquee-mask {
+  mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent);
+}
+
+/* Custom scrollbar */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-line-2) transparent;
+}
