@@ -58,7 +58,7 @@ deploy quietly lie to you.
 | `RESEND_API_KEY` | Yes | No email goes out at all. |
 | `EMAIL_FROM` | Yes | Sends are rejected unless the domain matches the one verified in Resend, exactly. |
 | `NOTIFY_EMAIL` | Yes | You never hear about a submission. |
-| `BLOB_READ_WRITE_TOKEN` | Yes | Leads are not stored and the follow-up cron has nothing to work from. |
+| `BLOB_STORE_ID` *or* `BLOB_READ_WRITE_TOKEN` | Yes | Leads are not stored and the follow-up cron has nothing to work from. Connecting the store sets `BLOB_STORE_ID` and authenticates via OIDC; the static token is only needed off-Vercel. |
 | `CRON_SECRET` | Yes | The follow-up route refuses to run rather than run unauthenticated. |
 | `FOLLOWUP_DELAY_MINUTES` | No | Defaults to 120. |
 | `NEXT_PUBLIC_BOOKING_URL` | No | The booking email falls back to asking the customer to reply with times. |

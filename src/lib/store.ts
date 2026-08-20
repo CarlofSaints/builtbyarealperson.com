@@ -52,8 +52,19 @@ function pathFor(reference: string): string {
   return `${PREFIX}${reference}.json`;
 }
 
+/**
+ * There are two ways a connected store authenticates, and checking for only one
+ * of them would mean leads silently stop being stored.
+ *
+ *  - OIDC (the default when you connect a store to a project): the SDK uses
+ *    `BLOB_STORE_ID` together with a short-lived `VERCEL_OIDC_TOKEN` that Vercel
+ *    rotates on every deployment.
+ *  - `BLOB_READ_WRITE_TOKEN`: a long-lived static token, used off-Vercel.
+ *
+ * Either one is enough, so accept either.
+ */
 export function isBlobConfigured(): boolean {
-  return Boolean(process.env.BLOB_READ_WRITE_TOKEN);
+  return Boolean(process.env.BLOB_READ_WRITE_TOKEN || process.env.BLOB_STORE_ID);
 }
 
 export function toStoredEstimate(estimate: Estimate): LeadRecord["estimate"] {

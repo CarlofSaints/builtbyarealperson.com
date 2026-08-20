@@ -43,3 +43,6 @@ next-env.d.ts
 
 # ...but the template, which holds no secrets, must be committed.
 !.env.example
+
+.vercel
+.env*

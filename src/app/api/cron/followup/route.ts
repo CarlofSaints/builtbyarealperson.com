@@ -55,7 +55,7 @@ export async function GET(request: Request) {
   }
 
   if (!isBlobConfigured()) {
-    console.error(JSON.stringify({ event: "cron.followup.misconfigured", message: "BLOB_READ_WRITE_TOKEN missing" }));
+    console.error(JSON.stringify({ event: "cron.followup.misconfigured", message: "No blob credentials: neither BLOB_STORE_ID (OIDC) nor BLOB_READ_WRITE_TOKEN is set" }));
     return NextResponse.json({ ok: false, error: "Blob storage is not configured." }, { status: 500 });
   }
 

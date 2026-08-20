@@ -177,7 +177,7 @@ export async function POST(request: Request) {
         warnings.push(`blob save: ${err instanceof Error ? err.message : String(err)}`);
       }
     } else {
-      warnings.push("blob save: BLOB_READ_WRITE_TOKEN is not set");
+      warnings.push("blob save: no credentials — neither BLOB_STORE_ID (OIDC) nor BLOB_READ_WRITE_TOKEN is set");
     }
 
     // Every run leaves a trace, whether it worked or not. A submission that
