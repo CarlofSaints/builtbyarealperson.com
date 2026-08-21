@@ -3,7 +3,7 @@
  *
  * Two messages go to the customer, staged rather than fired all at once:
  *   1. Immediately — confirmation with the PDF estimate attached.
- *   2. A couple of hours later — the booking request for the 45-minute call.
+ *   2. A couple of hours later — the booking request for the 30-minute call.
  * A third goes to the owner immediately, with the same PDF.
  *
  * Every send returns its provider message id so a lead record can carry proof
@@ -151,7 +151,7 @@ ${rows}
 </td></tr>
 </table>
 
-<p style="margin:0 0 18px;"><strong style="color:${INK};">What happens next.</strong> I read every one of these myself &mdash; there is no team here and no queue. I will be in touch shortly with a link to book a 45-minute Teams call, where we work out what the site actually needs to do for ${esc(answers.business.trim() || "your business")}. You get a fixed written quote after that.</p>
+<p style="margin:0 0 18px;"><strong style="color:${INK};">What happens next.</strong> I read every one of these myself &mdash; there is no team here and no queue. I will be in touch shortly with a link to book a 30-minute Teams call, where we work out what the site actually needs to do for ${esc(answers.business.trim() || "your business")}. You get a fixed written quote after that.</p>
 
 <p style="margin:0 0 18px;">Nothing is owed and no deposit is taken until you have accepted that quote in writing.</p>
 
@@ -210,7 +210,7 @@ the form. The fixed quote comes after we have spoken, and it will land within
 ${Math.round(ACCURACY_BAND * 100)}% of the number above.
 
 What happens next: I read every one of these myself. I will be in touch shortly
-with a link to book a 45-minute Teams call. You get a fixed written quote after
+with a link to book a 30-minute Teams call. You get a fixed written quote after
 that. Nothing is owed until you accept it.
 
 If anything is wrong, just reply and I will redo it.
@@ -249,7 +249,7 @@ export async function sendBookingRequest(args: {
 
 <p style="margin:0 0 18px;">I have been through your answers for ${esc(answers.business.trim() || "your business")} properly. The estimate I sent &mdash; <strong style="color:${INK};">${esc(formatMoney(estimate.total))}</strong> &mdash; still looks about right, and I have a few thoughts on where it could come down.</p>
 
-<p style="margin:0 0 18px;">The next step is a <strong style="color:${INK};">45-minute Teams call</strong>. It is not a sales pitch. It is the conversation where I find out what your business actually does, who buys from you, and what has to happen on this website for it to have been worth the money. I come out of it able to give you a fixed quote instead of an estimate.</p>
+<p style="margin:0 0 18px;">The next step is a <strong style="color:${INK};">30-minute Teams call</strong>. It is not a sales pitch. It is the conversation where I find out what your business actually does, who buys from you, and what has to happen on this website for it to have been worth the money. I come out of it able to give you a fixed quote instead of an estimate.</p>
 
 ${cta}
 
@@ -276,9 +276,9 @@ ${cta}
       from: FROM,
       to: answers.email.trim(),
       replyTo: REPLY_TO,
-      subject: `Shall we put 45 minutes in the diary? (${reference})`,
+      subject: `Shall we put 30 minutes in the diary? (${reference})`,
       html: shell({
-        preheader: "The next step is a 45-minute Teams call to turn the estimate into a fixed quote.",
+        preheader: "The next step is a 30-minute Teams call to turn the estimate into a fixed quote.",
         heading: "Let us talk it through",
         body,
       }),
@@ -286,7 +286,7 @@ ${cta}
 
 I have been through your answers for ${answers.business.trim() || "your business"} properly. The estimate I sent - ${formatMoney(estimate.total)} - still looks about right.
 
-The next step is a 45-minute Teams call. Not a sales pitch: it is where I find out what your business actually does and what this website has to achieve. I come out of it able to give you a fixed quote instead of an estimate.
+The next step is a 30-minute Teams call. Not a sales pitch: it is where I find out what your business actually does and what this website has to achieve. I come out of it able to give you a fixed quote instead of an estimate.
 
 ${bookingUrl ? `Book a time that suits you: ${bookingUrl}` : "Reply with two or three times that suit you over the next week and I will send a Teams invitation."}
 

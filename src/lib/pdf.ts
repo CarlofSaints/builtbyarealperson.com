@@ -476,7 +476,7 @@ export async function buildEstimatePdf({
 
   const steps = [
     "I read your answers properly - a person, today, not a queue.",
-    "I send you a link to book a 45-minute Teams call at a time that suits you.",
+    "I send you a link to book a 30-minute Teams call at a time that suits you.",
     "On that call we work out what the site actually has to do for your business.",
     "You get a fixed written quote afterwards. That one is binding, and it will sit inside the range on this page.",
   ];

@@ -34,7 +34,7 @@ so the three can never disagree.
    - to you: the full answers + the same PDF.
 3. The lead is stored on Vercel Blob as one private JSON file.
 4. `GET /api/cron/followup` runs hourly. Roughly two hours after a submission it
-   sends the customer a second, shorter email asking them to book the 45-minute
+   sends the customer a second, shorter email asking them to book the 30-minute
    Teams call. Staged on purpose — three emails inside a minute reads as an
    automated sequence, which is exactly the impression this business exists to
    avoid.

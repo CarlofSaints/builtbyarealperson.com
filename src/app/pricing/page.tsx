@@ -260,7 +260,7 @@ export default function PricingPage() {
                     </p>
                   </div>
                   <p className="mt-2 text-[14.5px] leading-relaxed text-muted">
-                    Your estimate is not a quote. But after our 45-minute call I give you a
+                    Your estimate is not a quote. But after our 30-minute call I give you a
                     fixed quote, and it will land inside that band. If the work turns out
                     bigger than I judged, that is mine to absorb.
                   </p>

@@ -20,7 +20,7 @@ const NEXT = [
   },
   {
     title: "A booking link follows shortly",
-    body: "Later today you will get a second, shorter email with a link to book a 45-minute Teams call at a time that suits you. That call is where the estimate turns into a fixed quote.",
+    body: "Later today you will get a second, shorter email with a link to book a 30-minute Teams call at a time that suits you. That call is where the estimate turns into a fixed quote.",
   },
   {
     title: "Nothing is owed",

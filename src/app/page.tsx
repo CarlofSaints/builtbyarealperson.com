@@ -24,7 +24,7 @@ const STEPS = [
   },
   {
     n: "02",
-    title: "We talk for 45 minutes",
+    title: "We talk for 30 minutes",
     body:
       "A Teams call. I ask what your business actually does, who buys from you and what has to happen on the site for it to have been worth it. You get a fixed quote after this — no more estimating.",
     note: "Within a day or two",
@@ -65,7 +65,7 @@ const FAQ = [
   },
   {
     q: "How can you promise the final quote is within 20% of the estimate?",
-    a: "Because the estimator asks the questions that actually move the price: how many pages, whether you sell, what has to connect to what, and who owns the domain. After the 45-minute call I give you a fixed quote. If the work turns out bigger than that, the difference is mine to absorb, not yours to pay.",
+    a: "Because the estimator asks the questions that actually move the price: how many pages, whether you sell, what has to connect to what, and who owns the domain. After the 30-minute call I give you a fixed quote. If the work turns out bigger than that, the difference is mine to absorb, not yours to pay.",
   },
   {
     q: "What if I do not know what I want yet?",

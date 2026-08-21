@@ -1,5 +1,5 @@
 /**
- * The second customer email — the one that asks for 45 minutes.
+ * The second customer email — the one that asks for 30 minutes.
  *
  * It is deliberately not sent with the first. Three emails landing in a
  * stranger's inbox inside one minute reads as an automated sequence, which is
