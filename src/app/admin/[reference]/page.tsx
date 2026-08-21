@@ -3,7 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { isSignedIn } from "@/lib/admin-auth";
 import { isBlobConfigured, leadStatus, readLead } from "@/lib/store";
 import { toRow } from "@/lib/lead-view";
-import { LEAD_STATUSES, STATUS_META, statusIndex } from "@/lib/pipeline";
+import { PIPELINE_STATUSES, STATUS_META, pipelinePosition } from "@/lib/pipeline";
 import {
   BRAND_STATES,
   COPY_MODES,
@@ -17,6 +17,7 @@ import {
 } from "@/lib/rate-card";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { StatusSelect } from "@/components/admin/StatusSelect";
+import { DeleteLead } from "@/components/admin/DeleteLead";
 
 export const dynamic = "force-dynamic";
 
@@ -50,7 +51,8 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
   const row = toRow(lead, new Date());
   const status = leadStatus(lead);
   const a = lead.answers;
-  const position = statusIndex(status);
+  // null for Lost, which is an outcome rather than a place on the bar.
+  const position = pipelinePosition(status);
 
   return (
     <>
@@ -90,20 +92,23 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
             <StatusSelect reference={lead.reference} status={status} />
           </div>
 
-          {/* Progress through the nine stages. */}
+          {/* Progress through the nine forward stages. Lost has no place on it. */}
           <ol className="mt-5 flex gap-1" aria-label="Pipeline position">
-            {LEAD_STATUSES.map((id, index) => (
+            {PIPELINE_STATUSES.map((id, index) => (
               <li
                 key={id}
                 title={STATUS_META[id].label}
                 className={`h-1.5 flex-1 rounded-full ${
-                  index < position ? STATUS_META[status].dot : "bg-line"
+                  position !== null && index < position ? STATUS_META[status].dot : "bg-line"
                 }`}
               />
             ))}
           </ol>
           <p className="mt-2 text-xs text-muted-2">
-            Stage {position} of {LEAD_STATUSES.length} &middot; here since {when(row.statusChangedAt)}
+            {position === null
+              ? "Not in the pipeline"
+              : `Stage ${position} of ${PIPELINE_STATUSES.length}`}{" "}
+            &middot; here since {when(row.statusChangedAt)}
             {row.stale && <span className="ml-2 font-semibold text-amber-300">— overdue</span>}
           </p>
 
@@ -281,6 +286,25 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
             <Row label="Browser" value={lead.meta.userAgent || "—"} />
           </Panel>
         </div>
+
+        {/* Deleting is last on the page and visually separated on purpose: it is
+            the one control here that cannot be undone. */}
+        <section className="mt-6 rounded-xl2 border border-line bg-surface p-5">
+          <h2 className="font-display text-sm font-semibold uppercase tracking-wider text-muted-2">
+            Delete
+          </h2>
+          <p className="mb-4 mt-2 max-w-2xl text-sm leading-relaxed text-muted">
+            For test submissions and duplicates. A real enquiry that came to nothing belongs in{" "}
+            <strong className="text-text">Lost</strong> instead — it stays out of the open pipeline
+            but you keep the record of who asked and what for.
+          </p>
+          <DeleteLead
+            reference={lead.reference}
+            who={a.name || a.business}
+            variant="panel"
+            onDeleted="back-to-list"
+          />
+        </section>
       </main>
     </>
   );

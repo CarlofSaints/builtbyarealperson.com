@@ -8,7 +8,7 @@
  * Leads hold personal information, so every blob is private.
  */
 
-import { get, list, put } from "@vercel/blob";
+import { del, get, list, put } from "@vercel/blob";
 import type { Answers } from "./estimate";
 import type { Estimate } from "./estimate";
 import { DEFAULT_STATUS, isLeadStatus, type LeadStatus } from "./pipeline";
@@ -231,4 +231,22 @@ export async function listLeads(): Promise<LeadRecord[]> {
 
   leads.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
   return leads;
+}
+
+/**
+ * Permanently remove a lead.
+ *
+ * There is no trash and no undo: Vercel Blob deletes on request, and the lead is
+ * the only copy of what that person told us. The caller is responsible for being
+ * certain — the UI asks twice and shows the name and reference before it gets
+ * here.
+ *
+ * Returns the record that was deleted so the caller can log what went, which is
+ * the only trace left afterwards.
+ */
+export async function deleteLead(reference: string): Promise<LeadRecord | null> {
+  const existing = await readLead(reference);
+  if (!existing) return null;
+  await del(pathFor(reference));
+  return existing;
 }

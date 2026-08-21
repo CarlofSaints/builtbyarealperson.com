@@ -85,8 +85,14 @@ One operator, one password. Everything under `/admin` is behind it.
 ### Stages
 
 `src/lib/pipeline.ts` is the single source of truth for the stage list, in the
-same spirit as the rate card. Nine stages, Fresh Lead through Complete, each
-with the number of days it may sit there before the grid flags it as overdue.
+same spirit as the rate card. Nine forward stages, Fresh Lead through Complete,
+each with the number of days it may sit there before the grid flags it as
+overdue — plus **Lost**.
+
+Lost is deliberately not the tenth step. It is an outcome, so it has no place on
+the progress bar, never counts as "furthest along", and is never overdue. It is
+"closed" alongside Complete: out of the Open filter and out of the open pipeline
+value, but the record of who asked and what for is kept.
 
 A brand new lead has **no stored status at all**. That absence means "nothing
 has happened yet" and is rendered as Fresh Lead; writing the default in at
@@ -94,8 +100,19 @@ creation would make "never touched" and "moved back to Fresh Lead by hand"
 indistinguishable. Everything after Fresh Lead is set by hand — nothing in the
 funnel can currently prove a human conversation happened.
 
-There is deliberately **no Lost / Not proceeding stage yet**. Until there is,
-a dead lead has to be parked in Complete or left to sit.
+### Deleting
+
+A lead can be deleted from its row in the grid or from the bottom of its own
+page. It is **permanent** — Vercel Blob has no trash and the lead is the only
+copy of what that person told us. The confirmation is a modal `<dialog>` naming
+the customer and the reference, because the risk is deleting the wrong row.
+
+It is meant for test submissions and duplicates. A real enquiry that came to
+nothing belongs in **Lost**, which gets it out of the way without throwing away
+who asked and what for.
+
+What was deleted is written to the function logs as one `lead.deleted` line
+before it goes, since afterwards that line is the only trace it ever existed.
 
 ### Auth
 

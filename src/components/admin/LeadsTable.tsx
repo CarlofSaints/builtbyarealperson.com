@@ -3,8 +3,9 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import type { LeadRow } from "@/lib/lead-view";
-import { LEAD_STATUSES, STATUS_META, statusIndex, type LeadStatus } from "@/lib/pipeline";
+import { LEAD_STATUSES, STATUS_META, isClosed, statusIndex, type LeadStatus } from "@/lib/pipeline";
 import { StatusSelect } from "./StatusSelect";
+import { DeleteLead } from "./DeleteLead";
 
 type SortKey = "idle" | "arrived" | "stage" | "value" | "name";
 
@@ -81,14 +82,14 @@ export function LeadsTable({ rows }: { rows: LeadRow[] }) {
     return map;
   }, [rows]);
 
-  const openCount = rows.filter((r) => r.status !== "complete").length;
+  const openCount = rows.filter((r) => !isClosed(r.status)).length;
   const staleCount = rows.filter((r) => r.stale).length;
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
 
     const filtered = rows.filter((row) => {
-      if (filter === "open" && row.status === "complete") return false;
+      if (filter === "open" && isClosed(row.status)) return false;
       if (filter !== "all" && filter !== "open" && row.status !== filter) return false;
       if (!q) return true;
       return (
@@ -202,8 +203,8 @@ export function LeadsTable({ rows }: { rows: LeadRow[] }) {
                   <Th className="w-[135px]">Estimate</Th>
                   <Th>Wants</Th>
                   <Th className="w-[125px]">Arrived</Th>
-                  <Th className="w-[52px]">
-                    <span className="sr-only">Open</span>
+                  <Th className="w-[130px]">
+                    <span className="sr-only">Actions</span>
                   </Th>
                 </tr>
               </thead>
@@ -259,13 +260,16 @@ export function LeadsTable({ rows }: { rows: LeadRow[] }) {
                       <div className="text-xs text-muted-2">{idleLabel(row.daysSinceArrival)} ago</div>
                     </Td>
                     <Td>
-                      <Link
-                        href={`/admin/${row.reference}`}
-                        aria-label={`Open ${row.reference}`}
-                        className="text-muted hover:text-turq"
-                      >
-                        &rarr;
-                      </Link>
+                      <div className="flex items-center gap-1">
+                        <Link
+                          href={`/admin/${row.reference}`}
+                          aria-label={`Open ${row.reference}`}
+                          className="rounded-lg px-2 py-1 text-xs text-muted hover:text-turq"
+                        >
+                          Open &rarr;
+                        </Link>
+                        <DeleteLead reference={row.reference} who={row.name || row.business} />
+                      </div>
                     </Td>
                   </tr>
                 ))}
@@ -306,9 +310,12 @@ export function LeadsTable({ rows }: { rows: LeadRow[] }) {
                     <span className="font-display font-semibold text-text">{row.totalLabel}</span>
                     <span className="ml-2 text-xs text-muted-2">{row.bandLabel}</span>
                   </div>
-                  <Link href={`/admin/${row.reference}`} className="text-sm text-turq">
-                    Open &rarr;
-                  </Link>
+                  <div className="flex items-center gap-2">
+                    <DeleteLead reference={row.reference} who={row.name || row.business} />
+                    <Link href={`/admin/${row.reference}`} className="text-sm text-turq">
+                      Open &rarr;
+                    </Link>
+                  </div>
                 </div>
 
                 <div className="mt-2 font-mono text-[11px] text-muted-2">

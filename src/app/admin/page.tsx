@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { isSignedIn } from "@/lib/admin-auth";
 import { isBlobConfigured, listLeads } from "@/lib/store";
 import { toRow } from "@/lib/lead-view";
+import { isClosed } from "@/lib/pipeline";
 import { formatMoney } from "@/lib/rate-card";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { LeadsTable } from "@/components/admin/LeadsTable";
@@ -39,7 +40,8 @@ export default async function AdminPage() {
   const leads = await listLeads();
   const rows = leads.map((lead) => toRow(lead, now));
 
-  const open = rows.filter((r) => r.status !== "complete");
+  // "Open" means still live: neither delivered nor written off.
+  const open = rows.filter((r) => !isClosed(r.status));
   const pipelineValue = open.reduce((sum, r) => sum + r.total, 0);
   const won = rows.filter((r) =>
     ["quote-accepted", "in-progress", "client-review", "iterating", "complete"].includes(r.status),

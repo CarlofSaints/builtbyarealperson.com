@@ -11,7 +11,12 @@
  * a blank, and it is never written to the blob just to make the field exist.
  */
 
-export const LEAD_STATUSES = [
+/**
+ * The nine stages a lead moves FORWARD through, in order. This is the ordered
+ * pipeline: the progress bar, the "furthest along" sort and the stage number
+ * all read it.
+ */
+export const PIPELINE_STATUSES = [
   "fresh-lead",
   "contact-made",
   "discovery-done",
@@ -23,7 +28,29 @@ export const LEAD_STATUSES = [
   "complete",
 ] as const;
 
+/**
+ * Every stage a lead may be in, including the ones that are not steps forward.
+ *
+ * "Lost" is deliberately NOT part of `PIPELINE_STATUSES`: it is an outcome, not
+ * progress, so it has no position on the bar and never counts as furthest along.
+ * It exists because a pipeline with only forward stages has nowhere to put a
+ * lead that went quiet, and those pile up looking like work you have dropped.
+ */
+export const LEAD_STATUSES = [...PIPELINE_STATUSES, "lost"] as const;
+
 export type LeadStatus = (typeof LEAD_STATUSES)[number];
+export type PipelineStatus = (typeof PIPELINE_STATUSES)[number];
+
+/** True for the stages that mean nothing more is going to happen. */
+export function isClosed(status: LeadStatus): boolean {
+  return status === "complete" || status === "lost";
+}
+
+/** Position on the bar, or null for a stage that is not on it. */
+export function pipelinePosition(status: LeadStatus): number | null {
+  const index = (PIPELINE_STATUSES as readonly string[]).indexOf(status);
+  return index === -1 ? null : index + 1;
+}
 
 /** What a lead is before anyone has touched it. Never persisted on its own. */
 export const DEFAULT_STATUS: LeadStatus = "fresh-lead";
@@ -36,7 +63,7 @@ type StatusMeta = {
   pill: string;
   dot: string;
   /** Stages past this point are live work rather than sales. */
-  phase: "sales" | "build" | "done";
+  phase: "sales" | "build" | "done" | "lost";
 };
 
 export const STATUS_META: Record<LeadStatus, StatusMeta> = {
@@ -103,6 +130,13 @@ export const STATUS_META: Record<LeadStatus, StatusMeta> = {
     dot: "bg-emerald-400",
     phase: "done",
   },
+  lost: {
+    label: "Lost",
+    meaning: "Not proceeding. They went quiet, said no, or went elsewhere.",
+    pill: "border-line-2 bg-ink text-muted",
+    dot: "bg-muted-2",
+    phase: "lost",
+  },
 };
 
 export function isLeadStatus(value: unknown): value is LeadStatus {
@@ -113,9 +147,12 @@ export function statusLabel(status: LeadStatus): string {
   return STATUS_META[status].label;
 }
 
-/** Position in the pipeline, 1-based. Used for sorting and the progress bar. */
+/**
+ * Rank for the "furthest along" sort. Lost sorts below everything, because a
+ * dead lead is not further along than a live one — it is out of the race.
+ */
 export function statusIndex(status: LeadStatus): number {
-  return LEAD_STATUSES.indexOf(status) + 1;
+  return status === "lost" ? -1 : PIPELINE_STATUSES.indexOf(status) + 1;
 }
 
 /**
@@ -135,6 +172,7 @@ const STALE_AFTER_DAYS: Record<LeadStatus, number | null> = {
   "client-review": 4,
   iterating: 5,
   complete: null,
+  lost: null,
 };
 
 export function staleAfterDays(status: LeadStatus): number | null {

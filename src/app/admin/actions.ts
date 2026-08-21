@@ -19,7 +19,7 @@ import {
   isSignedIn,
   startSession,
 } from "@/lib/admin-auth";
-import { isBlobConfigured, setLeadStatus } from "@/lib/store";
+import { deleteLead, isBlobConfigured, setLeadStatus } from "@/lib/store";
 import { isLeadStatus } from "@/lib/pipeline";
 
 export type LoginState = { error: string | null };
@@ -87,4 +87,44 @@ export async function updateLeadStatus(
   revalidatePath("/admin");
   revalidatePath(`/admin/${ref}`);
   return { error: null };
+}
+
+export type DeleteResult = { error: string | null; deleted: string | null };
+
+/**
+ * Delete a lead for good.
+ *
+ * Irreversible — there is no trash to restore from. The confirmation lives in
+ * the UI, but the reference is checked against the stored record here too, so a
+ * mistyped or stale reference deletes nothing rather than something else.
+ *
+ * What went is written to the function logs before it disappears, because after
+ * this returns that line is the only record the lead ever existed.
+ */
+export async function deleteLeadAction(reference: string): Promise<DeleteResult> {
+  if (!(await isSignedIn())) return { error: "Signed out. Reload and sign in again.", deleted: null };
+  if (!isBlobConfigured()) return { error: "Blob storage is not configured.", deleted: null };
+
+  const ref = reference.trim();
+  if (!ref) return { error: "No lead reference.", deleted: null };
+
+  const gone = await deleteLead(ref);
+  if (!gone) return { error: `Lead ${ref} was not found. Nothing was deleted.`, deleted: null };
+
+  console.log(
+    JSON.stringify({
+      event: "lead.deleted",
+      reference: gone.reference,
+      createdAt: gone.createdAt,
+      name: gone.answers.name,
+      business: gone.answers.business,
+      email: gone.answers.email,
+      total: gone.estimate.total,
+      at: new Date().toISOString(),
+    }),
+  );
+
+  revalidatePath("/admin");
+  revalidatePath(`/admin/${ref}`);
+  return { error: null, deleted: gone.reference };
 }
