@@ -11,6 +11,7 @@
 import { get, list, put } from "@vercel/blob";
 import type { Answers } from "./estimate";
 import type { Estimate } from "./estimate";
+import { DEFAULT_STATUS, isLeadStatus, type LeadStatus } from "./pipeline";
 
 const PREFIX = "leads/";
 
@@ -46,6 +47,20 @@ export type LeadRecord = {
     /** Set when the follow-up has been dealt with, successfully or not. */
     bookingRequestAttempts?: number;
   };
+
+  /**
+   * Where the lead is in the pipeline.
+   *
+   * ABSENT ON PURPOSE for a brand new lead. Absence means "fresh lead, nothing
+   * has happened yet", and `leadStatus()` renders it that way. Writing the
+   * default in at creation would make "never touched" and "moved back to Fresh
+   * Lead by hand" indistinguishable.
+   */
+  status?: LeadStatus;
+  /** When the status last changed. Absent means it has never been changed. */
+  statusChangedAt?: string;
+  /** Every change, oldest first. The audit trail behind the grid. */
+  statusHistory?: { from: LeadStatus; to: LeadStatus; at: string }[];
 };
 
 function pathFor(reference: string): string {
@@ -104,7 +119,15 @@ export async function readLead(reference: string): Promise<LeadRecord | null> {
   }
 }
 
-/** Read-modify-write. Safe here because only the cron touches a lead after creation. */
+/**
+ * Read-modify-write.
+ *
+ * Two things touch a lead after creation: the follow-up cron (email ids) and
+ * the admin portal (status). They write different fields, but this is still a
+ * last-write-wins read-modify-write with a window of a few hundred milliseconds.
+ * With one operator and an hourly cron that window is not worth locking for;
+ * if a second person ever gets a login it will be.
+ */
 export async function patchLead(
   reference: string,
   patch: (lead: LeadRecord) => LeadRecord,
@@ -146,4 +169,66 @@ export function makeReference(now: Date, random: () => number = Math.random): st
     tail += ALPHABET[Math.floor(random() * ALPHABET.length)];
   }
   return `BRP-${yy}${mm}-${tail}`;
+}
+
+/* ------------------------------------------------------------------ */
+/* Pipeline                                                            */
+/* ------------------------------------------------------------------ */
+
+/**
+ * The lead's stage, with absence read as "Fresh Lead".
+ *
+ * Also tolerates a status string that is no longer in the vocabulary — if a
+ * stage is ever renamed, an old lead falls back to Fresh Lead and shows up in
+ * the grid rather than crashing the page or vanishing from it.
+ */
+export function leadStatus(lead: LeadRecord): LeadStatus {
+  return isLeadStatus(lead.status) ? lead.status : DEFAULT_STATUS;
+}
+
+/** When the lead last moved. Falls back to when it arrived. */
+export function leadStatusChangedAt(lead: LeadRecord): string {
+  return lead.statusChangedAt || lead.createdAt;
+}
+
+export async function setLeadStatus(
+  reference: string,
+  to: LeadStatus,
+  now: Date,
+): Promise<LeadRecord | null> {
+  return patchLead(reference, (lead) => {
+    const from = leadStatus(lead);
+    if (from === to) return lead;
+    return {
+      ...lead,
+      status: to,
+      statusChangedAt: now.toISOString(),
+      statusHistory: [...(lead.statusHistory ?? []), { from, to, at: now.toISOString() }],
+    };
+  });
+}
+
+/**
+ * Every lead, newest first.
+ *
+ * There is no index file to read (see the note at the top), so this is one blob
+ * read per lead. Fetched in batches rather than all at once so a busy month does
+ * not open a hundred sockets in parallel. If this ever gets slow enough to
+ * notice, the fix is a summary index written alongside each lead — not a shared
+ * index.json, which loses writes.
+ */
+export async function listLeads(): Promise<LeadRecord[]> {
+  const refs = await listLeadReferences();
+  const leads: LeadRecord[] = [];
+  const BATCH = 12;
+
+  for (let i = 0; i < refs.length; i += BATCH) {
+    const batch = await Promise.all(refs.slice(i, i + BATCH).map((ref) => readLead(ref)));
+    for (const lead of batch) {
+      if (lead) leads.push(lead);
+    }
+  }
+
+  leads.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+  return leads;
 }

@@ -1,9 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Inter } from "next/font/google";
 import { SITE } from "@/lib/site";
-import { Nav } from "@/components/Nav";
-import { Footer } from "@/components/Footer";
-import { Reveal } from "@/components/Reveal";
 import "./globals.css";
 
 const bricolage = Bricolage_Grotesque({
@@ -63,18 +60,7 @@ export default function RootLayout({
           />
         </noscript>
       </head>
-      <body className="min-h-screen antialiased">
-        <a
-          href="#main"
-          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-50 focus:rounded-lg focus:bg-turq focus:px-4 focus:py-2 focus:font-semibold focus:text-ink"
-        >
-          Skip to content
-        </a>
-        <Nav />
-        <main id="main">{children}</main>
-        <Footer />
-        <Reveal />
-      </body>
+      <body className="min-h-screen antialiased">{children}</body>
     </html>
   );
 }

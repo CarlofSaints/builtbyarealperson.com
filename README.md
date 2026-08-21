@@ -64,6 +64,65 @@ deploy quietly lie to you.
 | `NEXT_PUBLIC_BOOKING_URL` | No | The booking email falls back to asking the customer to reply with times. |
 | `NEXT_PUBLIC_CONTACT_EMAIL` | No | Falls back to `hello@builtbyarealperson.com`. Must be an address that actually **receives** — sending as an address and receiving at it are separate problems. |
 | `NEXT_PUBLIC_PHONE` | No | No phone number is shown anywhere. |
+| `ADMIN_PASSWORD` | For /admin | Nobody can sign in to the back office. Minimum 12 characters. |
+| `ADMIN_SESSION_SECRET` | For /admin | The session cookie cannot be signed, so nobody can sign in. |
+
+---
+
+## The back office (`/admin`)
+
+One operator, one password. Everything under `/admin` is behind it.
+
+- **`/admin`** — the pipeline. Every lead ever submitted, with the customer's
+  contact details, what they asked for, the estimate, and a stage picker that
+  saves the moment it changes. Filter by stage, search, and sort. It opens
+  sorted by **longest untouched, overdue first** — the page exists so a lead
+  cannot quietly go cold.
+- **`/admin/<reference>`** — one lead in full: every answer, the estimate line
+  by line, the message ids of each email, the stage history, and how they found
+  the site.
+
+### Stages
+
+`src/lib/pipeline.ts` is the single source of truth for the stage list, in the
+same spirit as the rate card. Nine stages, Fresh Lead through Complete, each
+with the number of days it may sit there before the grid flags it as overdue.
+
+A brand new lead has **no stored status at all**. That absence means "nothing
+has happened yet" and is rendered as Fresh Lead; writing the default in at
+creation would make "never touched" and "moved back to Fresh Lead by hand"
+indistinguishable. Everything after Fresh Lead is set by hand — nothing in the
+funnel can currently prove a human conversation happened.
+
+There is deliberately **no Lost / Not proceeding stage yet**. Until there is,
+a dead lead has to be parked in Complete or left to sit.
+
+### Auth
+
+`ADMIN_PASSWORD` (minimum 12 characters, enforced) and `ADMIN_SESSION_SECRET`.
+Without both, the login page says which one is missing rather than silently
+refusing everyone.
+
+The session cookie is **signed** — HMAC over an expiry and a fingerprint of the
+current password — so it cannot be forged from devtools, cannot be replayed for
+ever, and every session dies the moment either variable changes. The password is
+compared in constant time.
+
+Every admin page and **every server action checks the session itself**. Rendering
+a control only when signed in is not a security boundary: each export of a
+`"use server"` file is a public POST endpoint whether or not any form calls it.
+There is no public-path prefix list, because `startsWith` allowlists exempt more
+than they mean to.
+
+### Known limits
+
+- The grid is one blob read per lead — there is no index file, by design, since
+  a shared one loses writes. Fine at this volume, and the fix when it is not is
+  a summary blob written alongside each lead, not a shared index.
+- Stage writes are a read-modify-write with no lock. One operator and an hourly
+  cron do not collide in practice; a second login would change that.
+- The login has no shared rate limit. Failures are slowed by a fixed delay, but
+  serverless instances do not share a counter.
 
 ---
 
@@ -104,6 +163,10 @@ from the difference.
 - **The mobile layout has not been clicked through on a real narrow viewport.**
   The responsive classes are conventional and the desktop and wide layouts were
   exercised in a browser, but the phone layout has only been reasoned about.
+- **The back office has never run against the real Blob store.** Every screen
+  and the stage round-trip were exercised in a browser against fixtures; the
+  reads and writes against Vercel Blob are the same code paths the estimator
+  already uses, but they have not been watched working here.
 - No analytics yet.
 - No portfolio or testimonials yet — the site currently argues from its own
   quality, which only works until there is something better to point at.
