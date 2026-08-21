@@ -66,6 +66,7 @@ deploy quietly lie to you.
 | `NEXT_PUBLIC_PHONE` | No | No phone number is shown anywhere. |
 | `ADMIN_PASSWORD` | For /admin | Nobody can sign in to the back office. Minimum 12 characters. |
 | `ADMIN_SESSION_SECRET` | For /admin | The session cookie cannot be signed, so nobody can sign in. |
+| `RESEND_WEBHOOK_SECRET` | For delivery | The webhook returns 503 instead of accepting unsigned events, so nothing is ever known beyond "accepted". |
 
 ---
 
@@ -143,6 +144,54 @@ than they mean to.
 
 ---
 
+## Knowing whether an email arrived
+
+A successful send means Resend *accepted* the message. It says nothing about
+whether anyone received it. `POST /api/webhooks/resend` closes that gap.
+
+Each send writes a tiny pointer blob under `email-index/<message-id>.json`
+naming the lead it belongs to. The webhook knows a message id and nothing else,
+so without the pointer it would have to read every lead in the store on every
+event — and there are several events per message. One pointer at send time makes
+it a single read. One file per id, not a shared map, for the same reason the
+leads are: a shared file is last-write-wins.
+
+The state lives on the lead as `emails.delivery`, and it is **merged by rank,
+never overwritten**. Events arrive out of order and more than once: `sent` can
+land after `delivered`, retries are normal, and an `opened` can beat the
+`delivered` it implies. Ranking means a stale event can never drag a lead
+backwards. `bounced` outranks everything because it is the only state that
+needs you to do something.
+
+Three states that look similar and are not, and are rendered differently on
+purpose:
+
+| Shown | Means |
+| --- | --- |
+| **Not sent** | No message was ever accepted. |
+| **No word yet** | Accepted, and no event has arrived. **Not** the same as undelivered. |
+| **Delivered / Bounced / Marked as spam** | The receiving server has spoken. |
+
+A bounce puts a banner at the top of the pipeline, because a lead that never got
+their estimate is a worse dropped ball than one that has merely gone quiet.
+
+### Setting it up
+
+In the Resend dashboard, add a webhook pointing at
+`https://builtbyarealperson.com/api/webhooks/resend`, subscribe to the
+`email.*` events, and put the signing secret it gives you into
+`RESEND_WEBHOOK_SECRET`.
+
+Signatures are verified against the **raw request body**. Parsing the JSON and
+re-serialising it changes the bytes and every signature fails for reasons that
+look like a configuration problem. Requests older than five minutes are rejected
+so a captured one cannot be replayed.
+
+`GET /api/webhooks/resend` reports whether the secret and the store are
+configured, without revealing either.
+
+---
+
 ## Diagnosing a failed submission
 
 `POST /api/estimate?diagnose=1` returns the stage tracker and the underlying
@@ -173,10 +222,9 @@ from the difference.
 
 ## Known gaps
 
-- **Email delivery is unproven.** A successful send means Resend *accepted* the
-  message, not that anyone received it. Message ids are stored on each lead so a
-  bounce can be traced. Wiring the Resend delivery webhook to flip a `delivered`
-  flag is the next thing worth building.
+- **Delivery is now recorded, but nothing has watched it work in production
+  yet.** The webhook, the signature check and the out-of-order merge were all
+  exercised against a local server; no real Resend event has arrived.
 - **The mobile layout has not been clicked through on a real narrow viewport.**
   The responsive classes are conventional and the desktop and wide layouts were
   exercised in a browser, but the phone layout has only been reasoned about.

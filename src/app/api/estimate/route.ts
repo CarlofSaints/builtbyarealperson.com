@@ -6,6 +6,7 @@ import { sendCustomerEstimate, sendOwnerNotification } from "@/lib/email";
 import {
   isBlobConfigured,
   makeReference,
+  indexLeadEmails,
   saveLead,
   toStoredEstimate,
   type LeadRecord,
@@ -176,6 +177,15 @@ export async function POST(request: Request) {
       } catch (err) {
         warnings.push(`blob save: ${err instanceof Error ? err.message : String(err)}`);
       }
+
+      // Pointers from each provider message id back to this lead, so the
+      // delivery webhook can find it without reading every lead in the store.
+      //
+      // OUTSIDE the try on purpose. It swallows its own failures, and if it ever
+      // stopped doing so, a pointer failing must not be reported as the lead
+      // failing to save: losing a pointer costs a delivery status, losing the
+      // lead costs the customer.
+      if (saved) await indexLeadEmails(lead);
     } else {
       warnings.push("blob save: no credentials — neither BLOB_STORE_ID (OIDC) nor BLOB_READ_WRITE_TOKEN is set");
     }

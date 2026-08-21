@@ -13,7 +13,7 @@
 import { NextResponse } from "next/server";
 import { list } from "@vercel/blob";
 import { sendBookingRequest } from "@/lib/email";
-import { isBlobConfigured, patchLead, readLead } from "@/lib/store";
+import { indexLeadEmails, isBlobConfigured, patchLead, readLead } from "@/lib/store";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -122,7 +122,7 @@ export async function GET(request: Request) {
           reference,
         });
 
-        await patchLead(reference, (current) => ({
+        const updated = await patchLead(reference, (current) => ({
           ...current,
           emails: {
             ...current.emails,
@@ -132,6 +132,9 @@ export async function GET(request: Request) {
               : { bookingRequestError: result.error }),
           },
         }));
+
+        // Same pointer, for the booking email this time.
+        if (updated && result.ok) await indexLeadEmails(updated);
 
         if (result.ok) {
           report.sent += 1;

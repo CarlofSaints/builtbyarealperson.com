@@ -18,6 +18,8 @@ import {
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { StatusSelect } from "@/components/admin/StatusSelect";
 import { DeleteLead } from "@/components/admin/DeleteLead";
+import { DeliveryBadge } from "@/components/admin/DeliveryBadge";
+import { EMAIL_KIND_LABELS, EMAIL_KINDS } from "@/lib/delivery";
 
 export const dynamic = "force-dynamic";
 
@@ -217,38 +219,57 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
           )}
 
           <Panel title="Emails">
-            <Row
-              label="Estimate + PDF"
-              value={
-                lead.emails.customerEstimateError
-                  ? `FAILED — ${lead.emails.customerEstimateError}`
-                  : lead.emails.customerEstimateId || "Not sent"
-              }
-              tone={lead.emails.customerEstimateError ? "bad" : "plain"}
-            />
-            <Row
-              label="Your notification"
-              value={
-                lead.emails.ownerNotifyError
-                  ? `FAILED — ${lead.emails.ownerNotifyError}`
-                  : lead.emails.ownerNotifyId || "Not sent"
-              }
-              tone={lead.emails.ownerNotifyError ? "bad" : "plain"}
-            />
-            <Row
-              label="Booking request"
-              value={
-                lead.emails.bookingRequestError
-                  ? `FAILED — ${lead.emails.bookingRequestError}`
-                  : lead.emails.bookingRequestId
-                    ? `Sent ${when(lead.emails.bookingRequestSentAt)}`
-                    : "Not sent yet"
-              }
-              tone={lead.emails.bookingRequestError ? "bad" : "plain"}
-            />
+            {EMAIL_KINDS.map((kind) => {
+              const sentId =
+                kind === "customerEstimate"
+                  ? lead.emails.customerEstimateId
+                  : kind === "ownerNotify"
+                    ? lead.emails.ownerNotifyId
+                    : lead.emails.bookingRequestId;
+              const error =
+                kind === "customerEstimate"
+                  ? lead.emails.customerEstimateError
+                  : kind === "ownerNotify"
+                    ? lead.emails.ownerNotifyError
+                    : lead.emails.bookingRequestError;
+              const delivery = lead.emails.delivery?.[kind];
+
+              return (
+                <div key={kind} className="border-b border-line/50 py-3 last:border-0">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-sm text-muted">{EMAIL_KIND_LABELS[kind]}</span>
+                    {error ? (
+                      <span className="text-sm font-semibold text-pink">Never sent</span>
+                    ) : sentId ? (
+                      <DeliveryBadge status={delivery?.status ?? null} detail={delivery?.detail} />
+                    ) : (
+                      <span className="text-sm text-muted-2">
+                        {kind === "bookingRequest" ? "Not sent yet" : "Not sent"}
+                      </span>
+                    )}
+                  </div>
+
+                  {error && <p className="mt-1 text-xs leading-snug text-pink">{error}</p>}
+                  {delivery?.detail && (
+                    <p className="mt-1 text-xs leading-snug text-pink">{delivery.detail}</p>
+                  )}
+
+                  {sentId && !error && (
+                    <p className="mt-1 text-xs text-muted-2">
+                      {delivery ? when(delivery.at) : "accepted, no delivery event yet"}
+                      {delivery?.openedAt && ` · opened ${when(delivery.openedAt)}`}
+                      {delivery?.clickedAt && " · clicked"}
+                    </p>
+                  )}
+                  {sentId && <p className="mt-0.5 font-mono text-[11px] text-muted-2">{sentId}</p>}
+                </div>
+              );
+            })}
+
             <p className="mt-3 text-xs leading-relaxed text-muted-2">
-              These are provider message ids. They prove the message was accepted, not that anyone
-              received it. Nothing here can currently tell you it was delivered.
+              {"“"}Accepted{"”"} means Resend took the message. Anything beyond that comes
+              from the delivery webhook. {"“"}No word yet{"”"} is not the same as not
+              delivered &mdash; it means nothing has reported back.
             </p>
           </Panel>
 

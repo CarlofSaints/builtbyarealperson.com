@@ -6,6 +6,7 @@ import type { LeadRow } from "@/lib/lead-view";
 import { LEAD_STATUSES, STATUS_META, isClosed, statusIndex, type LeadStatus } from "@/lib/pipeline";
 import { StatusSelect } from "./StatusSelect";
 import { DeleteLead } from "./DeleteLead";
+import { DeliveryBadge } from "./DeliveryBadge";
 
 type SortKey = "idle" | "arrived" | "stage" | "value" | "name";
 
@@ -84,6 +85,9 @@ export function LeadsTable({ rows }: { rows: LeadRow[] }) {
 
   const openCount = rows.filter((r) => !isClosed(r.status)).length;
   const staleCount = rows.filter((r) => r.stale).length;
+  // A bounced email is a lead that never heard from you and never will, which
+  // is a worse dropped ball than one that has merely gone quiet.
+  const undeliveredCount = rows.filter((r) => r.deliveryProblem || r.emailFailed).length;
 
   const visible = useMemo(() => {
     const q = query.trim().toLowerCase();
@@ -147,6 +151,14 @@ export function LeadsTable({ rows }: { rows: LeadRow[] }) {
           <strong className="font-semibold">{staleCount}</strong>{" "}
           {staleCount === 1 ? "lead has" : "leads have"} sat in the same stage longer than they
           should have. Sorted to the top.
+        </p>
+      )}
+
+      {undeliveredCount > 0 && (
+        <p className="mb-5 rounded-xl border border-pink/40 bg-pink/10 px-4 py-2.5 text-sm text-pink">
+          <strong className="font-semibold">{undeliveredCount}</strong>{" "}
+          {undeliveredCount === 1 ? "lead" : "leads"} never received their email. Check the address
+          and reach them another way — they are waiting on something that is not coming.
         </p>
       )}
 
@@ -238,8 +250,17 @@ export function LeadsTable({ rows }: { rows: LeadRow[] }) {
                     </Td>
                     <Td>
                       <ContactLinks row={row} />
-                      {row.emailFailed && (
-                        <div className="mt-1 text-xs text-pink">estimate email failed to send</div>
+                      <div className="mt-1.5 flex flex-wrap items-center gap-1.5">
+                        {row.emailFailed ? (
+                          <span className="text-xs text-pink">estimate email never sent</span>
+                        ) : (
+                          <DeliveryBadge status={row.estimateDelivery} detail={row.deliveryDetail} />
+                        )}
+                      </div>
+                      {row.deliveryDetail && row.deliveryProblem && (
+                        <div className="mt-1 max-w-[260px] text-xs leading-snug text-pink">
+                          {row.deliveryDetail}
+                        </div>
                       )}
                     </Td>
                     <Td>
@@ -304,6 +325,13 @@ export function LeadsTable({ rows }: { rows: LeadRow[] }) {
                 </div>
 
                 <ContactLinks row={row} className="mt-3" />
+                <div className="mt-2">
+                  {row.emailFailed ? (
+                    <span className="text-xs text-pink">estimate email never sent</span>
+                  ) : (
+                    <DeliveryBadge status={row.estimateDelivery} detail={row.deliveryDetail} />
+                  )}
+                </div>
 
                 <div className="mt-3 flex items-center justify-between gap-3 border-t border-line/60 pt-3">
                   <div>

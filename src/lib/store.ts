@@ -12,8 +12,22 @@ import { del, get, list, put } from "@vercel/blob";
 import type { Answers } from "./estimate";
 import type { Estimate } from "./estimate";
 import { DEFAULT_STATUS, isLeadStatus, type LeadStatus } from "./pipeline";
+import { mergeDelivery, type EmailDelivery, type EmailKind } from "./delivery";
 
 const PREFIX = "leads/";
+
+/**
+ * One tiny blob per provider message id, pointing back at the lead that sent it.
+ *
+ * The webhook knows a message id and nothing else. Without this it would have to
+ * read every lead in the store to find the owner — on every event, and there are
+ * several events per message. One pointer written at send time turns that into a
+ * single read.
+ *
+ * One file per id rather than a shared map, for the same reason the leads are:
+ * a shared file is last-write-wins and two sends a second apart would lose one.
+ */
+const EMAIL_PREFIX = "email-index/";
 
 export type LeadRecord = {
   reference: string;
@@ -46,6 +60,13 @@ export type LeadRecord = {
     bookingRequestSentAt?: string;
     /** Set when the follow-up has been dealt with, successfully or not. */
     bookingRequestAttempts?: number;
+
+    /**
+     * What became of each message after the provider accepted it, filled in by
+     * the Resend delivery webhook. Absent means no event has arrived yet — which
+     * is different from "not delivered", and is rendered as such.
+     */
+    delivery?: Partial<Record<EmailKind, EmailDelivery>>;
   };
 
   /**
@@ -249,4 +270,97 @@ export async function deleteLead(reference: string): Promise<LeadRecord | null> 
   if (!existing) return null;
   await del(pathFor(reference));
   return existing;
+}
+
+/* ------------------------------------------------------------------ */
+/* Email delivery                                                      */
+/* ------------------------------------------------------------------ */
+
+type EmailPointer = { reference: string; kind: EmailKind };
+
+function emailPath(messageId: string): string {
+  // Provider ids are uuids, but never trust an id from a webhook to be safe in
+  // a path. Anything outside the allowed set would let a crafted id read or
+  // write outside the prefix.
+  return `${EMAIL_PREFIX}${messageId.replace(/[^A-Za-z0-9_-]/g, "")}.json`;
+}
+
+/**
+ * Record which lead a message id belongs to.
+ *
+ * Called after a send, for whichever ids the lead now has. Idempotent, and a
+ * failure here is not allowed to fail the send — a missing pointer costs a
+ * delivery status, not a lead.
+ */
+export async function indexLeadEmails(lead: LeadRecord): Promise<void> {
+  const pairs: [string | undefined, EmailKind][] = [
+    [lead.emails.customerEstimateId, "customerEstimate"],
+    [lead.emails.ownerNotifyId, "ownerNotify"],
+    [lead.emails.bookingRequestId, "bookingRequest"],
+  ];
+
+  await Promise.all(
+    pairs
+      .filter(([id]) => Boolean(id))
+      .map(async ([id, kind]) => {
+        const pointer: EmailPointer = { reference: lead.reference, kind };
+        try {
+          await put(emailPath(id as string), JSON.stringify(pointer), {
+            access: "private",
+            contentType: "application/json",
+            addRandomSuffix: false,
+            allowOverwrite: true,
+            cacheControlMaxAge: 0,
+          });
+        } catch (err) {
+          console.error(
+            JSON.stringify({
+              event: "email.index.failed",
+              reference: lead.reference,
+              kind,
+              message: err instanceof Error ? err.message : String(err),
+            }),
+          );
+        }
+      }),
+  );
+}
+
+export async function readEmailPointer(messageId: string): Promise<EmailPointer | null> {
+  try {
+    const result = await get(emailPath(messageId), { access: "private", useCache: false });
+    if (!result || result.statusCode !== 200 || !result.stream) return null;
+    return JSON.parse(await new Response(result.stream).text()) as EmailPointer;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Apply one webhook event to the lead that sent the message.
+ *
+ * Returns what happened rather than throwing, because the webhook has to answer
+ * 200 to almost everything — a provider that gets an error retries for hours,
+ * and an event for a lead that has since been deleted is not a failure.
+ */
+export async function recordDeliveryEvent(
+  messageId: string,
+  event: { type: string; at: string; detail?: string },
+): Promise<{ outcome: "applied" | "unknown-message" | "lead-gone"; reference?: string }> {
+  const pointer = await readEmailPointer(messageId);
+  if (!pointer) return { outcome: "unknown-message" };
+
+  const updated = await patchLead(pointer.reference, (lead) => ({
+    ...lead,
+    emails: {
+      ...lead.emails,
+      delivery: {
+        ...lead.emails.delivery,
+        [pointer.kind]: mergeDelivery(lead.emails.delivery?.[pointer.kind], event),
+      },
+    },
+  }));
+
+  if (!updated) return { outcome: "lead-gone", reference: pointer.reference };
+  return { outcome: "applied", reference: pointer.reference };
 }

@@ -20,6 +20,7 @@ import {
 import type { LeadRecord } from "./store";
 import { leadStatus, leadStatusChangedAt } from "./store";
 import { isStale, type LeadStatus } from "./pipeline";
+import { needsAttention, type DeliveryStatus } from "./delivery";
 
 export type LeadRow = {
   reference: string;
@@ -50,9 +51,20 @@ export type LeadRow = {
   timeline: string;
   hasNotes: boolean;
 
-  /** True when the confirmation email came back with an error. */
+  /** True when the provider refused the message outright at send time. */
   emailFailed: boolean;
   bookingSent: boolean;
+
+  /**
+   * What became of the estimate email, once the delivery webhook has said.
+   * `null` means NOTHING HAS SAID YET — which is not the same as "not
+   * delivered", and must not be rendered as though it were.
+   */
+  estimateDelivery: DeliveryStatus | null;
+  /** Bounce or complaint reason, when there is one. */
+  deliveryDetail: string | null;
+  /** True when an email to this lead bounced or was reported as spam. */
+  deliveryProblem: boolean;
 };
 
 const DAY = 86_400_000;
@@ -155,5 +167,15 @@ export function toRow(lead: LeadRecord, now: Date): LeadRow {
 
     emailFailed: Boolean(lead.emails.customerEstimateError),
     bookingSent: Boolean(lead.emails.bookingRequestId),
+
+    estimateDelivery: lead.emails.delivery?.customerEstimate?.status ?? null,
+    deliveryDetail: lead.emails.delivery?.customerEstimate?.detail ?? null,
+    // Any of the three going wrong is worth flagging on the row, not just the
+    // estimate: a bounced booking email is a lead quietly never chased.
+    deliveryProblem: [
+      lead.emails.delivery?.customerEstimate,
+      lead.emails.delivery?.ownerNotify,
+      lead.emails.delivery?.bookingRequest,
+    ].some(needsAttention),
   };
 }
