@@ -6,6 +6,26 @@ import { useEffect, useRef, useState } from "react";
 import { Logo } from "./Logo";
 import { NAV_LINKS } from "@/lib/site";
 
+/**
+ * Points at /admin, not at /admin/login, on purpose: /admin sends you to the
+ * login page when there is no session and straight to the pipeline when there
+ * is, so one link is both "sign in" and "go to my leads".
+ *
+ * It also means the header does NOT have to check the session, which is what
+ * keeps the marketing pages static — reading a cookie up here would make every
+ * page dynamic to render one link.
+ */
+const ADMIN_HREF = "/admin";
+
+function LockIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="4" y="10.5" width="16" height="10" rx="2.5" stroke="currentColor" strokeWidth="1.9" />
+      <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" />
+    </svg>
+  );
+}
+
 export function Nav() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -71,6 +91,13 @@ export function Nav() {
             </Link>
           ))}
           <Link
+            href={ADMIN_HREF}
+            className="ml-1 inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm text-muted-2 transition-colors hover:text-turq"
+          >
+            <LockIcon />
+            Sign in
+          </Link>
+          <Link
             href="/estimate"
             className="ml-2 rounded-lg bg-turq px-4 py-2 text-sm font-semibold text-ink transition-transform duration-200 hover:-translate-y-0.5 hover:bg-turq/90"
           >
@@ -117,6 +144,13 @@ export function Nav() {
               className="mt-4 rounded-xl bg-turq px-4 py-3 text-center text-[15px] font-semibold text-ink"
             >
               Get an estimate
+            </Link>
+            <Link
+              href={ADMIN_HREF}
+              className="mt-3 inline-flex items-center justify-center gap-1.5 py-2 text-sm text-muted-2 transition-colors hover:text-turq"
+            >
+              <LockIcon />
+              Sign in
             </Link>
           </nav>
         </div>
