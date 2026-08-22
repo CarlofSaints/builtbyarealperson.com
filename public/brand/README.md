@@ -35,3 +35,10 @@ shrinking produces the smudge the threshold exists to avoid.
 **The mark renders on its own transparent canvas and is then composited.**
 Knocking the ridges out directly onto a target erases the background behind them
 as well, punching holes through to whatever sits underneath.
+
+`logo-wordmark-signature.png` is the same lockup at 672×144 — the email
+signature's 224×48 at 3×. It exists separately because the mark has to be
+*drawn* at its final size for the detail threshold to make the right call.
+Scaling the 1400px version down to signature width draws the ridges and then
+shrinks them into a smudge; drawing at 43px drops them and leaves a clean dot,
+which is what you actually want at 14px on screen.
