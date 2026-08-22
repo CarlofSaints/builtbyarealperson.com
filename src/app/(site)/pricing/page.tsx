@@ -86,7 +86,7 @@ export default function PricingPage() {
             <p className="mt-6 max-w-2xl text-[17px] leading-relaxed text-muted sm:text-lg">
               Hiding prices until you have handed over your phone number wastes your time
               and mine. Here is the whole thing. Add up the rows that apply to you and you
-              have your number — or let the estimator do the arithmetic.
+              have your number, or let the estimator do the arithmetic.
             </p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Button href="/estimate">Let the estimator do it</Button>
@@ -216,7 +216,7 @@ export default function PricingPage() {
               <ul className="mt-6 space-y-3 text-[14.5px] text-muted">
                 {[
                   "Never bundled into the build price",
-                  "Cancel whenever — the site keeps working",
+                  "Cancel whenever and the site keeps working",
                   "You keep the domain, the code and every login either way",
                 ].map((t) => (
                   <li key={t} className="flex gap-3">
@@ -282,7 +282,7 @@ export default function PricingPage() {
         <div className="u-reveal mx-auto max-w-2xl text-center">
           <H2>Add it up yourself, or let me do it</H2>
           <Lead className="mx-auto">
-            The estimator uses exactly these numbers — nothing hidden, nothing added at
+            The estimator uses exactly these numbers. Nothing hidden, nothing added at
             the end. Two minutes and the PDF is in your inbox.
           </Lead>
           <div className="mt-9 flex justify-center">

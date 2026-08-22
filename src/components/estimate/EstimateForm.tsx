@@ -80,7 +80,7 @@ export function EstimateForm() {
       if (a.hasSite === null) e.hasSite = "Pick one so I know what I am working with.";
       if (a.hasSite === true && a.currentUrl.trim() && !isValidUrlish(a.currentUrl))
         e.currentUrl = "That does not look like a web address.";
-      if (a.domain === null) e.domain = "Pick one — this is the step that most often delays a launch.";
+      if (a.domain === null) e.domain = "Pick one. This is the step that most often delays a launch.";
     }
     if (index === 1 && !a.siteSize) e.siteSize = "Pick the closest size. You can change your mind on the call.";
     if (index === 2) {
@@ -96,7 +96,7 @@ export function EstimateForm() {
       if (!a.name.trim()) e.name = "I need something to call you.";
       if (!a.business.trim()) e.business = "What is the business called?";
       if (!a.email.trim()) e.email = "The estimate needs somewhere to go.";
-      else if (!EMAIL_RE.test(a.email.trim())) e.email = "Check that email address — the estimate goes there.";
+      else if (!EMAIL_RE.test(a.email.trim())) e.email = "Check that email address. The estimate goes there.";
     }
     return e;
   }
@@ -206,7 +206,7 @@ export function EstimateForm() {
             <Question
               index="01"
               title="Do you have a website at the moment?"
-              hint="An existing site is useful even if you hate it — it tells me what your content is and what needs to survive the move."
+              hint="An existing site is useful even if you hate it. It tells me what your content is and what needs to survive the move."
             >
               <div className="grid gap-3 sm:grid-cols-2">
                 <OptionCard
@@ -277,7 +277,7 @@ export function EstimateForm() {
           <Question
             index="03"
             title="Roughly how big does the site need to be?"
-            hint="A page is a separate destination with its own address — Home, About, each service, Contact. Sections inside a page do not count."
+            hint="A page is a separate destination with its own address: Home, About, each service, Contact. Sections inside a page do not count."
           >
             <div className="grid gap-3">
               {SITE_SIZES.map((s) => (
@@ -418,7 +418,7 @@ export function EstimateForm() {
             <Question
               index="08"
               title="Who writes the words?"
-              hint="This is the step that stalls most website projects — not the design. Be realistic about whether you will actually sit down and write it."
+              hint="This is the step that stalls most website projects, not the design. Be realistic about whether you will actually sit down and write it."
             >
               <div className="grid gap-3">
                 {COPY_MODES.map((c) => (
@@ -453,7 +453,7 @@ export function EstimateForm() {
           <Question
             index="09"
             title="When do you need it live?"
-            hint="Only the last option costs more. The other two cost exactly the same — I am asking so I can plan honestly, not to upsell you."
+            hint="Only the last option costs more. The other two cost exactly the same. I am asking so I can plan honestly, not to upsell you."
           >
             <div className="grid gap-3">
               {TIMELINES.map((t) => (
@@ -537,7 +537,7 @@ export function EstimateForm() {
                 multiline
                 value={answers.notes}
                 onChange={(v) => set("notes", v)}
-                placeholder="What the site has to achieve, a site you like the look of, a deadline you are working towards — whatever is on your mind."
+                placeholder="What the site has to achieve, a site you like the look of, a deadline you are working towards. Whatever is on your mind."
               />
             </div>
 
@@ -555,7 +555,7 @@ export function EstimateForm() {
             </div>
 
             <p className="mt-6 text-[13px] leading-relaxed text-muted-2">
-              By sending this you are asking me for an estimate — nothing more. It is not
+              By sending this you are asking me for an estimate, nothing more. It is not
               an order, it does not commit you to anything, and I will not add you to a
               mailing list.
             </p>
@@ -617,7 +617,7 @@ export function EstimateForm() {
       <aside className="hidden lg:block lg:sticky lg:top-24">
         <RunningTotal estimate={estimate} />
         <p className="mt-4 px-1 text-[12.5px] leading-relaxed text-muted-2">
-          This number updates as you answer. It is an estimate, not a quote — but the
+          This number updates as you answer. It is an estimate, not a quote, but the
           final quote will land inside the range shown above.
         </p>
       </aside>

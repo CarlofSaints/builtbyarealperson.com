@@ -74,7 +74,7 @@ export function RunningTotal({ estimate, compact = false }: { estimate: Estimate
         <div className="min-w-0">
           <p className="text-[11px] uppercase tracking-[0.12em] text-muted-2">Running estimate</p>
           <p className="font-display text-2xl font-extrabold tabular-nums leading-tight text-text">
-            {estimate.isPriceable ? formatMoney(animated) : "—"}
+            {estimate.isPriceable ? formatMoney(animated) : "…"}
           </p>
         </div>
         {estimate.isPriceable ? (
@@ -116,7 +116,7 @@ export function RunningTotal({ estimate, compact = false }: { estimate: Estimate
         ) : (
           <>
             <p className="mt-3 font-display text-[2.6rem] font-extrabold leading-none tracking-tight text-line-2">
-              R—
+              R&hellip;
             </p>
             <p className="mt-3 text-[13px] leading-relaxed text-muted">
               Pick how big the site needs to be and the number starts working.

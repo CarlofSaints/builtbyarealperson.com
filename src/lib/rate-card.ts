@@ -20,7 +20,7 @@ export const CARE_PLAN = {
   monthly: 450,
   label: "Care plan (optional)",
   blurb:
-    "Hosting, security updates, daily backups, uptime monitoring and up to 30 minutes of small tweaks a month. Cancel any time — you keep the site either way.",
+    "Hosting, security updates, daily backups, uptime monitoring and up to 30 minutes of small tweaks a month. Cancel any time. You keep the site either way.",
 };
 
 /** Hosting position, shown as a note rather than a line item. */
@@ -50,21 +50,21 @@ export const SITE_SIZES: Choice<SiteSize>[] = [
   },
   {
     id: "brochure",
-    label: "Small site — 4 to 5 pages",
+    label: "Small site (4 to 5 pages)",
     blurb:
       "Home, About, Services, Contact and one more. The size most small businesses actually need.",
     price: 9500,
   },
   {
     id: "standard",
-    label: "Standard site — 6 to 12 pages",
+    label: "Standard site (6 to 12 pages)",
     blurb:
       "Separate pages per service, team, case studies, a news or blog section.",
     price: 16500,
   },
   {
     id: "large",
-    label: "Large site — 12+ pages",
+    label: "Large site (12+ pages)",
     blurb:
       "Bigger structure, custom sections, member or client area, more moving parts.",
     price: 26000,
@@ -78,7 +78,7 @@ export type SellMode = "no" | "simple" | "full";
 export const SELL_MODES: Choice<SellMode>[] = [
   {
     id: "no",
-    label: "No — the site is there to get enquiries",
+    label: "No, the site is there to get enquiries",
     blurb: "People find you, understand you, and contact you.",
     price: 0,
   },
@@ -198,7 +198,7 @@ export const DOMAIN_STATES: Choice<DomainState>[] = [
     id: "own-access",
     label: "I own it and I can change its settings",
     blurb:
-      "Nothing to do — I hand you two records to paste in, or you give me access for ten minutes.",
+      "Nothing to do. I hand you two records to paste in, or you give me access for ten minutes.",
     price: 0,
   },
   {

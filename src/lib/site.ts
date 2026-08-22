@@ -9,7 +9,7 @@ export const SITE = {
   url: "https://builtbyarealperson.com",
   tagline: "A real person builds your website. AI just makes me fast.",
   description:
-    "Websites for South African small businesses, built by one person in days rather than months. AI speeds up the work — it does not do the work. Fixed price up front, from R5,500.",
+    "Websites for South African small businesses, built by one person in days rather than months. AI speeds up the work: it does not do the work. Fixed price up front, from R5,500.",
 
   /**
    * The address shown on the site and used as the reply-to.

@@ -9,7 +9,7 @@ export function Logo({ compact = false }: { compact?: boolean }) {
     <Link
       href="/"
       className="group flex items-center gap-2.5 font-display font-semibold tracking-tight"
-      aria-label="Built By A Real Person — home"
+      aria-label="Built By A Real Person, home"
     >
       <span className="relative flex h-2.5 w-2.5 shrink-0" aria-hidden="true">
         <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-turq opacity-60 [animation-duration:2.4s]" />

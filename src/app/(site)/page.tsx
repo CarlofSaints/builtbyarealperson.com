@@ -19,14 +19,14 @@ const STEPS = [
     n: "01",
     title: "Price it yourself, in two minutes",
     body:
-      "Answer nine questions about what you need. The total updates as you go — no waiting for a call back, no being asked for your budget first. A PDF lands in your inbox straight away.",
+      "Answer nine questions about what you need. The total updates as you go. No waiting for a call back, no being asked for your budget first. A PDF lands in your inbox straight away.",
     note: "Immediate",
   },
   {
     n: "02",
     title: "We talk for 30 minutes",
     body:
-      "A Teams call. I ask what your business actually does, who buys from you and what has to happen on the site for it to have been worth it. You get a fixed quote after this — no more estimating.",
+      "A Teams call. I ask what your business actually does, who buys from you and what has to happen on the site for it to have been worth it. You get a fixed quote after this. No more estimating.",
     note: "Within a day or two",
   },
   {
@@ -40,7 +40,7 @@ const STEPS = [
     n: "04",
     title: "It goes live and it is yours",
     body:
-      "I point the domain, check it on real phones, submit it to Google and hand over every login. Walk away whenever you like — nothing is held hostage.",
+      "I point the domain, check it on real phones, submit it to Google and hand over every login. Walk away whenever you like. Nothing is held hostage.",
     note: "Yours, permanently",
   },
 ];
@@ -61,7 +61,7 @@ const FAQ = [
   },
   {
     q: "Why are you so much cheaper than an agency?",
-    a: "An agency quote pays for an account manager, a project manager, a designer, a developer, a tester and an office. You are paying for one of those things — the person who actually builds it. AI closes the gap in throughput, and I have no office in Sandton to fund.",
+    a: "An agency quote pays for an account manager, a project manager, a designer, a developer, a tester and an office. You are paying for one of those things: the person who actually builds it. AI closes the gap in throughput, and I have no office in Sandton to fund.",
   },
   {
     q: "How can you promise the final quote is within 20% of the estimate?",
@@ -69,7 +69,7 @@ const FAQ = [
   },
   {
     q: "What if I do not know what I want yet?",
-    a: "Most people do not, and that is fine. Pick your best guess in the estimator — the number moves as you change your mind, and nothing you choose is binding. The call is where it gets sorted out.",
+    a: "Most people do not, and that is fine. Pick your best guess in the estimator. The number moves as you change your mind, and nothing you choose is binding. The call is where it gets sorted out.",
   },
   {
     q: "Who owns it when it is finished?",
@@ -106,13 +106,13 @@ export default function Home() {
             </h1>
 
             <p className="u-reveal mt-7 max-w-2xl text-lg leading-relaxed text-muted sm:text-xl" data-reveal-delay="140">
-              I use AI the way a carpenter uses power tools — it speeds up the work,
+              I use AI the way a carpenter uses power tools: it speeds up the work,
               it does not do the work. Every site is designed, built, tested and
               signed off by me, and I am the one who answers the phone afterwards.
             </p>
 
             <div className="u-reveal mt-10 flex flex-col gap-3 sm:flex-row sm:items-center" data-reveal-delay="220">
-              <Button href="/estimate">Build my estimate — 2 minutes</Button>
+              <Button href="/estimate">Build my estimate in 2 minutes</Button>
               <Button href="/pricing" variant="ghost">
                 See the rate card
               </Button>
@@ -194,7 +194,7 @@ export default function Home() {
               <ul className="mt-6 space-y-4 text-[15px] leading-relaxed text-muted">
                 {[
                   "Sit with you and work out what the site is actually for",
-                  "Make every design decision — layout, colour, hierarchy, what to cut",
+                  "Make every design decision: layout, colour, hierarchy, what to cut",
                   "Read every line of code that ships, because AI gets things confidently wrong",
                   "Test it on real phones, on real signal, the way your customers will use it",
                   "Answer the phone in six months when something needs changing",
@@ -206,7 +206,7 @@ export default function Home() {
                 ))}
               </ul>
               <p className="mt-7 rounded-xl border border-turq/20 bg-turq/5 p-4 text-sm leading-relaxed text-text">
-                If your site is wrong, that is my fault and my problem — not a model&rsquo;s.
+                If your site is wrong, that is my fault and my problem, not a model&rsquo;s.
                 That accountability is the whole product.
               </p>
             </Card>
@@ -263,7 +263,7 @@ export default function Home() {
               your website. Here is where a typical R60,000 quote actually goes.
             </Lead>
             <p className="mt-6 text-[15px] leading-relaxed text-muted">
-              Cheaper does not mean worse here — it means fewer people taking a cut and
+              Cheaper does not mean worse here. It means fewer people taking a cut and
               a shorter calendar. The site you get is the same standard I would ship to
               a client paying five times more, because it is the only standard I know
               how to work to.
@@ -345,8 +345,8 @@ export default function Home() {
               <H2>Published, not negotiated</H2>
               <Lead>
                 The full rate card is on the website, because hiding prices wastes
-                everybody&rsquo;s time. Work out your own number before you speak to me
-                — the estimator uses exactly the same figures.
+                everybody&rsquo;s time. Work out your own number before you speak to me. The
+                estimator uses exactly the same figures.
               </Lead>
               <div className="mt-8 flex flex-col gap-3 sm:flex-row">
                 <Button href="/estimate">Build my estimate</Button>

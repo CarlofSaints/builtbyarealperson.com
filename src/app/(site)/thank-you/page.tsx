@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 const NEXT = [
   {
     title: "Check your inbox",
-    body: "A PDF breakdown should be there within a minute or two. If it is not, look in spam — and if it is not there either, email me and I will send it again by hand.",
+    body: "A PDF breakdown should be there within a minute or two. If it is not, look in spam. If it is not there either, email me and I will send it again by hand.",
   },
   {
     title: "I read it myself, today",
@@ -24,7 +24,7 @@ const NEXT = [
   },
   {
     title: "Nothing is owed",
-    body: `No deposit is taken and nothing is committed until you have accepted a fixed written quote — and that quote will land within ${Math.round(
+    body: `No deposit is taken and nothing is committed until you have accepted a fixed written quote, and that quote will land within ${Math.round(
       ACCURACY_BAND * 100,
     )}% of the estimate you just received.`,
   },
@@ -63,7 +63,7 @@ export default async function ThankYouPage({
           <div className="mt-8 inline-flex flex-wrap items-center gap-3 rounded-2xl border border-line bg-surface/60 px-5 py-4">
             <span className="text-sm text-muted-2">Your reference</span>
             <span className="font-display text-lg font-bold tracking-wide text-turq">{reference}</span>
-            <span className="text-sm text-muted-2">— quote it if you write to me.</span>
+            <span className="text-sm text-muted-2">Quote it if you write to me.</span>
           </div>
         ) : null}
 
@@ -96,7 +96,7 @@ export default async function ThankYouPage({
                 and quote <span className="font-semibold text-text">{reference}</span>
               </>
             ) : null}
-            . A real person will reply — that is rather the point.
+            . A real person will reply. That is rather the point.
           </p>
         </div>
 
