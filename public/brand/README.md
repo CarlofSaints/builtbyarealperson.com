@@ -19,3 +19,19 @@ The light and dark versions are not the same file recoloured by accident: the
 site's turquoise `#2ae8ce` is tuned for a near-black background and is far too
 pale to read on white. The light version uses `#0f9e8c`, the same turquoise the
 estimate emails already use on their white background.
+
+## The mark
+
+Concentric ridges knocked out of the gradient disc: a fingerprint. One specific
+human made this, which is the argument the whole business rests on and the exact
+opposite of generic AI output.
+
+**Detail threshold.** Below about 46px across, the ridges close up into a smudge,
+so the mark drops them and falls back to the plain gradient dot the site header
+already animates. That is why the favicon and the share card wordmark are drawn
+at sizes above the threshold rather than shrunk down from the 512px version —
+shrinking produces the smudge the threshold exists to avoid.
+
+**The mark renders on its own transparent canvas and is then composited.**
+Knocking the ridges out directly onto a target erases the background behind them
+as well, punching holes through to whatever sits underneath.
