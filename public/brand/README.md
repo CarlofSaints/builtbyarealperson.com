@@ -42,3 +42,17 @@ signature's 224×48 at 3×. It exists separately because the mark has to be
 Scaling the 1400px version down to signature width draws the ridges and then
 shrinks them into a smudge; drawing at 43px drops them and leaves a clean dot,
 which is what you actually want at 14px on screen.
+
+## Social
+
+`fb-cover.png` — 1640×856, the Facebook page cover. Two constraints shape it,
+and the share card fails both:
+
+- **The profile picture sits bottom-centre and covers the middle of the image.**
+  On the current Facebook page layout it is roughly 300px across, centred, about
+  80% of the way down. Everything readable therefore lives in the top 60%.
+- **Mobile crops the sides.** Only the central ~1280px of the 1640 survives, so
+  nothing important goes outside that, including the wordmark.
+
+Both were checked by drawing the profile-picture circle and the mobile crop over
+the design as guides before exporting without them.
