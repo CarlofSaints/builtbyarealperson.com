@@ -36,8 +36,29 @@ a surprise.
 | `<email host>` | Business email | `<client>` | `<R x/month>` | `<login route>` |
 
 **No passwords are written in this document, and I do not hold any of yours.**
-Where I need access I am invited to your account as a member and log in under my
-own name. When you want me gone, you remove me.
+Every account above is registered to your email address, which is what makes it
+yours: whoever controls the email controls the account, no matter who filled in
+the signup form. Where I need access I am invited as a **member** and log in
+under my own name. We have never shared a login and we should not start.
+
+### Taking full control
+
+Do a password reset on each account, using your own email. That is it. You do
+not need anything from me and I cannot stop you, because I never had your
+password to begin with.
+
+### Removing me
+
+Open the account, find members or people, remove `carl@builtbyarealperson.com`.
+One click, takes effect immediately. Changing your password is not what removes
+me, and it is not what you should rely on: removing the member is.
+
+### Letting me back in later
+
+Invite `carl@builtbyarealperson.com` back as a member. Also one click. Nothing
+moves, nothing is reinstalled, and no password is sent to anybody. Whether that
+is next month or in five years, the site does not need rebuilding for me to pick
+it back up.
 
 ---
 
