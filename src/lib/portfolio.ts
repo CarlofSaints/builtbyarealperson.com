@@ -51,6 +51,14 @@ export type Project = {
   /** Ties it back to the rate card. Without this it is a CV. */
   costsHere: string;
   live: boolean;
+  /**
+   * Only where the public can actually go and use the thing.
+   *
+   * The rest are internal tools behind a login: a link would either 404 for the
+   * reader or expose somebody's staff system, and neither builds any trust. The
+   * absence of a link is honest rather than a gap.
+   */
+  url?: string;
 };
 
 export const PROJECTS: Project[] = [
@@ -67,6 +75,7 @@ export const PROJECTS: Project[] = [
       "Everyone is kept up to date by email as it moves, without anybody chasing",
     ],
     capabilities: ["data", "notifications", "mobile"],
+    url: "https://pricemyprang.co.za",
     costsHere:
       "This is the far end of what a website can be. Most businesses need nothing like it, but if you have ever thought your site could take the job rather than just describe it, this is what that looks like.",
     live: true,

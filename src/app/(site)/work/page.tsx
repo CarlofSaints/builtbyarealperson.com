@@ -96,6 +96,27 @@ export default function WorkPage() {
                 ))}
               </div>
 
+              {project.url && (
+                <a
+                  href={project.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-6 inline-flex items-center gap-2 rounded-xl border border-turq/50 px-4 py-2.5 font-display text-sm font-semibold text-turq transition-colors hover:bg-turq/10"
+                >
+                  Go and have a look
+                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                    <path
+                      d="M6 3h7v7M13 3L4 12"
+                      stroke="currentColor"
+                      strokeWidth="1.7"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                  <span className="sr-only">(opens {project.client} in a new tab)</span>
+                </a>
+              )}
+
               <p className="mt-6 border-t border-line pt-5 text-[15px] leading-relaxed text-text">
                 <span className="font-semibold text-turq">On your quote:</span> {project.costsHere}
               </p>
