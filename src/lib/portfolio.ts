@@ -171,6 +171,13 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "iram-routes",
+    shots: [
+      { src: "/work/iram-routes/map.jpg", caption: "Every store the reps cover, plotted. The whole footprint on one screen instead of in a spreadsheet." },
+      { src: "/work/iram-routes/stores.jpg", caption: "The store list behind the map: who calls there, how often, and for how long." },
+      { src: "/work/iram-routes/reps.jpg", caption: "The reps, their teams and where each one starts the day, which is what the routing works from." },
+      { src: "/work/iram-routes/capacity.jpg", caption: "Who is over capacity and who has room, so the fix is reshuffling rather than hiring." },
+    ],
+
     client: "iRam",
     headline: "Sales rounds planned by the map instead of by habit",
     problem:
