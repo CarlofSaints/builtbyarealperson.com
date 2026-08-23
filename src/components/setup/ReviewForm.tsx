@@ -19,7 +19,7 @@ function Star({ filled }: { filled: boolean }) {
   );
 }
 
-export function ReviewForm({ reference, firstName }: { reference: string; firstName: string }) {
+export function ReviewForm({ token, firstName }: { token: string; firstName: string }) {
   const [stars, setStars] = useState(0);
   const [hover, setHover] = useState(0);
   const [quote, setQuote] = useState("");
@@ -37,7 +37,7 @@ export function ReviewForm({ reference, firstName }: { reference: string; firstN
     if (!consent) return setError("Let me know whether I may use this, even if the answer is no.");
     setError(null);
     startTransition(async () => {
-      const result = await submitReview(reference, { stars, quote, consent, attributionName, privateNote });
+      const result = await submitReview(token, { stars, quote, consent, attributionName, privateNote });
       if (!result.ok) return setError(result.error);
       router.refresh();
     });

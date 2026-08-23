@@ -11,7 +11,7 @@
  * answer a questionnaire once. That is the whole blast radius.
  */
 
-import { readLead, saveTakeOn } from "@/lib/store";
+import { leadByAccessToken, saveTakeOn } from "@/lib/store";
 import { EMPTY_TAKE_ON, QUESTIONS, recommend, type TakeOnAnswers } from "@/lib/take-on";
 
 export type TakeOnResult = { ok: boolean; error: string | null };
@@ -37,16 +37,16 @@ function sanitise(input: unknown): TakeOnAnswers | null {
   return out;
 }
 
-export async function submitTakeOn(reference: string, input: unknown): Promise<TakeOnResult> {
-  const ref = String(reference || "").trim();
-  if (!ref) return { ok: false, error: "Something went wrong. Please use the link I sent you." };
-
+export async function submitTakeOn(token: string, input: unknown): Promise<TakeOnResult> {
   const answers = sanitise(input);
   if (!answers) return { ok: false, error: "Please answer every question before sending." };
 
-  const lead = await readLead(ref);
-  if (!lead) return { ok: false, error: "I could not find that. Please use the link I sent you." };
+  // The link is the credential, so this resolves the same way the page does.
+  // A caller without a live token is told nothing about why it failed.
+  const lead = await leadByAccessToken(String(token ?? ""));
+  if (!lead) return { ok: false, error: "This link is no longer working. Email me and I will send a new one." };
   if (lead.takeOn) return { ok: true, error: null };
+  const ref = lead.reference;
 
   const { plan } = recommend(answers, lead.answers);
   const saved = await saveTakeOn(ref, answers, plan, new Date());
@@ -68,12 +68,9 @@ import { CONSENT_CHOICES, type Review, type ReviewConsent } from "@/lib/review";
 export type ReviewResult = { ok: boolean; error: string | null };
 
 export async function submitReview(
-  reference: string,
+  token: string,
   input: { stars: number; quote: string; consent: string; attributionName: string; privateNote: string },
 ): Promise<ReviewResult> {
-  const ref = String(reference || "").trim();
-  if (!ref) return { ok: false, error: "Something went wrong. Please use the link I sent you." };
-
   const stars = Number(input?.stars);
   if (!Number.isInteger(stars) || stars < 1 || stars > 5) {
     return { ok: false, error: "Pick between one and five stars." };
@@ -82,9 +79,10 @@ export async function submitReview(
     return { ok: false, error: "Let me know whether I may use this." };
   }
 
-  const lead = await readLead(ref);
-  if (!lead) return { ok: false, error: "I could not find that. Please use the link I sent you." };
+  const lead = await leadByAccessToken(String(token ?? ""));
+  if (!lead) return { ok: false, error: "This link is no longer working. Email me and I will send a new one." };
   if (lead.review) return { ok: true, error: null };
+  const ref = lead.reference;
 
   const review: Review = {
     stars,

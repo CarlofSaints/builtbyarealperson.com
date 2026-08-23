@@ -101,14 +101,22 @@ function ChangeRow({ reference, change }: { reference: string; change: ChangeReq
   );
 }
 
+const LINKS = [
+  { label: "Setup", path: "/setup" },
+  { label: "Progress", path: "/project" },
+  { label: "Review", path: "/review" },
+];
+
 export function ProjectPanel({
   reference,
-  url,
+  base,
+  token,
   changes,
   waitingOn,
 }: {
   reference: string;
-  url: string;
+  base: string;
+  token: string;
   changes: ChangeRequest[];
   waitingOn: { what: string; since: string }[];
 }) {
@@ -122,11 +130,28 @@ export function ProjectPanel({
     <div>
       <div className="rounded-xl border border-line bg-ink p-4">
         <p className="text-xs font-semibold uppercase tracking-wider text-muted-2">
-          Their link. No password. Send it in an email.
+          Their links. No password on any of them. Send the one you need.
         </p>
-        <p className="mt-2 break-all font-mono text-[11px] text-muted">{url}</p>
+        {/* One token, three pages. Rotating kills all three at once, which is
+            the behaviour you want: revoking access should not be partial. */}
+        <div className="mt-3 space-y-2">
+          {LINKS.map((link) => (
+            <div key={link.path} className="flex flex-wrap items-center gap-2">
+              <span className="w-[104px] shrink-0 text-[11px] font-semibold uppercase tracking-wider text-turq">
+                {link.label}
+              </span>
+              <span className="min-w-0 flex-1 break-all font-mono text-[11px] text-muted">
+                {base}{link.path}/{token}
+              </span>
+              <CopyLink url={`${base}${link.path}/${token}`} />
+            </div>
+          ))}
+        </div>
+        <p className="mt-3 text-[11px] leading-relaxed text-muted-2">
+          Setup is for after they accept a quote, progress is for during the build, and the review
+          goes out at handover.
+        </p>
         <div className="mt-3 flex flex-wrap gap-2">
-          <CopyLink url={url} />
           <button
             type="button"
             disabled={rotating}

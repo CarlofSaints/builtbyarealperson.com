@@ -13,7 +13,7 @@ import { EMPTY_TAKE_ON, QUESTIONS, type TakeOnAnswers } from "@/lib/take-on";
  * would only hide how short it is. Somebody who can see the whole thing knows
  * it is three minutes; somebody clicking Next has no idea.
  */
-export function TakeOnForm({ reference }: { reference: string }) {
+export function TakeOnForm({ token }: { token: string }) {
   const [answers, setAnswers] = useState<TakeOnAnswers>(EMPTY_TAKE_ON);
   const [error, setError] = useState<string | null>(null);
   const [showGaps, setShowGaps] = useState(false);
@@ -39,7 +39,7 @@ export function TakeOnForm({ reference }: { reference: string }) {
       return;
     }
     startTransition(async () => {
-      const result = await submitTakeOn(reference, answers);
+      const result = await submitTakeOn(token, answers);
       if (!result.ok) {
         setError(result.error);
         return;

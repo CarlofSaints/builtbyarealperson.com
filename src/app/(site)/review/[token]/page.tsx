@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { isBlobConfigured, readLead } from "@/lib/store";
+import { isBlobConfigured, leadByAccessToken } from "@/lib/store";
 import { ReviewForm } from "@/components/setup/ReviewForm";
 import { Section, H2, Lead } from "@/components/ui";
 
@@ -10,10 +10,10 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function ReviewPage({ params }: { params: Promise<{ reference: string }> }) {
-  const { reference } = await params;
+export default async function ReviewPage({ params }: { params: Promise<{ token: string }> }) {
+  const { token } = await params;
   if (!isBlobConfigured()) notFound();
-  const lead = await readLead(reference);
+  const lead = await leadByAccessToken(token);
   if (!lead) notFound();
 
   const first = lead.answers.name.trim().split(/\s+/)[0] || "there";
@@ -43,7 +43,7 @@ export default async function ReviewPage({ params }: { params: Promise<{ referen
           way I find out whether the thing I do is any good.
         </Lead>
         <div className="mt-10">
-          <ReviewForm reference={lead.reference} firstName={first} />
+          <ReviewForm token={token} firstName={first} />
         </div>
       </div>
     </Section>

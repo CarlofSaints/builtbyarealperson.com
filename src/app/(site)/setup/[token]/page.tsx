@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { isBlobConfigured, readLead } from "@/lib/store";
+import { isBlobConfigured, leadByAccessToken } from "@/lib/store";
 import { recommend } from "@/lib/take-on";
 import { TakeOnForm } from "@/components/setup/TakeOnForm";
 import { Recommended } from "@/components/setup/Recommended";
@@ -14,11 +14,12 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function SetupPage({ params }: { params: Promise<{ reference: string }> }) {
-  const { reference } = await params;
+export default async function SetupPage({ params }: { params: Promise<{ token: string }> }) {
+  const { token } = await params;
   if (!isBlobConfigured()) notFound();
 
-  const lead = await readLead(reference);
+  // Dead, rotated, malformed and invented tokens all end in the same place.
+  const lead = await leadByAccessToken(token);
   if (!lead) notFound();
 
   const first = lead.answers.name.trim().split(/\s+/)[0] || "there";
@@ -61,7 +62,7 @@ export default async function SetupPage({ params }: { params: Promise<{ referenc
         </p>
 
         <div className="mt-12">
-          <TakeOnForm reference={lead.reference} />
+          <TakeOnForm token={token} />
         </div>
       </div>
     </Section>

@@ -343,8 +343,7 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
           ) : (
             <Panel title="Take-on">
               <p className="text-sm leading-relaxed text-muted">
-                Not answered yet. Send them{" "}
-                <span className="font-mono text-text">/setup/{lead.reference}</span> once the quote
+                Not answered yet. Send them the Setup link from the panel below once the quote
                 is accepted, and the hosting arrangement works itself out from their answers.
               </p>
             </Panel>
@@ -417,7 +416,8 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
             <Panel title="Their project page">
               <ProjectPanel
                 reference={lead.reference}
-                url={`${SITE.url}/project/${token}`}
+                base={SITE.url}
+                token={token}
                 changes={lead.changes ?? []}
                 waitingOn={lead.waitingOn ?? []}
               />
