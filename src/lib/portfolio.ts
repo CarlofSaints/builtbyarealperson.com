@@ -57,20 +57,21 @@ export const PROJECTS: Project[] = [
   {
     slug: "colab-hub",
     client: "COLAB",
-    headline: "A staff hub that books the vehicles and reports the faults",
+    headline: "A staff hub that talks to the accounting system",
     problem:
-      "Booking a company vehicle meant asking somebody, and nobody could see what was already taken. Faults were reported by walking up to a person and hoping they remembered.",
+      "Invoices were raised in one place and retyped into the accounts in another, which is where the mistakes came from. Questions about a job lived in WhatsApp, where nobody could find them a month later.",
     does: [
-      "A shared calendar of every vehicle, so people book against what is actually free",
-      "Requests to take a vehicle somebody else has, which the organiser can accept or decline",
-      "A QR sticker on the vehicle that anyone can scan to report a fault, without a login",
+      "Billing raised in the hub goes through to Xero, so the same figure is never typed twice",
+      "Staff message each other inside the system, against the thing they are talking about, so the conversation stays with the job",
       "Sign in with a one-time code sent to your email, so there is no password to forget",
-      "Different people see different things: finance sees the money, staff see the diary",
-      "Emails that go out on their own when something is booked, returned, overdue or cancelled",
+      "Different people see different things: finance sees the money, staff see their own work",
+      "A shared calendar for the things people book, so two people cannot take the same slot",
+      "A QR sticker anyone can scan to report a fault, with no login and no app to install",
+      "Emails that send themselves when something needs attention, instead of somebody remembering",
     ],
-    capabilities: ["bookings", "logins", "notifications", "mobile"],
+    capabilities: ["accounting", "logins", "bookings", "notifications", "mobile"],
     costsHere:
-      "A booking calendar with email confirmations is the sort of thing an integration covers on the rate card.",
+      "Connecting a site to accounting software is the clearest example of what an integration is, and it is priced as one.",
     live: true,
   },
   {

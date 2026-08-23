@@ -27,9 +27,8 @@ export default function WorkPage() {
             what it means before you pay for it.
           </Lead>
           <p className="mt-5 leading-relaxed text-muted">
-            These were built through my other business, for companies I am involved in. That is
-            why I can show them: I asked, and the answer was mine to give. It also means you are
-            not my first project, which is a fair thing to want to know.
+            All of it is in daily use by people who depend on it. Which is the fair thing to want
+            to know before you hand your website to one person: that you are not the first.
           </p>
         </div>
       </Section>
