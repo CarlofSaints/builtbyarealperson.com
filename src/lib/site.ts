@@ -39,6 +39,6 @@ export const SITE = {
 export const NAV_LINKS = [
   { href: "/#how", label: "How it works" },
   { href: "/#honest", label: "The AI question" },
-  { href: "/work", label: "What it can do" },
+  { href: "/work", label: "My work" },
   { href: "/pricing", label: "Pricing" },
 ] as const;
