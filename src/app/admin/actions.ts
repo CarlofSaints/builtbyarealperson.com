@@ -128,3 +128,103 @@ export async function deleteLeadAction(reference: string): Promise<DeleteResult>
   revalidatePath(`/admin/${ref}`);
   return { error: null, deleted: gone.reference };
 }
+
+/* ------------------------------------------------------------------ */
+/* The client's project page                                           */
+/* ------------------------------------------------------------------ */
+
+import { accessTokenFor, readLead, rotateAccessToken, setWaitingOn, updateChangeRequest } from "@/lib/store";
+import type { ChangeStatus } from "@/lib/project";
+import { SITE } from "@/lib/site";
+
+export type LinkResult = { url: string | null; error: string | null };
+
+/** Mint the link if it does not exist yet, or hand back the one that does. */
+export async function getProjectLink(reference: string): Promise<LinkResult> {
+  if (!(await isSignedIn())) return { url: null, error: "Signed out." };
+  const token = await accessTokenFor(reference);
+  if (!token) return { url: null, error: "Could not read that lead." };
+  return { url: `${SITE.url}/project/${token}`, error: null };
+}
+
+/** Kill the old link and issue a new one. The old one stops working at once. */
+export async function rotateProjectLink(reference: string): Promise<LinkResult> {
+  if (!(await isSignedIn())) return { url: null, error: "Signed out." };
+  const token = await rotateAccessToken(reference);
+  if (!token) return { url: null, error: "Could not rotate that link." };
+  console.log(JSON.stringify({ event: "project.link.rotated", reference }));
+  revalidatePath(`/admin/${reference}`);
+  return { url: `${SITE.url}/project/${token}`, error: null };
+}
+
+export type ChangeResult = { error: string | null };
+
+export async function triageChange(
+  reference: string,
+  id: string,
+  status: string,
+  priceText: string,
+  note: string,
+): Promise<ChangeResult> {
+  if (!(await isSignedIn())) return { error: "Signed out. Reload and sign in again." };
+
+  const allowed: ChangeStatus[] = ["new", "in-the-build", "quoted", "done", "not-doing"];
+  if (!allowed.includes(status as ChangeStatus)) return { error: `Unknown status "${status}".` };
+
+  // An empty box means "no price", which is different from a price of zero:
+  // zero is a deliberate "no charge" the customer sees.
+  const trimmed = String(priceText ?? "").trim();
+  let price: number | null | undefined = null;
+  if (trimmed) {
+    const parsed = Number(trimmed.replace(/[^0-9.]/g, ""));
+    if (!Number.isFinite(parsed) || parsed < 0) return { error: "That price is not a number." };
+    price = Math.round(parsed);
+  }
+
+  const updated = await updateChangeRequest(reference, id, {
+    status: status as ChangeStatus,
+    price,
+    note: String(note ?? ""),
+  });
+  if (!updated) return { error: "Could not save that." };
+
+  revalidatePath(`/admin/${reference}`);
+  return { error: null };
+}
+
+/**
+ * One thing per line. A repeater UI would be more work for both of us.
+ *
+ * The date on each line is PRESERVED where the wording has not changed. The
+ * value of this feature is entirely in "since the 3rd" — stamping today's date
+ * every time I tidy the list would quietly reset the clock on exactly the thing
+ * it exists to measure.
+ */
+export async function saveWaitingOn(reference: string, text: string): Promise<ChangeResult> {
+  if (!(await isSignedIn())) return { error: "Signed out. Reload and sign in again." };
+
+  const lead = await readLead(reference);
+  if (!lead) return { error: "Could not read that lead." };
+  const existing = new Map((lead.waitingOn ?? []).map((w) => [w.what, w]));
+  const now = new Date();
+
+  // Declared rather than inlined: this file has already been mangled once by
+  // an escaping layer, and a named constant is harder to corrupt silently.
+  const SPLIT_LINES = /\r?\n/;
+
+  const items = String(text ?? "")
+    .split(SPLIT_LINES)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .slice(0, 20)
+    .map((what, i) => {
+      const trimmed = what.slice(0, 300);
+      const kept = existing.get(trimmed);
+      return kept ?? { id: `${now.getTime().toString(36)}-${i}`, what: trimmed, since: now.toISOString() };
+    });
+
+  const updated = await setWaitingOn(reference, items);
+  if (!updated) return { error: "Could not save that." };
+  revalidatePath(`/admin/${reference}`);
+  return { error: null };
+}

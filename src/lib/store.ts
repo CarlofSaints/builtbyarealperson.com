@@ -15,6 +15,8 @@ import { DEFAULT_STATUS, isLeadStatus, type LeadStatus } from "./pipeline";
 import { mergeDelivery, type EmailDelivery, type EmailKind } from "./delivery";
 import type { HostingPlan, TakeOnAnswers } from "./take-on";
 import type { Review } from "./review";
+import { looksLikeToken, makeAccessToken } from "./access";
+import { makeChangeId, type ChangeRequest, type ChangeStatus, type WaitingOn } from "./project";
 
 const PREFIX = "leads/";
 
@@ -30,6 +32,16 @@ const PREFIX = "leads/";
  * a shared file is last-write-wins and two sends a second apart would lose one.
  */
 const EMAIL_PREFIX = "email-index/";
+
+/**
+ * One pointer per access token, back to the lead it opens.
+ *
+ * Same shape as the email index and for the same reason: the customer arrives
+ * holding a token and nothing else, and reading every lead on every visit would
+ * be absurd. Rotating a token means deleting the old pointer, which is what
+ * makes revocation actually revoke.
+ */
+const ACCESS_PREFIX = "access/";
 
 export type LeadRecord = {
   reference: string;
@@ -103,6 +115,17 @@ export type LeadRecord = {
    * as one.
    */
   review?: Review;
+
+  /**
+   * The unguessable key to this lead's own pages. Absent on older leads, minted
+   * on demand — see `accessTokenFor`.
+   */
+  accessToken?: string;
+
+  /** Everything asked for after the quote, by either side. */
+  changes?: ChangeRequest[];
+  /** What I am waiting on them for. The honest answer to "why is this late". */
+  waitingOn?: WaitingOn[];
 };
 
 function pathFor(reference: string): string {
@@ -433,4 +456,148 @@ export async function listPublishableReviews(): Promise<
       business: lead.answers.business,
       reference: lead.reference,
     }));
+}
+
+/* ------------------------------------------------------------------ */
+/* Unguessable access links                                            */
+/* ------------------------------------------------------------------ */
+
+function accessPath(token: string): string {
+  return `${ACCESS_PREFIX}${token.replace(/[^A-Za-z0-9_-]/g, "")}.json`;
+}
+
+async function writeAccessPointer(token: string, reference: string): Promise<void> {
+  await put(accessPath(token), JSON.stringify({ reference }), {
+    access: "private",
+    contentType: "application/json",
+    addRandomSuffix: false,
+    allowOverwrite: true,
+    cacheControlMaxAge: 0,
+  });
+}
+
+/**
+ * The token for a lead, minted on first use.
+ *
+ * Leads created before this existed have none, and back-filling every one of
+ * them in a migration is work for no reason. The first time a link is needed,
+ * it appears.
+ */
+export async function accessTokenFor(reference: string): Promise<string | null> {
+  const lead = await readLead(reference);
+  if (!lead) return null;
+  if (lead.accessToken) return lead.accessToken;
+
+  const token = makeAccessToken();
+  const updated = await patchLead(reference, (current) => ({ ...current, accessToken: token }));
+  if (!updated) return null;
+  await writeAccessPointer(token, reference);
+  return token;
+}
+
+/**
+ * Invalidate the old link and issue a new one.
+ *
+ * Deleting the pointer is what does the revoking: the lead still carries the
+ * new token, but the old one no longer resolves to anything.
+ */
+export async function rotateAccessToken(reference: string): Promise<string | null> {
+  const lead = await readLead(reference);
+  if (!lead) return null;
+
+  const next = makeAccessToken();
+  const updated = await patchLead(reference, (current) => ({ ...current, accessToken: next }));
+  if (!updated) return null;
+
+  if (lead.accessToken) {
+    try {
+      await del(accessPath(lead.accessToken));
+    } catch {
+      // The pointer may already be gone. The new token is what matters.
+    }
+  }
+  await writeAccessPointer(next, reference);
+  return next;
+}
+
+/**
+ * Resolve a token to its lead.
+ *
+ * Returns null for anything that does not resolve, without saying whether the
+ * token was malformed, unknown or revoked — three different answers would let
+ * somebody map the space.
+ */
+export async function leadByAccessToken(token: string): Promise<LeadRecord | null> {
+  if (!looksLikeToken(token)) return null;
+  try {
+    const result = await get(accessPath(token), { access: "private", useCache: false });
+    if (!result || result.statusCode !== 200 || !result.stream) return null;
+    const { reference } = JSON.parse(await new Response(result.stream).text()) as { reference: string };
+    const lead = await readLead(reference);
+    // The pointer could outlive a rotation if a delete failed. The lead is the
+    // authority on which token is current.
+    if (!lead || lead.accessToken !== token) return null;
+    return lead;
+  } catch {
+    return null;
+  }
+}
+
+/* ------------------------------------------------------------------ */
+/* Change requests                                                     */
+/* ------------------------------------------------------------------ */
+
+/**
+ * Add a request. Called from the client's own page, so it takes their words
+ * and nothing else — no status, no price, no ability to mark anything done.
+ */
+export async function addChangeRequest(
+  reference: string,
+  what: string,
+  askedBy: "you" | "me",
+  now: Date,
+): Promise<LeadRecord | null> {
+  const text = what.trim().slice(0, 2000);
+  if (!text) return null;
+  return patchLead(reference, (lead) => ({
+    ...lead,
+    changes: [
+      ...(lead.changes ?? []),
+      { id: makeChangeId(now), what: text, askedAt: now.toISOString(), askedBy, status: "new" as ChangeStatus },
+    ],
+  }));
+}
+
+/** Triage, from the admin only. */
+export async function updateChangeRequest(
+  reference: string,
+  id: string,
+  patch: { status?: ChangeStatus; price?: number | null; note?: string },
+): Promise<LeadRecord | null> {
+  return patchLead(reference, (lead) => ({
+    ...lead,
+    changes: (lead.changes ?? []).map((c) =>
+      c.id !== id
+        ? c
+        : {
+            ...c,
+            ...(patch.status ? { status: patch.status } : {}),
+            ...(patch.note !== undefined ? { note: patch.note.trim().slice(0, 1000) } : {}),
+            // null clears a price; undefined leaves it alone. "No charge" and
+            // "not priced yet" have to stay tellable apart.
+            ...(patch.price === null
+              ? { price: undefined }
+              : typeof patch.price === "number"
+                ? { price: patch.price }
+                : {}),
+          },
+    ),
+  }));
+}
+
+export async function setWaitingOn(
+  reference: string,
+  items: WaitingOn[],
+): Promise<LeadRecord | null> {
+  return patchLead(reference, (lead) => ({ ...lead, waitingOn: items }));
 }

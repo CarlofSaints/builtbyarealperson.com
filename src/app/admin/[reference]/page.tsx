@@ -15,10 +15,13 @@ import {
   TIMELINES,
   formatMoney,
 } from "@/lib/rate-card";
+import { SITE } from "@/lib/site";
 import { AdminHeader } from "@/components/admin/AdminHeader";
 import { StatusSelect } from "@/components/admin/StatusSelect";
 import { DeleteLead } from "@/components/admin/DeleteLead";
 import { DeliveryBadge } from "@/components/admin/DeliveryBadge";
+import { ProjectPanel } from "@/components/admin/ProjectPanel";
+import { accessTokenFor } from "@/lib/store";
 import { EMAIL_KIND_LABELS, EMAIL_KINDS } from "@/lib/delivery";
 import { QUESTIONS, recommend } from "@/lib/take-on";
 import { CONSENT_CHOICES, STAR_LABELS, attribution, isPublishable } from "@/lib/review";
@@ -53,6 +56,7 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
   if (!lead) notFound();
 
   const row = toRow(lead, new Date());
+  const token = await accessTokenFor(lead.reference);
   const status = leadStatus(lead);
   const a = lead.answers;
   // null for Lost, which is an outcome rather than a place on the bar.
@@ -406,6 +410,17 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
               )}
 
               <p className="mt-3 text-xs text-muted-2">Left {when(lead.review.at)}</p>
+            </Panel>
+          )}
+
+          {token && (
+            <Panel title="Their project page">
+              <ProjectPanel
+                reference={lead.reference}
+                url={`${SITE.url}/project/${token}`}
+                changes={lead.changes ?? []}
+                waitingOn={lead.waitingOn ?? []}
+              />
             </Panel>
           )}
 
