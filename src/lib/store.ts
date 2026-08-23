@@ -13,6 +13,7 @@ import type { Answers } from "./estimate";
 import type { Estimate } from "./estimate";
 import { DEFAULT_STATUS, isLeadStatus, type LeadStatus } from "./pipeline";
 import { mergeDelivery, type EmailDelivery, type EmailKind } from "./delivery";
+import type { HostingPlan, TakeOnAnswers } from "./take-on";
 
 const PREFIX = "leads/";
 
@@ -82,6 +83,18 @@ export type LeadRecord = {
   statusChangedAt?: string;
   /** Every change, oldest first. The audit trail behind the grid. */
   statusHistory?: { from: LeadStatus; to: LeadStatus; at: string }[];
+
+  /**
+   * The take-on questionnaire, filled in by the customer once a quote is
+   * accepted. Absent means it has not been sent or not been answered — the two
+   * are distinguished by whether a status past Quote Accepted has been set.
+   */
+  takeOn?: {
+    answers: TakeOnAnswers;
+    completedAt: string;
+    /** The plan derived at the time, kept so a later logic change cannot rewrite history. */
+    plan: HostingPlan;
+  };
 };
 
 function pathFor(reference: string): string {
@@ -363,4 +376,24 @@ export async function recordDeliveryEvent(
 
   if (!updated) return { outcome: "lead-gone", reference: pointer.reference };
   return { outcome: "applied", reference: pointer.reference };
+}
+
+/**
+ * Record the take-on answers against a lead.
+ *
+ * Called from a public endpoint — the customer filling it in is not signed in —
+ * so it writes exactly one field and nothing else. A caller who guesses a
+ * reference can fill in a questionnaire, which is not worth defending against
+ * with a login the customer would resent.
+ */
+export async function saveTakeOn(
+  reference: string,
+  answers: TakeOnAnswers,
+  plan: HostingPlan,
+  now: Date,
+): Promise<LeadRecord | null> {
+  return patchLead(reference, (lead) => ({
+    ...lead,
+    takeOn: { answers, completedAt: now.toISOString(), plan },
+  }));
 }

@@ -23,9 +23,29 @@ export const CARE_PLAN = {
     "Hosting, security updates, daily backups, uptime monitoring and up to 30 minutes of small tweaks a month. Cancel any time. You keep the site either way.",
 };
 
-/** Hosting position, shown as a note rather than a line item. */
+/**
+ * Hosting position, shown as a note rather than a line item.
+ *
+ * The old wording offered hosting "free on my account", which contradicted the
+ * ownership promise everywhere else on the site: a site on my plan is a site
+ * you cannot take with you, however willingly I would hand it over. Most sites
+ * here do not need a paid platform at all, so the honest version is that the
+ * arrangement is a decision we make together, and the domain and the code are
+ * yours regardless of it.
+ */
 export const HOSTING_NOTE =
-  "Hosting for the first year is included. After that it is either free on my account or roughly R0–R250 a month on your own, depending on traffic. I will show you the numbers before you commit.";
+  "Hosting for the first year is included. Most sites here run on hosting that costs nothing or close to it, often on something you already pay for. Where a site needs more, it is roughly R0 to R250 a month. We decide together whose account it lives in, and I will show you the numbers before you commit.";
+
+/**
+ * What "you own it" actually means, boundary included.
+ *
+ * Read literally, "you own the code" hands every client the reusable components
+ * and tooling that make this business possible. The line below is the standard
+ * split, and it is on the site rather than buried in terms because it is the
+ * kind of thing that should not be a surprise.
+ */
+export const OWNERSHIP_NOTE =
+  "Your domain, your site, your content and your accounts are yours outright, and stay yours whether or not you carry on working with me. What I keep is the reusable toolkit underneath: the components and build setup I use across every project. You are not buying a share of my tools, and I am not taking a share of your website.";
 
 export type Money = number;
 

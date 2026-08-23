@@ -51,7 +51,7 @@ const INCLUDED = [
   { title: "Found on Google", body: "Titles, descriptions, sitemap, structured data and Search Console set up and submitted. Not an add-on." },
   { title: "Forms that arrive", body: "Enquiries land in your inbox and are stored, so a mail glitch never quietly costs you a customer." },
   { title: "Accessible", body: "Real contrast, keyboard navigation, labelled fields. It is the law's direction of travel and it is just better." },
-  { title: "Handed over clean", body: "Every login, the code, the domain, the analytics. In your name, from day one." },
+  { title: "Handed over clean", body: "The domain, the code, the analytics and every login, in your name. Where the site is hosted is a decision we make together, and it is written down." },
 ];
 
 const FAQ = [

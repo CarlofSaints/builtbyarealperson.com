@@ -20,6 +20,7 @@ import { StatusSelect } from "@/components/admin/StatusSelect";
 import { DeleteLead } from "@/components/admin/DeleteLead";
 import { DeliveryBadge } from "@/components/admin/DeliveryBadge";
 import { EMAIL_KIND_LABELS, EMAIL_KINDS } from "@/lib/delivery";
+import { QUESTIONS, recommend } from "@/lib/take-on";
 
 export const dynamic = "force-dynamic";
 
@@ -294,6 +295,55 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
               </p>
             )}
           </Panel>
+
+          {lead.takeOn ? (
+            (() => {
+              const rec = recommend(lead.takeOn.answers, a);
+              return (
+                <Panel title={`Take-on — ${rec.title}`}>
+                  {rec.flags.length > 0 && (
+                    <div className="mb-4 rounded-xl border border-amber-400/40 bg-amber-400/10 p-3">
+                      <p className="text-xs font-semibold uppercase tracking-wider text-amber-300">
+                        Chase before the build
+                      </p>
+                      <ul className="mt-2 space-y-1.5">
+                        {rec.flags.map((f) => (
+                          <li key={f} className="text-xs leading-snug text-amber-200">{f}</li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
+                  <Row label="Hosting plan" value={rec.title} />
+                  <Row label="Costs them" value={rec.monthly} />
+                  {QUESTIONS.map((q) => {
+                    const picked = lead.takeOn!.answers[q.id];
+                    const label = q.choices.find((c) => c.id === picked)?.label ?? String(picked ?? "—");
+                    return <Row key={q.id} label={q.question} value={label} />;
+                  })}
+                  {lead.takeOn.answers.currentHostingWho.trim() && (
+                    <Row label="Host named" value={lead.takeOn.answers.currentHostingWho} />
+                  )}
+                  {lead.takeOn.answers.domainWho.trim() && (
+                    <Row label="Domain held by" value={lead.takeOn.answers.domainWho} />
+                  )}
+                  {lead.takeOn.answers.notes.trim() && (
+                    <p className="mt-3 whitespace-pre-wrap border-t border-line pt-3 text-sm leading-relaxed text-text">
+                      {lead.takeOn.answers.notes}
+                    </p>
+                  )}
+                  <p className="mt-3 text-xs text-muted-2">Answered {when(lead.takeOn.completedAt)}</p>
+                </Panel>
+              );
+            })()
+          ) : (
+            <Panel title="Take-on">
+              <p className="text-sm leading-relaxed text-muted">
+                Not answered yet. Send them{" "}
+                <span className="font-mono text-text">/setup/{lead.reference}</span> once the quote
+                is accepted, and the hosting arrangement works itself out from their answers.
+              </p>
+            </Panel>
+          )}
 
           <Panel title="How they got here">
             <Row label="Referrer" value={lead.meta.referer || "Typed or unknown"} />
