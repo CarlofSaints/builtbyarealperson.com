@@ -71,15 +71,39 @@ Any competent developer can take it from there. That is the point of this file.
 
 ---
 
-## Running it
+## The code
 
-- **Code:** `<repo url>`
-- **Framework:** Next.js. Any developer will recognise it.
-- **To run it locally:** `npm install` then `npm run dev`
-- **Deploys:** pushing to the `main` branch publishes automatically
-- **Settings and keys:** in the hosting account, under environment variables
+**Your copy is the file `<slug>-website-<date>.bundle` in this pack.** That one
+file is the entire website, including every version of it since the day it was
+started. It is not an export or a backup that might be missing something. Any
+developer can turn it back into a working project with one command, offline,
+years from now, without needing anything from me and without my permission.
 
----
+You do not need a GitHub account, and you will never have to use one.
+
+| | |
+| --- | --- |
+| Where I keep it day to day | `<repo url>` |
+| Who can see it | Private |
+| Deploys are triggered from | `<repo url>`, branch `<branch>` |
+
+That last row matters and is worth understanding: **the hosting is fed from that
+repository.** If you ever move the site to a developer of your own, they need to
+point the hosting at their own copy, which the bundle gives them. It is a
+ten-minute job and it is the only string attached.
+
+**To turn the file back into the website:**
+
+```
+git clone <slug>-website-<date>.bundle mysite
+cd mysite
+npm install
+npm run dev
+```
+
+It is a Next.js project. Any web developer will recognise it immediately.
+Settings and keys are not in the code — they live in the hosting account, which
+is listed in the table above.
 
 ## What was agreed
 

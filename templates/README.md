@@ -12,3 +12,18 @@ checklist: if a row cannot be completed honestly, an account got created in the
 wrong name and now is the cheap moment to fix it, not launch week.
 
 The hosting row comes out of the take-on questionnaire at `/setup/<reference>`.
+
+## Producing a pack
+
+From inside the client repo:
+
+    node ../builtbyarealperson.com/scripts/handover.mjs "Client Name"
+
+It writes a verified `git bundle` into `handover/`, checks the history for
+secrets including ones deleted later, refuses to pass a public repo, and prints
+the rows to paste into HANDOVER.md.
+
+The bundle is the point. The customer does not need a GitHub account, does not
+need to know what a repository is, and will never type a git command — they get
+one file that IS the website, and a document telling any developer how to use
+it. Ownership without administration.

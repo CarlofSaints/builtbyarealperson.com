@@ -191,15 +191,36 @@ export function needsServer(answers: Answers): boolean {
 }
 
 const ALWAYS_YOURS =
-  "The web address and the code are in your name whichever of these we pick. Only where the site runs is in question.";
+  "The web address is registered in your name and the code is handed to you as a file you keep, whichever of these we pick. Only where the site runs is in question.";
+
+/**
+ * The default is that I carry it.
+ *
+ * This started out the other way round and it was wrong. Recommending that
+ * somebody create their own hosting account is recommending homework, and the
+ * customers here run plumbing businesses — the whole proposition is that the
+ * technical burden is mine. A recommendation that begins "first, create an
+ * account" is a barrier dressed up as a principle.
+ *
+ * Owning something means being able to take it and having nobody able to stop
+ * you. It does not mean holding the keys yourself. So the domain is in their
+ * name and the code is in their hands from launch either way, and the running
+ * of it is mine unless they have actively said they want it.
+ *
+ * An account in their name is therefore only recommended when they have asked
+ * for one: either they said they would rather own everything, or they said
+ * being able to leave without involving me matters a lot. Both are real
+ * answers and both are honoured. Neither is the default.
+ */
+function wantsTheKeys(take: TakeOnAnswers): boolean {
+  return take.stance === "own-it" || take.portability === "high";
+}
 
 export function recommend(take: TakeOnAnswers, answers: Answers): Recommendation {
   const server = needsServer(answers);
   const hasHost = take.currentHosting === "yes-known" || take.currentHosting === "yes-unknown";
   const ownDomainEmail = take.emailKind === "own-domain";
-  const handsOff = take.stance === "hands-off";
-  const wantsOut = take.portability === "high";
-  const tightOnCost = take.monthlyCost === "problem";
+  const theirs = wantsTheKeys(take);
 
   const flags: string[] = [];
   if (take.domainAccess === "someone-else" || take.domainAccess === "unsure") {
@@ -213,96 +234,87 @@ export function recommend(take: TakeOnAnswers, answers: Answers): Recommendation
   if (take.whoLooksAfterIt === "outside-company") {
     flags.push("There is an outside IT company. Loop them in early. They will have opinions about DNS and email.");
   }
-  if (handsOff && wantsOut) {
+  if (take.stance === "hands-off" && take.portability === "high") {
     flags.push("They want no admin AND full portability. Those pull against each other, so it is worth a sentence on the call.");
   }
+  if (theirs) {
+    flags.push("They have asked to hold the accounts themselves. Walk them through the signup on the call rather than emailing steps.");
+  }
+
+  const carriedByMe = (why: string): Recommendation => ({
+    plan: "my-account",
+    title: "I look after it",
+    summary: `${why} So it runs on my account and there is nothing for you to set up, sign up for, or remember. ${ALWAYS_YOURS}`,
+    monthly: "Nothing to you.",
+    theyDo: ["Nothing at all."],
+    iDo: [
+      "Set the whole thing up and run it.",
+      "Register the web address in your name, so it is legally yours from the start.",
+      "Hand you a copy of the site's code at launch, as a file you keep.",
+      "Give you a handover document listing everything, including exactly how to take it off me.",
+    ],
+    exit: "You ask, and I move it to wherever you want it. It takes an afternoon, there is no charge, and I do not need to be feeling co-operative for it to work: the handover document tells any developer everything they need.",
+    flags,
+  });
 
   if (server) {
-    if (handsOff && !wantsOut && tightOnCost) {
+    if (theirs) {
       return {
-        plan: "my-account",
-        title: "I host it, and we write down how you take it back",
-        summary: `Your site needs a proper platform to run on, and you have said you would rather not manage accounts or pay monthly. So it runs on my account. ${ALWAYS_YOURS}`,
-        monthly: "Nothing to you. It is inside the care plan if you take one.",
-        theyDo: ["Nothing."],
-        iDo: [
-          "Run the site on my platform account.",
-          "Register the domain in your name, on an account you control.",
-          "Give you the handover document listing everything, including how to move the hosting.",
+        plan: "own-paid",
+        title: "A platform account in your name",
+        summary: `Your site needs a server to run, which is what a shop or a connected system means. You have said you would rather hold the accounts yourself, so this one is yours. ${ALWAYS_YOURS}`,
+        monthly: "Roughly R100 to R400 a month depending on the platform, billed to you directly.",
+        theyDo: [
+          "Sign up for the hosting account. I will do it with you on a call rather than sending you instructions.",
+          "Invite me to it so I can build and look after the site.",
         ],
-        exit: "You ask, and I move it to an account of yours. It takes an afternoon and there is no charge for it.",
+        iDo: [
+          "Sit on a call and do the signup with you, so it takes ten minutes once rather than an evening of guessing.",
+          "Build, deploy and maintain the site from inside your account.",
+          "Never hold your password. I work as an invited member, under my own login.",
+        ],
+        exit: "You remove me from the account. That is the whole process. Nothing moves.",
         flags,
       };
     }
-    return {
-      plan: "own-paid",
-      title: "A platform account in your name",
-      summary: `Your site needs a server to run, which is what a shop or a connected system means. That needs a proper hosting account, and it should be yours. ${ALWAYS_YOURS}`,
-      monthly: "Roughly R100 to R400 a month depending on the platform, billed to you directly.",
-      theyDo: [
-        "Create the hosting account in the business name, with the business card.",
-        "Invite me to it so I can build and maintain the site.",
-      ],
-      iDo: [
-        "Tell you exactly which account to open and walk you through it.",
-        "Build, deploy and look after the site from inside your account.",
-        "Never hold your password. I work as an invited member, under my own login.",
-      ],
-      exit: "You remove me from the account. That is the whole process. Nothing needs to move.",
-      flags,
-    };
+    return carriedByMe("Your site needs a proper platform to run on, and you have not asked to manage accounts.");
   }
 
   if (hasHost && ownDomainEmail) {
     return {
       plan: "existing-host",
       title: "On the hosting you already pay for",
-      summary: `You are already paying somebody for hosting and email on your own business name. Your site does not need anything a server has to run, so it can go straight onto what you have. No new accounts, no new bills. ${ALWAYS_YOURS}`,
+      summary: `You are already paying somebody for hosting and email on your own business name, and your site does not need anything a server has to run. So it goes onto what you already have. No new accounts, no new bills, and it is already in your name. ${ALWAYS_YOURS}`,
       monthly: "Nothing new. You carry on paying what you already pay.",
-      theyDo: ["Find the login for your existing hosting, or the invoice with the company's name on it."],
+      theyDo: ["Nothing, if I can work out who your host is from the invoice. If not, I will ask you for one thing."],
       iDo: [
+        "Track down who your hosting is with and get access sorted.",
         "Check it can host the site properly, and tell you honestly if it cannot.",
-        "Put the site there and set the web address to point at it.",
+        "Put the site there and point the web address at it.",
       ],
       exit: "It is already your account. There is nothing to take back.",
       flags,
     };
   }
 
-  if (handsOff && !wantsOut) {
+  if (theirs) {
     return {
-      plan: "my-account",
-      title: "I host it, and we write down how you take it back",
-      summary: `You have said you would rather not manage accounts, and your site does not need an expensive platform. So it runs on my hosting at no cost to you. ${ALWAYS_YOURS}`,
-      monthly: "Nothing to you.",
-      theyDo: ["Nothing."],
+      plan: "own-free",
+      title: "A free hosting account in your name",
+      summary: `Your site does not need a server to run, so hosting it is genuinely free. Not a trial, not a first year. Free. You have said you would rather hold the accounts yourself, so it goes in one of yours. ${ALWAYS_YOURS}`,
+      monthly: "Nothing. The web address is the only thing you pay for, and that is a few hundred rand a year.",
+      theyDo: ["Sign up for one free account. I will do it with you on a call, it takes about five minutes."],
       iDo: [
-        "Host the site on my account.",
-        "Register the web address in your name, on an account you control.",
-        "Give you the handover document listing everything, including how to move the hosting.",
+        "Do the signup with you rather than sending you steps to follow alone.",
+        "Build and deploy the site inside your account.",
+        "Never hold your password. I work as an invited member, under my own login.",
       ],
-      exit: "You ask, and I move it to an account of yours. It takes an afternoon and there is no charge for it.",
+      exit: "You remove me from the account. That is the whole process. Nothing moves.",
       flags,
     };
   }
 
-  return {
-    plan: "own-free",
-    title: "A free hosting account in your name",
-    summary: `Your site does not need a server to run, which means the hosting for it is genuinely free. Not a trial, not a first year. Free. It goes in an account you own. ${ALWAYS_YOURS}`,
-    monthly: "Nothing. The web address is the only thing you pay for, and that is a few hundred rand a year.",
-    theyDo: [
-      "Create one free hosting account in the business name. It takes about five minutes and I will send you the steps.",
-      "Invite me to it so I can put the site there and look after it.",
-    ],
-    iDo: [
-      "Send you the exact steps, with screenshots.",
-      "Build and deploy the site inside your account.",
-      "Never hold your password. I work as an invited member, under my own login.",
-    ],
-    exit: "You remove me from the account. That is the whole process. Nothing needs to move.",
-    flags,
-  };
+  return carriedByMe("Your site does not need expensive hosting, and you have not asked to manage accounts.");
 }
 
 /** Every question answered? The free-text ones are optional by design. */
