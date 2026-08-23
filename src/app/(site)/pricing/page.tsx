@@ -7,6 +7,7 @@ import {
   COPY_MODES,
   DOMAIN_STATES,
   HOSTING_NOTE,
+  OWNERSHIP_NOTE,
   INTEGRATION_ADDITIONAL,
   INTEGRATION_FIRST,
   INTEGRATIONS,
@@ -201,6 +202,16 @@ export default function PricingPage() {
                 Afterwards
               </h3>
               <p className="mt-3 text-[15px] leading-relaxed text-muted">{HOSTING_NOTE}</p>
+
+              {/* The boundary sits next to the hosting note on purpose: these
+                  are the two questions somebody asks when they are deciding
+                  whether working with one person is a risk. */}
+              <div className="mt-6 rounded-2xl border border-turq/25 bg-turq/[0.05] p-5">
+                <p className="font-display text-[15px] font-semibold text-turq">
+                  What you own, and what I keep
+                </p>
+                <p className="mt-2 text-[15px] leading-relaxed text-muted">{OWNERSHIP_NOTE}</p>
+              </div>
 
               <div className="mt-6 rounded-2xl border border-line bg-ink/50 p-5">
                 <div className="flex items-baseline justify-between gap-4">
