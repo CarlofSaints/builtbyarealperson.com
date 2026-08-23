@@ -93,7 +93,7 @@ export const QUESTIONS: Question[] = [
   {
     id: "domainAccess",
     section: "What you already have",
-    question: "Your web address — mybusiness.co.za — can you log in to wherever it was bought?",
+    question: "Your web address, mybusiness.co.za, can you log in to wherever it was bought?",
     why: "The web address is the one thing that is genuinely hard to recover if nobody knows who controls it. Better to find out now than the week we go live.",
     choices: [
       { id: "yes", label: "Yes, I can get into it" },
@@ -136,7 +136,7 @@ export const QUESTIONS: Question[] = [
         label: "I would rather have nothing to manage",
         note: "No accounts, no logins to keep, no monthly bill. You look after it.",
       },
-      { id: "no-preference", label: "I genuinely do not mind — tell me what you would do" },
+      { id: "no-preference", label: "I genuinely do not mind. Tell me what you would do." },
     ],
   },
   {
@@ -211,10 +211,10 @@ export function recommend(take: TakeOnAnswers, answers: Answers): Recommendation
     flags.push("They pay someone but do not know who. Find the invoice before assuming there is nothing to reuse.");
   }
   if (take.whoLooksAfterIt === "outside-company") {
-    flags.push("There is an outside IT company. Loop them in early — they will have opinions about DNS and email.");
+    flags.push("There is an outside IT company. Loop them in early. They will have opinions about DNS and email.");
   }
   if (handsOff && wantsOut) {
-    flags.push("They want no admin AND full portability. Those pull against each other — worth a sentence on the call.");
+    flags.push("They want no admin AND full portability. Those pull against each other, so it is worth a sentence on the call.");
   }
 
   if (server) {
@@ -237,7 +237,7 @@ export function recommend(take: TakeOnAnswers, answers: Answers): Recommendation
     return {
       plan: "own-paid",
       title: "A platform account in your name",
-      summary: `Your site needs a server to run — that is what a shop or a connected system means. That needs a proper hosting account, and it should be yours. ${ALWAYS_YOURS}`,
+      summary: `Your site needs a server to run, which is what a shop or a connected system means. That needs a proper hosting account, and it should be yours. ${ALWAYS_YOURS}`,
       monthly: "Roughly R100 to R400 a month depending on the platform, billed to you directly.",
       theyDo: [
         "Create the hosting account in the business name, with the business card.",
@@ -246,7 +246,7 @@ export function recommend(take: TakeOnAnswers, answers: Answers): Recommendation
       iDo: [
         "Tell you exactly which account to open and walk you through it.",
         "Build, deploy and look after the site from inside your account.",
-        "Never hold your password — I work as an invited member, under my own login.",
+        "Never hold your password. I work as an invited member, under my own login.",
       ],
       exit: "You remove me from the account. That is the whole process. Nothing needs to move.",
       flags,
@@ -289,7 +289,7 @@ export function recommend(take: TakeOnAnswers, answers: Answers): Recommendation
   return {
     plan: "own-free",
     title: "A free hosting account in your name",
-    summary: `Your site does not need a server to run, which means the hosting for it is genuinely free — not a trial, not a first year, free. It goes in an account you own. ${ALWAYS_YOURS}`,
+    summary: `Your site does not need a server to run, which means the hosting for it is genuinely free. Not a trial, not a first year. Free. It goes in an account you own. ${ALWAYS_YOURS}`,
     monthly: "Nothing. The web address is the only thing you pay for, and that is a few hundred rand a year.",
     theyDo: [
       "Create one free hosting account in the business name. It takes about five minutes and I will send you the steps.",
@@ -298,7 +298,7 @@ export function recommend(take: TakeOnAnswers, answers: Answers): Recommendation
     iDo: [
       "Send you the exact steps, with screenshots.",
       "Build and deploy the site inside your account.",
-      "Never hold your password — I work as an invited member, under my own login.",
+      "Never hold your password. I work as an invited member, under my own login.",
     ],
     exit: "You remove me from the account. That is the whole process. Nothing needs to move.",
     flags,

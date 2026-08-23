@@ -1,4 +1,4 @@
-# <CLIENT NAME> — what you own and where it lives
+# <CLIENT NAME>: what you own and where it lives
 
 Everything about this website: what exists, whose name it is in, what it costs
 and how to get into it. Keep this. If you ever work with somebody else, hand
@@ -87,7 +87,7 @@ Any competent developer can take it from there. That is the point of this file.
 | --- | --- |
 | Quoted | `R<amount>` fixed |
 | Included | `<pages, features>` |
-| Care plan | `<taken / not taken>` — `R<x>/month` |
+| Care plan | `<taken / not taken>`, `R<x>/month` |
 | Hosting after year one | `<what was agreed>` |
 
 ---

@@ -33,7 +33,7 @@ export default async function SetupPage({ params }: { params: Promise<{ referenc
           <H2>Thank you, that is everything I needed</H2>
           <Lead className="mt-4">
             Based on what you told me, here is where I am proposing your site lives. Nothing is
-            locked in — if any of it looks wrong, say so and we will change it.
+            locked in. If any of it looks wrong, say so and we will change it.
           </Lead>
           <div className="mt-10">
             <Recommended recommendation={recommend(lead.takeOn.answers, lead.answers)} />

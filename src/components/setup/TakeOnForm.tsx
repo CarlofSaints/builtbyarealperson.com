@@ -72,13 +72,19 @@ export function TakeOnForm({ reference }: { reference: string }) {
               </p>
             )}
 
-            <fieldset
+            {/* role="group" rather than fieldset/legend: a <legend> breaks out
+                of a bordered box by design, so inside a card it renders above
+                the border instead of within the padding. This gives a screen
+                reader the same grouping without the layout quirk. */}
+            <div
               id={`q-${q.id}`}
+              role="group"
+              aria-labelledby={`label-${q.id}`}
               className={`u-card mb-4 p-5 sm:p-6 ${unanswered ? "border-pink/60" : ""}`}
             >
-              <legend className="font-display text-lg font-semibold leading-snug text-text">
+              <h3 id={`label-${q.id}`} className="font-display text-lg font-semibold leading-snug text-text">
                 {q.question}
-              </legend>
+              </h3>
               <p className="mt-2 text-sm leading-relaxed text-muted-2">{q.why}</p>
 
               <div className="mt-5 space-y-2.5">
@@ -136,7 +142,7 @@ export function TakeOnForm({ reference }: { reference: string }) {
                   Pick one of these. If none of them fit, say so in the box at the bottom.
                 </p>
               )}
-            </fieldset>
+            </div>
           </div>
         );
       })}
