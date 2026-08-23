@@ -2,12 +2,12 @@
  * Everything that leaves the building by email.
  *
  * Two messages go to the customer, staged rather than fired all at once:
- *   1. Immediately — confirmation with the PDF estimate attached.
- *   2. A couple of hours later — the booking request for the 30-minute call.
+ *   1. Immediately. Confirmation with the PDF estimate attached.
+ *   2. A couple of hours later. The booking request for the 30-minute call.
  * A third goes to the owner immediately, with the same PDF.
  *
  * Every send returns its provider message id so a lead record can carry proof
- * of what was accepted. Accepted is not the same as delivered — see the note at
+ * of what was accepted. Accepted is not the same as delivered. See the note at
  * the bottom of this file.
  */
 
@@ -147,17 +147,17 @@ ${rows}
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fff5f9;border-left:4px solid ${PINK};border-radius:8px;margin:0 0 26px;">
 <tr><td style="padding:18px 20px;">
   <p style="margin:0 0 6px;font-size:13px;font-weight:800;color:${PINK};letter-spacing:0.04em;">THIS IS NOT A QUOTE</p>
-  <p style="margin:0;font-size:14px;line-height:1.6;color:#6b2545;">It is a preliminary estimate based only on what you told the form. The fixed quote comes after we have spoken, and it will land <strong>within ${Math.round(ACCURACY_BAND * 100)}%</strong> of the number above. If the job turns out bigger than I judged, that is mine to absorb &mdash; not yours to pay.</p>
+  <p style="margin:0;font-size:14px;line-height:1.6;color:#6b2545;">It is a preliminary estimate based only on what you told the form. The fixed quote comes after we have spoken, and it will land <strong>within ${Math.round(ACCURACY_BAND * 100)}%</strong> of the number above. If the job turns out bigger than I judged, that is mine to absorb, not yours to pay.</p>
 </td></tr>
 </table>
 
-<p style="margin:0 0 18px;"><strong style="color:${INK};">What happens next.</strong> I read every one of these myself &mdash; there is no team here and no queue. I will be in touch shortly with a link to book a 30-minute Teams call, where we work out what the site actually needs to do for ${esc(answers.business.trim() || "your business")}. You get a fixed written quote after that.</p>
+<p style="margin:0 0 18px;"><strong style="color:${INK};">What happens next.</strong> I read every one of these myself. There is no team here and no queue. I will be in touch shortly with a link to book a 30-minute Teams call, where we work out what the site actually needs to do for ${esc(answers.business.trim() || "your business")}. You get a fixed written quote after that.</p>
 
 <p style="margin:0 0 18px;">Nothing is owed and no deposit is taken until you have accepted that quote in writing.</p>
 
 <p style="margin:0 0 6px;">If anything in the attached PDF is wrong, just reply to this email and I will redo it.</p>
 
-<p style="margin:22px 0 0;color:${MUTED};font-size:14px;">&mdash; ${esc(SITE.builder.name)}<br>
+<p style="margin:22px 0 0;color:${MUTED};font-size:14px;">${esc(SITE.builder.name)}<br>
 <span style="font-size:13px;">Your reference is <strong style="color:${INK};">${esc(reference)}</strong>. Quote it if you write to me.</span></p>
 `;
 
@@ -247,7 +247,7 @@ export async function sendBookingRequest(args: {
   const body = `
 <p style="margin:0 0 18px;">Hi ${esc(firstName)},</p>
 
-<p style="margin:0 0 18px;">I have been through your answers for ${esc(answers.business.trim() || "your business")} properly. The estimate I sent &mdash; <strong style="color:${INK};">${esc(formatMoney(estimate.total))}</strong> &mdash; still looks about right, and I have a few thoughts on where it could come down.</p>
+<p style="margin:0 0 18px;">I have been through your answers for ${esc(answers.business.trim() || "your business")} properly. The estimate I sent, <strong style="color:${INK};">${esc(formatMoney(estimate.total))}</strong>, still looks about right, and I have a few thoughts on where it could come down.</p>
 
 <p style="margin:0 0 18px;">The next step is a <strong style="color:${INK};">30-minute Teams call</strong>. It is not a sales pitch. It is the conversation where I find out what your business actually does, who buys from you, and what has to happen on this website for it to have been worth the money. I come out of it able to give you a fixed quote instead of an estimate.</p>
 
@@ -267,7 +267,7 @@ ${cta}
 
 <p style="margin:0 0 18px;">No preparation is required and there is no obligation at the end of it. If it turns out I am not the right fit, I will say so and point you at someone who is.</p>
 
-<p style="margin:22px 0 0;color:${MUTED};font-size:14px;">&mdash; ${esc(SITE.builder.name)}<br>
+<p style="margin:22px 0 0;color:${MUTED};font-size:14px;">${esc(SITE.builder.name)}<br>
 <span style="font-size:13px;">Reference ${esc(reference)}. The optional care plan, if you were wondering, is ${esc(formatMoney(CARE_PLAN.monthly))} a month and is never bundled into the build price.</span></p>
 `;
 
@@ -333,18 +333,18 @@ export async function sendOwnerNotification(args: {
     ["Business", answers.business],
     ["Contact", `${answers.name} · ${answers.email}${answers.phone ? ` · ${answers.phone}` : ""}`],
     ["Current site", answers.hasSite ? answers.currentUrl || "Yes (no link given)" : "None"],
-    ["Domain", answers.domain ?? "—"],
-    ["Size", answers.siteSize ?? "—"],
-    ["Selling", answers.sell ?? "—"],
-    ["Market", answers.market ?? "—"],
+    ["Domain", answers.domain ?? "not answered"],
+    ["Size", answers.siteSize ?? "not answered"],
+    ["Selling", answers.sell ?? "not answered"],
+    ["Market", answers.market ?? "not answered"],
     ["Integrations", integrationLabels],
-    ["Integration detail", answers.integrationsDetail || "—"],
-    ["Brand", answers.brand ?? "—"],
-    ["Copy", answers.copy ?? "—"],
+    ["Integration detail", answers.integrationsDetail || "not answered"],
+    ["Brand", answers.brand ?? "not answered"],
+    ["Copy", answers.copy ?? "not answered"],
     ["Second language", answers.multilingual ? "Yes" : "No"],
     ["Migrate content", answers.migrateContent ? "Yes" : "No"],
-    ["Timeline", answers.timeline ?? "—"],
-    ["Notes", answers.notes || "—"],
+    ["Timeline", answers.timeline ?? "not answered"],
+    ["Notes", answers.notes || "not answered"],
     ["Time on form", `${Math.round(meta.elapsedMs / 1000)}s`],
     ["Submitted", meta.submittedAt],
   ];
@@ -367,7 +367,7 @@ export async function sendOwnerNotification(args: {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0">${rows}</table>
 
 <p style="margin:24px 0 0;font-size:13px;color:${MUTED};">
-The same PDF the customer received is attached. Their booking email goes out automatically a couple of hours from now &mdash; reply before then if you want to say something different.
+The same PDF the customer received is attached. Their booking email goes out automatically a couple of hours from now. Reply before then if you want to say something different.
 </p>
 <p style="margin:12px 0 0;font-size:13px;">
 <a href="mailto:${esc(answers.email)}?subject=${encodeURIComponent(`Re: your website estimate (${reference})`)}" style="color:${TURQ};">Reply to ${esc(answers.name)}</a>
@@ -379,7 +379,7 @@ The same PDF the customer received is attached. Their booking email goes out aut
       from: FROM,
       to: OWNER,
       replyTo: answers.email.trim(),
-      subject: `New lead: ${answers.business} — ${formatMoney(estimate.total)} (${reference})`,
+      subject: `New lead: ${answers.business}, ${formatMoney(estimate.total)} (${reference})`,
       html: shell({
         preheader: `${answers.business} · ${formatMoney(estimate.total)} · ${answers.email}`,
         heading: `New estimate: ${answers.business}`,

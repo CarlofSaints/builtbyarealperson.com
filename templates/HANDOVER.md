@@ -68,7 +68,7 @@ it back up.
 web address, the website itself, everything on it, your content, your images,
 your data and every account listed above.
 
-**Mine:** the reusable toolkit underneath — the components and build setup I use
+**Mine:** the reusable toolkit underneath. The components and build setup I use
 across every project. You are not buying a share of my tools, and I am not
 taking a share of your website.
 
@@ -123,7 +123,7 @@ npm run dev
 ```
 
 It is a Next.js project. Any web developer will recognise it immediately.
-Settings and keys are not in the code — they live in the hosting account, which
+Settings and keys are not in the code. They live in the hosting account, which
 is listed in the table above.
 
 ## What was agreed

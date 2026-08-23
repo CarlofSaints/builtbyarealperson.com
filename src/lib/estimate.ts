@@ -174,7 +174,7 @@ export function calculateEstimate(a: Answers): Estimate {
     });
   }
 
-  /* 3. Integrations — first one costs more because it carries the plumbing */
+  /* 3. Integrations. First one costs more because it carries the plumbing */
   a.integrations.forEach((id, index) => {
     const def = INTEGRATIONS.find((i) => i.id === id);
     if (!def) return;
@@ -280,7 +280,7 @@ export function calculateEstimate(a: Answers): Estimate {
     daysLow,
     daysHigh,
     // The base build is the only answer that has to exist for a number to mean
-    // anything — everything else is an addition to it.
+    // anything. Everything else is an addition to it.
     isPriceable: Boolean(a.siteSize),
   };
 }

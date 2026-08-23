@@ -12,7 +12,7 @@ export const metadata: Metadata = {
  *
  * The header lives in the signed-in pages, not in this layout, because the
  * login page must not render a nav bar that implies a session exists. Auth is
- * checked page by page rather than in this layout — a layout is not a security
+ * checked page by page rather than in this layout. A layout is not a security
  * boundary you want to be the only one.
  */
 export default function AdminLayout({ children }: { children: React.ReactNode }) {

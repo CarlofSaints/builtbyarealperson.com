@@ -9,7 +9,7 @@
  *   signedContent = "{svix-id}.{svix-timestamp}.{raw body}"
  *   secret        = base64-decode(everything after "whsec_")
  *   signature     = base64(HMAC-SHA256(secret, signedContent))
- *   header        = space-separated list of "v1,<signature>" — a list, because
+ *   header        = space-separated list of "v1,<signature>". A list, because
  *                   during a secret rotation more than one is valid at once.
  *
  * Two things this must get right, and both are easy to get wrong:

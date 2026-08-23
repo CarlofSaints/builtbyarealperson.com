@@ -20,6 +20,13 @@ import { SITE } from "./site";
    draw time, which is exactly the kind of failure that only shows up on the one
    submission containing an em dash. Map the characters we actually use and
    strip the rest rather than crash. */
+/**
+ * DO NOT remove the em dash from this map to satisfy a no-em-dashes sweep.
+ * This is the one place in the codebase that CONVERTS an em dash rather than
+ * writing one: a customer can type anything into the notes box, and an em dash
+ * reaching pdf-lib throws at draw time. Deleting this line would not remove a
+ * dash from anywhere, it would crash the PDF for whoever pastes one in.
+ */
 const CHAR_MAP: Record<string, string> = {
   "—": "-",
   "–": "-",

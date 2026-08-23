@@ -18,8 +18,8 @@
  */
 
 // No `import "server-only"` here: that package is not a dependency of this
-// project. The `next/headers` import below gives the same protection anyway —
-// Next refuses to build if a Client Component reaches this file.
+// project. The `next/headers` import below gives the same protection anyway,
+// since Next refuses to build if a Client Component reaches this file.
 import { createHmac, timingSafeEqual, randomBytes } from "node:crypto";
 import { cookies } from "next/headers";
 
@@ -132,7 +132,7 @@ export async function isSignedIn(now: Date = new Date()): Promise<boolean> {
 /**
  * Call this at the top of every admin page, server action and route handler.
  *
- * Rendering a page only when signed in is not a security boundary — a server
+ * Rendering a page only when signed in is not a security boundary. A server
  * action is a public POST endpoint whether or not the form that calls it was
  * ever rendered.
  */

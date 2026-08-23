@@ -24,7 +24,7 @@ const PREFIX = "leads/";
  * One tiny blob per provider message id, pointing back at the lead that sent it.
  *
  * The webhook knows a message id and nothing else. Without this it would have to
- * read every lead in the store to find the owner — on every event, and there are
+ * read every lead in the store to find the owner, on every event, and there are
  * several events per message. One pointer written at send time turns that into a
  * single read.
  *
@@ -77,7 +77,7 @@ export type LeadRecord = {
 
     /**
      * What became of each message after the provider accepted it, filled in by
-     * the Resend delivery webhook. Absent means no event has arrived yet — which
+     * the Resend delivery webhook. Absent means no event has arrived yet, which
      * is different from "not delivered", and is rendered as such.
      */
     delivery?: Partial<Record<EmailKind, EmailDelivery>>;
@@ -99,7 +99,7 @@ export type LeadRecord = {
 
   /**
    * The take-on questionnaire, filled in by the customer once a quote is
-   * accepted. Absent means it has not been sent or not been answered — the two
+   * accepted. Absent means it has not been sent or not been answered. The two
    * are distinguished by whether a status past Quote Accepted has been set.
    */
   takeOn?: {
@@ -118,7 +118,7 @@ export type LeadRecord = {
 
   /**
    * The unguessable key to this lead's own pages. Absent on older leads, minted
-   * on demand — see `accessTokenFor`.
+   * on demand. See `accessTokenFor`.
    */
   accessToken?: string;
 
@@ -243,7 +243,7 @@ export function makeReference(now: Date, random: () => number = Math.random): st
 /**
  * The lead's stage, with absence read as "Fresh Lead".
  *
- * Also tolerates a status string that is no longer in the vocabulary — if a
+ * Also tolerates a status string that is no longer in the vocabulary, if a
  * stage is ever renamed, an old lead falls back to Fresh Lead and shows up in
  * the grid rather than crashing the page or vanishing from it.
  */
@@ -279,7 +279,7 @@ export async function setLeadStatus(
  * There is no index file to read (see the note at the top), so this is one blob
  * read per lead. Fetched in batches rather than all at once so a busy month does
  * not open a hundred sockets in parallel. If this ever gets slow enough to
- * notice, the fix is a summary index written alongside each lead — not a shared
+ * notice, the fix is a summary index written alongside each lead, not a shared
  * index.json, which loses writes.
  */
 export async function listLeads(): Promise<LeadRecord[]> {
@@ -303,7 +303,7 @@ export async function listLeads(): Promise<LeadRecord[]> {
  *
  * There is no trash and no undo: Vercel Blob deletes on request, and the lead is
  * the only copy of what that person told us. The caller is responsible for being
- * certain — the UI asks twice and shows the name and reference before it gets
+ * certain. The UI asks twice and shows the name and reference before it gets
  * here.
  *
  * Returns the record that was deleted so the caller can log what went, which is
@@ -333,7 +333,7 @@ function emailPath(messageId: string): string {
  * Record which lead a message id belongs to.
  *
  * Called after a send, for whichever ids the lead now has. Idempotent, and a
- * failure here is not allowed to fail the send — a missing pointer costs a
+ * failure here is not allowed to fail the send. A missing pointer costs a
  * delivery status, not a lead.
  */
 export async function indexLeadEmails(lead: LeadRecord): Promise<void> {
@@ -384,7 +384,7 @@ export async function readEmailPointer(messageId: string): Promise<EmailPointer 
  * Apply one webhook event to the lead that sent the message.
  *
  * Returns what happened rather than throwing, because the webhook has to answer
- * 200 to almost everything — a provider that gets an error retries for hours,
+ * 200 to almost everything. A provider that gets an error retries for hours,
  * and an event for a lead that has since been deleted is not a failure.
  */
 export async function recordDeliveryEvent(
@@ -412,8 +412,8 @@ export async function recordDeliveryEvent(
 /**
  * Record the take-on answers against a lead.
  *
- * Called from a public endpoint — the customer filling it in is not signed in —
- * so it writes exactly one field and nothing else. A caller who guesses a
+ * Called from a public endpoint, where the customer filling it in is not
+ * signed in, so it writes exactly one field and nothing else. A caller who guesses a
  * reference can fill in a questionnaire, which is not worth defending against
  * with a login the customer would resent.
  */
@@ -524,7 +524,7 @@ export async function rotateAccessToken(reference: string): Promise<string | nul
  * Resolve a token to its lead.
  *
  * Returns null for anything that does not resolve, without saying whether the
- * token was malformed, unknown or revoked — three different answers would let
+ * token was malformed, unknown or revoked, three different answers would let
  * somebody map the space.
  */
 export async function leadByAccessToken(token: string): Promise<LeadRecord | null> {
@@ -549,7 +549,7 @@ export async function leadByAccessToken(token: string): Promise<LeadRecord | nul
 
 /**
  * Add a request. Called from the client's own page, so it takes their words
- * and nothing else — no status, no price, no ability to mark anything done.
+ * and nothing else. No status, no price, no ability to mark anything done.
  */
 export async function addChangeRequest(
   reference: string,

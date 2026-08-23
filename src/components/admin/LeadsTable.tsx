@@ -20,13 +20,13 @@ const SORTS: { id: SortKey; label: string }[] = [
 
 function formatDate(iso: string): string {
   const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "—";
+  if (Number.isNaN(d.getTime())) return "no date";
   return d.toLocaleDateString("en-ZA", { day: "2-digit", month: "short", year: "2-digit" });
 }
 
 function formatDateTime(iso: string): string {
   const d = new Date(iso);
-  if (Number.isNaN(d.getTime())) return "—";
+  if (Number.isNaN(d.getTime())) return "no date";
   return d.toLocaleString("en-ZA", {
     day: "2-digit",
     month: "short",
@@ -158,7 +158,7 @@ export function LeadsTable({ rows }: { rows: LeadRow[] }) {
         <p className="mb-5 rounded-xl border border-pink/40 bg-pink/10 px-4 py-2.5 text-sm text-pink">
           <strong className="font-semibold">{undeliveredCount}</strong>{" "}
           {undeliveredCount === 1 ? "lead" : "leads"} never received their email. Check the address
-          and reach them another way — they are waiting on something that is not coming.
+          and reach them another way. They are waiting on something that is not coming.
         </p>
       )}
 
@@ -269,7 +269,7 @@ export function LeadsTable({ rows }: { rows: LeadRow[] }) {
                     </Td>
                     <Td>
                       <div className="max-w-[330px] text-[13px] leading-snug text-muted">
-                        {row.wants || "—"}
+                        {row.wants || "nothing specified"}
                       </div>
                       <div className="mt-1 flex flex-wrap gap-1.5">
                         {row.timeline && <Tag>{row.timeline}</Tag>}

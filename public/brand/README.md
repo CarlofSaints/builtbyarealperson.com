@@ -5,14 +5,14 @@ the site rather than approximating it. Regenerate rather than edit by hand.
 
 | File | Size | Use it for |
 | --- | --- | --- |
-| `logo-wordmark-light.png` | 1400×300, transparent | **The logo, for white backgrounds** — Microsoft Bookings, email headers, invoices, anything on paper |
+| `logo-wordmark-light.png` | 1400×300, transparent | **The logo, for white backgrounds**. Microsoft Bookings, email headers, invoices, anything on paper |
 | `logo-wordmark-dark.png` | 1400×300, transparent | The same lockup for dark backgrounds |
-| `logo-mark.png` | 512×512 | The icon on its own — social avatars, app tiles, anywhere square and small |
+| `logo-mark.png` | 512×512 | The icon on its own. Social avatars, app tiles, anywhere square and small |
 | `share-card.png` | 1200×630 | Full-size share card. The site serves its own compressed copy at `/opengraph-image.jpg` |
 
 The wordmark gradient is three-stop, matching the site's
 `linear-gradient(100deg, turq 0%, #7de0d6 35%, pink 100%)`. A two-stop
-turquoise-to-pink slides through grey in the middle and looks muddy — the mid
+turquoise-to-pink slides through grey in the middle and looks muddy. The mid
 stop is what stops that.
 
 The light and dark versions are not the same file recoloured by accident: the
@@ -29,14 +29,14 @@ opposite of generic AI output.
 **Detail threshold.** Below about 46px across, the ridges close up into a smudge,
 so the mark drops them and falls back to the plain gradient dot the site header
 already animates. That is why the favicon and the share card wordmark are drawn
-at sizes above the threshold rather than shrunk down from the 512px version —
-shrinking produces the smudge the threshold exists to avoid.
+at sizes above the threshold rather than shrunk down from the 512px version.
+Shrinking produces the smudge the threshold exists to avoid.
 
 **The mark renders on its own transparent canvas and is then composited.**
 Knocking the ridges out directly onto a target erases the background behind them
 as well, punching holes through to whatever sits underneath.
 
-`logo-wordmark-signature.png` is the same lockup at 672×144 — the email
+`logo-wordmark-signature.png` is the same lockup at 672×144. The email
 signature's 224×48 at 3×. It exists separately because the mark has to be
 *drawn* at its final size for the detail threshold to make the right call.
 Scaling the 1400px version down to signature width draws the ridges and then
@@ -45,7 +45,7 @@ which is what you actually want at 14px on screen.
 
 ## Social
 
-`fb-cover.png` — 1640×856, the Facebook page cover. Two constraints shape it,
+`fb-cover.png`. 1640×856, the Facebook page cover. Two constraints shape it,
 and the share card fails both:
 
 - **The profile picture sits bottom-centre and covers the middle of the image.**

@@ -34,7 +34,7 @@ function label<T extends { id: string; label: string }>(list: T[], id: string | 
 }
 
 function when(iso: string | undefined): string {
-  if (!iso) return "—";
+  if (!iso) return "not recorded";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return iso;
   return d.toLocaleString("en-ZA", {
@@ -117,7 +117,7 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
               ? "Not in the pipeline"
               : `Stage ${position} of ${PIPELINE_STATUSES.length}`}{" "}
             &middot; here since {when(row.statusChangedAt)}
-            {row.stale && <span className="ml-2 font-semibold text-amber-300">— overdue</span>}
+            {row.stale && <span className="ml-2 font-semibold text-amber-300">· overdue</span>}
           </p>
 
           <div className="mt-4 flex flex-wrap gap-3">
@@ -181,7 +181,7 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
                 a.hasSite === null
                   ? "Not answered"
                   : a.hasSite
-                    ? `${a.currentUrl || "Yes"}${a.migrateContent ? " — wants content moved across" : ""}`
+                    ? `${a.currentUrl || "Yes"}${a.migrateContent ? ". Wants content moved across" : ""}`
                     : "No"
               }
             />
@@ -275,7 +275,7 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
             <p className="mt-3 text-xs leading-relaxed text-muted-2">
               {"“"}Accepted{"”"} means Resend took the message. Anything beyond that comes
               from the delivery webhook. {"“"}No word yet{"”"} is not the same as not
-              delivered &mdash; it means nothing has reported back.
+              delivered. It means nothing has reported back.
             </p>
           </Panel>
 
@@ -322,7 +322,7 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
                   <Row label="Costs them" value={rec.monthly} />
                   {QUESTIONS.map((q) => {
                     const picked = lead.takeOn!.answers[q.id];
-                    const label = q.choices.find((c) => c.id === picked)?.label ?? String(picked ?? "—");
+                    const label = q.choices.find((c) => c.id === picked)?.label ?? String(picked ?? "not answered");
                     return <Row key={q.id} label={q.question} value={label} />;
                   })}
                   {lead.takeOn.answers.currentHostingWho.trim() && (
@@ -377,7 +377,7 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
                       Safe to publish
                     </p>
                     <p className="mt-1 text-sm text-text">
-                      Sign it: {attribution(lead.review, a.name, a.business) ?? "—"}
+                      Sign it: {attribution(lead.review, a.name, a.business) ?? "no attribution"}
                     </p>
                   </>
                 ) : (
@@ -429,11 +429,11 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
             <Row
               label="Time on form"
               value={
-                lead.meta.elapsedMs ? `${Math.round(lead.meta.elapsedMs / 1000)} seconds` : "—"
+                lead.meta.elapsedMs ? `${Math.round(lead.meta.elapsedMs / 1000)} seconds` : "not recorded"
               }
             />
-            <Row label="IP" value={lead.meta.ip || "—"} />
-            <Row label="Browser" value={lead.meta.userAgent || "—"} />
+            <Row label="IP" value={lead.meta.ip || "not recorded"} />
+            <Row label="Browser" value={lead.meta.userAgent || "not recorded"} />
           </Panel>
         </div>
 
@@ -445,7 +445,7 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
           </h2>
           <p className="mb-4 mt-2 max-w-2xl text-sm leading-relaxed text-muted">
             For test submissions and duplicates. A real enquiry that came to nothing belongs in{" "}
-            <strong className="text-text">Lost</strong> instead — it stays out of the open pipeline
+            <strong className="text-text">Lost</strong> instead. It stays out of the open pipeline
             but you keep the record of who asked and what for.
           </p>
           <DeleteLead

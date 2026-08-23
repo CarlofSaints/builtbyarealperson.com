@@ -20,7 +20,7 @@ import { deleteLeadAction } from "@/app/admin/actions";
  *    hand-rolled overlay has to reimplement and usually gets wrong.
  *
  * It names the customer and the reference before asking, because the whole risk
- * here is deleting the wrong row — and there is no trash to fish it back out of.
+ * here is deleting the wrong row, and there is no trash to fish it back out of.
  */
 export function DeleteLead({
   reference,
@@ -29,7 +29,7 @@ export function DeleteLead({
   onDeleted,
 }: {
   reference: string;
-  /** Whatever identifies this lead to a human — a name, or the business. */
+  /** Whatever identifies this lead to a human. A name, or the business. */
   who: string;
   /** "inline" sits in a grid row; "panel" is the block on the detail page. */
   variant?: "inline" | "panel";

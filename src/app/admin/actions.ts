@@ -4,7 +4,7 @@
  * Admin server actions.
  *
  * EVERY export of a "use server" file is a public POST endpoint. It does not
- * matter that the only form calling it is rendered behind a login — the action
+ * matter that the only form calling it is rendered behind a login. The action
  * id is in the client bundle and can be posted to directly. So each action does
  * its own authorisation check as its first statement, and none of them leak
  * information to a caller who fails it.
@@ -44,8 +44,8 @@ export async function loginAction(
 
   if (!checkPassword(password)) {
     // Slow every failure down a little. It does not stop a determined attacker
-    // on serverless — there is no shared counter between instances — but it
-    // does make an unattended dictionary run meaningfully more expensive.
+    // on serverless, where there is no shared counter between instances, but
+    // it does make an unattended dictionary run meaningfully more expensive.
     await new Promise((resolve) => setTimeout(resolve, 600));
     return { error: "That is not the password." };
   }
@@ -55,7 +55,7 @@ export async function loginAction(
 }
 
 export async function logoutAction(): Promise<void> {
-  // No auth check needed to sign OUT — the worst an unauthenticated caller can
+  // No auth check needed to sign OUT. The worst an unauthenticated caller can
   // do is delete their own cookie.
   await endSession();
   redirect("/admin/login");
@@ -67,7 +67,7 @@ export type StatusResult = { error: string | null };
  * Move a lead to a stage.
  *
  * Takes plain arguments rather than FormData so the picker can call it inside a
- * transition and drive an optimistic update — a form submission would fight the
+ * transition and drive an optimistic update. A form submission would fight the
  * transition and leave the control showing a stage that was never stored.
  */
 export async function updateLeadStatus(
@@ -94,7 +94,7 @@ export type DeleteResult = { error: string | null; deleted: string | null };
 /**
  * Delete a lead for good.
  *
- * Irreversible — there is no trash to restore from. The confirmation lives in
+ * Irreversible. There is no trash to restore from. The confirmation lives in
  * the UI, but the reference is checked against the stored record here too, so a
  * mistyped or stale reference deletes nothing rather than something else.
  *
@@ -196,7 +196,7 @@ export async function triageChange(
  * One thing per line. A repeater UI would be more work for both of us.
  *
  * The date on each line is PRESERVED where the wording has not changed. The
- * value of this feature is entirely in "since the 3rd" — stamping today's date
+ * value of this feature is entirely in "since the 3rd". Stamping today's date
  * every time I tidy the list would quietly reset the clock on exactly the thing
  * it exists to measure.
  */

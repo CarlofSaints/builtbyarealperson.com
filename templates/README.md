@@ -2,7 +2,7 @@
 
 `HANDOVER.md` is filled in per client and given to them at launch.
 
-It exists because the site makes a strong promise — the domain, the code, the
+It exists because the site makes a strong promise. The domain, the code, the
 analytics and every login in the client's name, and no version of leaving that
 costs them their website. A promise like that is only real if there is a
 document that proves it, and the client can act on it without you.
@@ -24,6 +24,6 @@ secrets including ones deleted later, refuses to pass a public repo, and prints
 the rows to paste into HANDOVER.md.
 
 The bundle is the point. The customer does not need a GitHub account, does not
-need to know what a repository is, and will never type a git command — they get
+need to know what a repository is, and will never type a git command. They get
 one file that IS the website, and a document telling any developer how to use
 it. Ownership without administration.

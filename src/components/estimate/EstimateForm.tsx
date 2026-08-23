@@ -200,7 +200,7 @@ export function EstimateForm() {
 
         <div ref={headingRef} tabIndex={-1} className="outline-none" />
 
-        {/* Step 1 — where you are now */}
+        {/* Step 1. Where you are now */}
         {step === 0 && (
           <div className="space-y-10">
             <Question
@@ -272,7 +272,7 @@ export function EstimateForm() {
           </div>
         )}
 
-        {/* Step 2 — size */}
+        {/* Step 2. Size */}
         {step === 1 && (
           <Question
             index="03"
@@ -300,7 +300,7 @@ export function EstimateForm() {
           </Question>
         )}
 
-        {/* Step 3 — selling */}
+        {/* Step 3. Selling */}
         {step === 2 && (
           <div className="space-y-10">
             <Question
@@ -347,7 +347,7 @@ export function EstimateForm() {
           </div>
         )}
 
-        {/* Step 4 — integrations */}
+        {/* Step 4. Integrations */}
         {step === 3 && (
           <Question
             index="06"
@@ -391,7 +391,7 @@ export function EstimateForm() {
           </Question>
         )}
 
-        {/* Step 5 — design and words */}
+        {/* Step 5. Design and words */}
         {step === 4 && (
           <div className="space-y-10">
             <Question
@@ -448,7 +448,7 @@ export function EstimateForm() {
           </div>
         )}
 
-        {/* Step 6 — timing */}
+        {/* Step 6. Timing */}
         {step === 5 && (
           <Question
             index="09"
@@ -482,7 +482,7 @@ export function EstimateForm() {
           </Question>
         )}
 
-        {/* Step 7 — about you */}
+        {/* Step 7, about you */}
         {step === 6 && (
           <Question
             index="10"

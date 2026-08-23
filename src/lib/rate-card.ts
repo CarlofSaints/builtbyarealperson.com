@@ -1,6 +1,6 @@
 /**
  * ─────────────────────────────────────────────────────────────────────────────
- *  THE RATE CARD — single source of truth.
+ *  THE RATE CARD. Single source of truth.
  *
  *  Every price shown on the website, in the live estimator and in the emailed
  *  PDF comes from this file. Change a number here and it changes everywhere.
@@ -15,7 +15,7 @@ export const CURRENCY_PREFIX = "R";
 /** Final quote is promised to land within this fraction of the estimate. */
 export const ACCURACY_BAND = 0.2;
 
-/** Optional monthly care plan — quoted separately, never inside the total. */
+/** Optional monthly care plan. Quoted separately, never inside the total. */
 export const CARE_PLAN = {
   monthly: 450,
   label: "Care plan (optional)",
@@ -56,7 +56,7 @@ export type Choice<T extends string> = {
   price: Money;
 };
 
-/* ── 1. Base build — how big is the site ─────────────────────────────────── */
+/* ── 1. Base build. How big is the site ─────────────────────────────────── */
 
 export type SiteSize = "landing" | "brochure" | "standard" | "large";
 

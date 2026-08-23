@@ -5,8 +5,8 @@
  * The framing matters more than the content. A page headed "my portfolio of
  * enterprise systems" tells a plumber that this is not for him and costs a
  * sale. The same entries headed "what a site can do once it stops being a
- * brochure" turn an abstract line on the rate card — "Integrations, R4,500
- * first" — into something a person can picture. So every entry ends with what
+ * brochure" turn an abstract line on the rate card, "Integrations, R4,500
+ * first", into something a person can picture. So every entry ends with what
  * the equivalent costs here. An entry that ends with a capability is a CV; one
  * that ends with a number is a sales page.
  *

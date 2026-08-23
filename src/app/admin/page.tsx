@@ -9,7 +9,7 @@ import { LeadsTable } from "@/components/admin/LeadsTable";
 
 /**
  * Never cached. Every load reads the blob store, because a stale pipeline is
- * worse than a slow one — it is the difference between "I have chased them"
+ * worse than a slow one. It is the difference between "I have chased them"
  * and "I have not".
  */
 export const dynamic = "force-dynamic";

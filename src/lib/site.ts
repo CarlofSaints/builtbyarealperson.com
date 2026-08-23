@@ -16,7 +16,7 @@ export const SITE = {
    *
    * Env-driven on purpose: sending from a domain and RECEIVING at it are
    * separate problems. Resend can send as hello@builtbyarealperson.com with no
-   * mailbox existing anywhere — but a `mailto:` to an address with no mailbox
+   * mailbox existing anywhere, but a `mailto:` to an address with no mailbox
    * behind it bounces, and the bounce goes to the customer, not to us. So point
    * this at an address that genuinely receives until the nice one does.
    */

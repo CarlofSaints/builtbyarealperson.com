@@ -28,7 +28,7 @@ export default async function LoginPage() {
               {problem === "no-password" &&
                 "ADMIN_PASSWORD is not set on this deployment. Set it in the Vercel project's environment variables and redeploy."}
               {problem === "weak-password" &&
-                "ADMIN_PASSWORD is set but shorter than 12 characters. This is the only lock on every customer's contact details — set a longer one."}
+                "ADMIN_PASSWORD is set but shorter than 12 characters. This is the only lock on every customer's contact details. Set a longer one."}
               {problem === "no-secret" &&
                 "ADMIN_SESSION_SECRET is not set, so a session cookie cannot be signed. Set it to a long random string and redeploy."}
             </p>

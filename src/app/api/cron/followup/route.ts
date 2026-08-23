@@ -1,12 +1,12 @@
 /**
- * The second customer email — the one that asks for 30 minutes.
+ * The second customer email. The one that asks for 30 minutes.
  *
  * It is deliberately not sent with the first. Three emails landing in a
  * stranger's inbox inside one minute reads as an automated sequence, which is
  * the exact impression this business exists to avoid.
  *
  * Runs on a schedule (see vercel.json). Every run logs a summary line, including
- * the runs that do nothing — a cron that quietly stopped firing is invisible
+ * the runs that do nothing. A cron that quietly stopped firing is invisible
  * otherwise, and you only find out when the leads dry up.
  */
 
@@ -32,7 +32,7 @@ function delayMinutes(): number {
 export async function GET(request: Request) {
   const startedAt = Date.now();
 
-  // A guard whose secret is missing is not a guard — it is an endpoint that has
+  // A guard whose secret is missing is not a guard. It is an endpoint that has
   // never actually been protected and never told anyone. Fail loudly.
   const secret = process.env.CRON_SECRET;
   if (!secret) {

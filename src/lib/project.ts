@@ -4,7 +4,7 @@
  * The point of this is not fewer emails. It is that "can you just move that
  * button" stops being a sentence in a thread and becomes a line with a status
  * and, where it needs one, a price. That is how a fixed-price business survives
- * change requests instead of absorbing them — and it works even if the customer
+ * change requests instead of absorbing them, and it works even if the customer
  * never opens the page, because the record exists either way.
  *
  * The other half is WAITING ON YOU. Most delays on a small build are the client

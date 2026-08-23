@@ -7,7 +7,7 @@
  *
  * Webhook events arrive out of order and more than once. Retries are normal,
  * `sent` can land after `delivered`, and `opened` can beat `delivered`. So the
- * state is MERGED by rank rather than overwritten — a stale event can never
+ * state is MERGED by rank rather than overwritten. A stale event can never
  * drag a lead backwards from "delivered" to "sent".
  */
 
@@ -36,7 +36,7 @@ export type DeliveryStatus = (typeof DELIVERY_STATUSES)[number];
  *
  * `bounced` is top because it is the only one that needs you to do something:
  * the customer never got it and never will. `complained` outranks `delivered`
- * for the same reason — it implies delivery, and it is the more useful fact.
+ * for the same reason. It implies delivery, and it is the more useful fact.
  */
 const RANK: Record<DeliveryStatus, number> = {
   sent: 1,
@@ -112,7 +112,7 @@ export function statusFromEvent(type: string): DeliveryStatus | null {
  *
  * `opened` and `clicked` are timestamps rather than statuses, but an open is
  * proof of delivery, so it lifts the status to `delivered` if nothing better is
- * recorded yet — otherwise a message whose `delivered` event was lost would sit
+ * recorded yet. Otherwise a message whose `delivered` event was lost would sit
  * on "Accepted" for ever while the customer is demonstrably reading it.
  */
 export function mergeDelivery(

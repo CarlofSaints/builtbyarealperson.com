@@ -15,17 +15,17 @@ import { LEAD_STATUSES, STATUS_META, type LeadStatus } from "@/lib/pipeline";
  * browser rather than by reasoning about it:
  *
  *  1. The optimistic value is `useOptimistic`, driven INSIDE the transition that
- *     runs the action. Holding it in ordinary state and syncing it back from the
- *     `status` prop — whether in an effect or during render — races the action's
- *     own re-render, and the picker settles on the previous stage while the
+ *     runs the action. Holding it in ordinary state and syncing it back from
+ *     the `status` prop, whether in an effect or during render, races the
+ *     action's own re-render: the picker settles on the previous stage while the
  *     stored stage is the new one. A control that disagrees with the data is
  *     worse than no control.
  *  2. Nothing wrapping the <select> may carry a key that changes. A remounted
  *     select falls back to displaying its FIRST option while holding a different
  *     value underneath, which reads as "everything is a Fresh Lead again".
  *
- * The stored value is always one of the options — an unknown status is read back
- * as "fresh-lead" before it reaches here — so the select can never sit showing
+ * The stored value is always one of the options. An unknown status is read back
+ * as "fresh-lead" before it reaches here, so the select can never sit showing
  * an option that does not match the data.
  */
 export function StatusSelect({
@@ -94,7 +94,7 @@ export function StatusSelect({
             strokeLinecap="round"
           />
         </svg>
-        {/* Confirmation pulse. A SIBLING overlay, never a wrapper — see note 2. */}
+        {/* Confirmation pulse. A SIBLING overlay, never a wrapper. See note 2. */}
         {savedAt !== null && !pending && (
           <span
             key={savedAt}

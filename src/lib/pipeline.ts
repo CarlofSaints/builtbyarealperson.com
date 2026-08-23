@@ -6,8 +6,8 @@
  * detail page and the stored lead all read it, so a stage cannot be spelled one
  * way on screen and another way in the data.
  *
- * A brand new lead has NO stored status. That absence is meaningful — it means
- * "nothing has happened yet" — so it is rendered as `fresh-lead` rather than as
+ * A brand new lead has NO stored status. That absence is meaningful. It means
+ * "nothing has happened yet", so it is rendered as `fresh-lead` rather than as
  * a blank, and it is never written to the blob just to make the field exist.
  */
 
@@ -149,7 +149,7 @@ export function statusLabel(status: LeadStatus): string {
 
 /**
  * Rank for the "furthest along" sort. Lost sorts below everything, because a
- * dead lead is not further along than a live one — it is out of the race.
+ * dead lead is not further along than a live one. It is out of the race.
  */
 export function statusIndex(status: LeadStatus): number {
   return status === "lost" ? -1 : PIPELINE_STATUSES.indexOf(status) + 1;
@@ -158,8 +158,8 @@ export function statusIndex(status: LeadStatus): number {
 /**
  * How long a lead may sit in a stage before it counts as a dropped ball.
  *
- * These are deliberately short at the top of the funnel — an unanswered fresh
- * lead goes cold in a day or two — and longer once the work is actually running,
+ * These are deliberately short at the top of the funnel. An unanswered fresh
+ * lead goes cold in a day or two, and longer once the work is actually running,
  * because a build in progress is not a ball being dropped.
  */
 const STALE_AFTER_DAYS: Record<LeadStatus, number | null> = {

@@ -12,7 +12,7 @@ const TONES: Record<"good" | "bad" | "warn" | "neutral", string> = {
  *
  * `null` renders as "No word yet" rather than as nothing at all. A blank here
  * would read as "not delivered", when it actually means the webhook has not
- * spoken — and those two are the whole reason this exists.
+ * spoken, and those two are the whole reason this exists.
  */
 export function DeliveryBadge({
   status,
@@ -38,7 +38,7 @@ export function DeliveryBadge({
 
   return (
     <span
-      title={detail ? `${meta.blurb} — ${detail}` : meta.blurb}
+      title={detail ? `${meta.blurb}. ${detail}` : meta.blurb}
       className={`inline-block whitespace-nowrap rounded-md border px-1.5 py-0.5 text-[11px] font-semibold ${TONES[meta.tone]} ${className}`}
     >
       {meta.label}

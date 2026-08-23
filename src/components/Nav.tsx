@@ -12,7 +12,7 @@ import { NAV_LINKS } from "@/lib/site";
  * is, so one link is both "sign in" and "go to my leads".
  *
  * It also means the header does NOT have to check the session, which is what
- * keeps the marketing pages static — reading a cookie up here would make every
+ * keeps the marketing pages static. Reading a cookie up here would make every
  * page dynamic to render one link.
  */
 const ADMIN_HREF = "/admin";

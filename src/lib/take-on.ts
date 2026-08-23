@@ -2,8 +2,8 @@
  * The take-on questionnaire, sent once a quote is accepted.
  *
  * Its job is to work out where the finished site should live. That decision has
- * real consequences — whether the customer can walk away, what it costs them
- * every month, and how much administration they are signing up for — and it is
+ * real consequences: whether the customer can walk away, what it costs them
+ * every month, and how much administration they are signing up for. And it is
  * a decision they cannot make directly, because nobody outside this trade knows
  * what a platform is.
  *
@@ -198,7 +198,7 @@ const ALWAYS_YOURS =
  *
  * This started out the other way round and it was wrong. Recommending that
  * somebody create their own hosting account is recommending homework, and the
- * customers here run plumbing businesses — the whole proposition is that the
+ * customers here run plumbing businesses. The whole proposition is that the
  * technical burden is mine. A recommendation that begins "first, create an
  * account" is a barrier dressed up as a principle.
  *

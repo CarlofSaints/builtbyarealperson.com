@@ -187,7 +187,7 @@ export async function POST(request: Request) {
       // lead costs the customer.
       if (saved) await indexLeadEmails(lead);
     } else {
-      warnings.push("blob save: no credentials — neither BLOB_STORE_ID (OIDC) nor BLOB_READ_WRITE_TOKEN is set");
+      warnings.push("blob save: no credentials. Neither BLOB_STORE_ID (OIDC) nor BLOB_READ_WRITE_TOKEN is set");
     }
 
     // Every run leaves a trace, whether it worked or not. A submission that
@@ -212,7 +212,7 @@ export async function POST(request: Request) {
         {
           ok: false,
           error:
-            "Your answers reached me but I could not store or send them. Please email me directly — nothing was lost on your side.",
+            "Your answers reached me but I could not store or send them. Please email me directly. Nothing was lost on your side.",
           stages,
           ...(diagnose ? { warnings } : {}),
         },

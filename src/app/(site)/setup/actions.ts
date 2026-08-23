@@ -4,7 +4,7 @@
  * Saving the take-on questionnaire.
  *
  * DELIBERATELY PUBLIC. The customer filling this in has no login and should not
- * need one — a questionnaire behind a password is a questionnaire nobody fills
+ * need one. A questionnaire behind a password is a questionnaire nobody fills
  * in. The protections are that it writes exactly one field on exactly one lead,
  * it will not create a lead that does not exist, and it refuses to overwrite an
  * answer that has already been given. Someone who guesses a reference can

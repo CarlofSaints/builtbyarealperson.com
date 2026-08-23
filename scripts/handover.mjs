@@ -18,7 +18,7 @@
  *   1. Secrets in the history. Handing over a repo with keys in it hands over
  *      the keys, and git history remembers files you deleted.
  *   2. A public repo. Fine for my own marketing site, not for a client's.
- *   3. Which remote the deploy is wired to — because hosting that is connected
+ *   3. Which remote the deploy is wired to, because hosting that is connected
  *      to MY repo means I handed over the hosting and quietly kept the tap.
  */
 
@@ -71,7 +71,7 @@ const check = spawnSync("git", ["bundle", "verify", bundlePath], { encoding: "ut
 const verified = `${check.stdout || ""}${check.stderr || ""}`;
 if (check.status === 0 && /is okay/i.test(verified)) {
   const commits = git(["rev-list", "--all", "--count"]);
-  ok(`${bundlePath.replace(process.cwd(), ".")} — verified, ${commits} commits, full history`);
+  ok(`${bundlePath.replace(process.cwd(), ".")}. Verified, ${commits} commits, full history`);
 } else {
   bad("The bundle did not verify. Do not hand it over.");
   process.exitCode = 1;
@@ -113,11 +113,11 @@ if (remote) {
   ok(`origin: ${remote}`);
   const mine = /CarlofSaints|builtbyarealperson/i.test(remote);
   if (mine) {
-    warn("This remote is on MY account. That is fine as the default — but the");
+    warn("This remote is on MY account. That is fine as the default, but the");
     warn("handover document must say so, and must say the hosting is fed from it.");
   }
 } else {
-  warn("No origin remote. The bundle is the only copy — make sure it is stored somewhere safe.");
+  warn("No origin remote. The bundle is the only copy. Make sure it is stored somewhere safe.");
 }
 
 let visibility = "";
@@ -125,7 +125,7 @@ try {
   visibility = execFileSync("gh", ["repo", "view", "--json", "visibility", "-q", ".visibility"], {
     encoding: "utf8", stdio: ["ignore", "pipe", "ignore"],
   }).trim();
-} catch { /* gh not installed or not authenticated — not fatal */ }
+} catch { /* gh not installed or not authenticated, not fatal */ }
 
 if (visibility === "PUBLIC") {
   bad("THIS REPOSITORY IS PUBLIC. A client's site must not be. Make it private before handover.");

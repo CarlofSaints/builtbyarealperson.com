@@ -4,7 +4,7 @@
  * A password is a barrier: a plumber will not remember one to report a typo,
  * and a portal nobody opens is worse than no portal. So the link IS the
  * credential. This is the same pattern as a password reset email, a Calendly
- * invitation or a shared document — and like those, it lives or dies on
+ * invitation or a shared document, and like those, it lives or dies on
  * entropy.
  *
  * WHY NOT THE REFERENCE. The lead reference is four characters from a 26 letter

@@ -57,7 +57,7 @@ export type LeadRow = {
 
   /**
    * What became of the estimate email, once the delivery webhook has said.
-   * `null` means NOTHING HAS SAID YET — which is not the same as "not
+   * `null` means NOTHING HAS SAID YET, which is not the same as "not
    * delivered", and must not be rendered as though it were.
    */
   estimateDelivery: DeliveryStatus | null;
@@ -86,7 +86,7 @@ function wholeDaysBetween(from: string, to: Date): number {
  * needs digits only, in international form with no plus.
  *
  * Returns "" rather than a guess when the number is not a recognisable SA
- * mobile — a wrong wa.me link opens a chat with a stranger.
+ * mobile. A wrong wa.me link opens a chat with a stranger.
  */
 export function toWhatsAppNumber(raw: string): string {
   const digits = raw.replace(/\D/g, "");
@@ -95,7 +95,7 @@ export function toWhatsAppNumber(raw: string): string {
   if (digits.startsWith("0027")) return `27${digits.slice(4)}`;
   if (digits.startsWith("27") && digits.length === 11) return digits;
   if (digits.startsWith("0") && digits.length === 10) return `27${digits.slice(1)}`;
-  // Already international and not SA — trust it if it is a plausible length.
+  // Already international and not SA. Trust it if it is a plausible length.
   if (digits.length >= 11 && digits.length <= 15) return digits;
   return "";
 }

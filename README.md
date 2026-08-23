@@ -15,7 +15,7 @@ Next.js 16 (App Router) · Tailwind 4 · Resend · Vercel Blob · pdf-lib.
 
 The published rate card page, the live estimator and the emailed PDF all read
 from it. Change a number there and it changes in all three. No rand amount
-should exist anywhere else in the codebase — if you find one, it is a bug.
+should exist anywhere else in the codebase, if you find one, it is a bug.
 
 `src/lib/estimate.ts` turns answers into line items and a total. It is a pure
 function, imported by the browser, the PDF generator and the notification email,
@@ -26,7 +26,7 @@ so the three can never disagree.
 ## The flow
 
 1. Visitor fills in the estimator at `/estimate`. The total updates live as they
-   answer — nine questions, seven steps.
+   answer, nine questions, seven steps.
 2. `POST /api/estimate` **recomputes the estimate server-side** (the browser's
    number is never trusted), generates a PDF, and sends two emails immediately:
    - to the customer: confirmation + the PDF attached, with a bold "this is NOT
@@ -35,7 +35,7 @@ so the three can never disagree.
 3. The lead is stored on Vercel Blob as one private JSON file.
 4. `GET /api/cron/followup` runs hourly. Roughly two hours after a submission it
    sends the customer a second, shorter email asking them to book the 30-minute
-   Teams call. Staged on purpose — three emails inside a minute reads as an
+   Teams call. Staged on purpose, three emails inside a minute reads as an
    automated sequence, which is exactly the impression this business exists to
    avoid.
 
@@ -50,7 +50,7 @@ delay is that value rounded up to the next hour.
 ## Environment variables
 
 Copy `.env.example` to `.env.local`, and set the same keys in Vercel for
-**Production *and* Preview** — a key set only in Production makes every preview
+**Production *and* Preview**. A key set only in Production makes every preview
 deploy quietly lie to you.
 
 | Key | Required | What breaks without it |
@@ -62,7 +62,7 @@ deploy quietly lie to you.
 | `CRON_SECRET` | Yes | The follow-up route refuses to run rather than run unauthenticated. |
 | `FOLLOWUP_DELAY_MINUTES` | No | Defaults to 120. |
 | `NEXT_PUBLIC_BOOKING_URL` | No | The booking email falls back to asking the customer to reply with times. |
-| `NEXT_PUBLIC_CONTACT_EMAIL` | No | Falls back to `hello@builtbyarealperson.com`. Must be an address that actually **receives** — sending as an address and receiving at it are separate problems. |
+| `NEXT_PUBLIC_CONTACT_EMAIL` | No | Falls back to `hello@builtbyarealperson.com`. Must be an address that actually **receives**. Sending as an address and receiving at it are separate problems. |
 | `NEXT_PUBLIC_PHONE` | No | No phone number is shown anywhere. |
 | `ADMIN_PASSWORD` | For /admin | Nobody can sign in to the back office. Minimum 12 characters. |
 | `ADMIN_SESSION_SECRET` | For /admin | The session cookie cannot be signed, so nobody can sign in. |
@@ -74,12 +74,12 @@ deploy quietly lie to you.
 
 One operator, one password. Everything under `/admin` is behind it.
 
-- **`/admin`** — the pipeline. Every lead ever submitted, with the customer's
+- **`/admin`**. The pipeline. Every lead ever submitted, with the customer's
   contact details, what they asked for, the estimate, and a stage picker that
   saves the moment it changes. Filter by stage, search, and sort. It opens
-  sorted by **longest untouched, overdue first** — the page exists so a lead
+  sorted by **longest untouched, overdue first**. The page exists so a lead
   cannot quietly go cold.
-- **`/admin/<reference>`** — one lead in full: every answer, the estimate line
+- **`/admin/<reference>`**, one lead in full: every answer, the estimate line
   by line, the message ids of each email, the stage history, and how they found
   the site.
 
@@ -88,7 +88,7 @@ One operator, one password. Everything under `/admin` is behind it.
 `src/lib/pipeline.ts` is the single source of truth for the stage list, in the
 same spirit as the rate card. Nine forward stages, Fresh Lead through Complete,
 each with the number of days it may sit there before the grid flags it as
-overdue — plus **Lost**.
+overdue, plus **Lost**.
 
 Lost is deliberately not the tenth step. It is an outcome, so it has no place on
 the progress bar, never counts as "furthest along", and is never overdue. It is
@@ -98,13 +98,13 @@ value, but the record of who asked and what for is kept.
 A brand new lead has **no stored status at all**. That absence means "nothing
 has happened yet" and is rendered as Fresh Lead; writing the default in at
 creation would make "never touched" and "moved back to Fresh Lead by hand"
-indistinguishable. Everything after Fresh Lead is set by hand — nothing in the
+indistinguishable. Everything after Fresh Lead is set by hand. Nothing in the
 funnel can currently prove a human conversation happened.
 
 ### Deleting
 
 A lead can be deleted from its row in the grid or from the bottom of its own
-page. It is **permanent** — Vercel Blob has no trash and the lead is the only
+page. It is **permanent**. Vercel Blob has no trash and the lead is the only
 copy of what that person told us. The confirmation is a modal `<dialog>` naming
 the customer and the reference, because the risk is deleting the wrong row.
 
@@ -121,8 +121,8 @@ before it goes, since afterwards that line is the only trace it ever existed.
 Without both, the login page says which one is missing rather than silently
 refusing everyone.
 
-The session cookie is **signed** — HMAC over an expiry and a fingerprint of the
-current password — so it cannot be forged from devtools, cannot be replayed for
+The session cookie is **signed**. HMAC over an expiry and a fingerprint of the
+current password, so it cannot be forged from devtools, cannot be replayed for
 ever, and every session dies the moment either variable changes. The password is
 compared in constant time.
 
@@ -134,7 +134,7 @@ than they mean to.
 
 ### Known limits
 
-- The grid is one blob read per lead — there is no index file, by design, since
+- The grid is one blob read per lead. There is no index file, by design, since
   a shared one loses writes. Fine at this volume, and the fix when it is not is
   a summary blob written alongside each lead, not a shared index.
 - Stage writes are a read-modify-write with no lock. One operator and an hourly
@@ -152,7 +152,7 @@ whether anyone received it. `POST /api/webhooks/resend` closes that gap.
 Each send writes a tiny pointer blob under `email-index/<message-id>.json`
 naming the lead it belongs to. The webhook knows a message id and nothing else,
 so without the pointer it would have to read every lead in the store on every
-event — and there are several events per message. One pointer at send time makes
+event, and there are several events per message. One pointer at send time makes
 it a single read. One file per id, not a shared map, for the same reason the
 leads are: a shared file is last-write-wins.
 
@@ -207,7 +207,7 @@ logs, whether it succeeded or not.
 
 `GET /api/cron/followup?dry=1` (with the `Authorization: Bearer $CRON_SECRET`
 header) lists which leads *would* be chased without sending anything. Every run
-logs a `cron.followup.ran` line including the runs that do nothing — a cron that
+logs a `cron.followup.ran` line including the runs that do nothing. A cron that
 silently stopped firing is otherwise invisible until the leads dry up.
 
 ---
@@ -233,5 +233,5 @@ from the difference.
   reads and writes against Vercel Blob are the same code paths the estimator
   already uses, but they have not been watched working here.
 - No analytics yet.
-- No portfolio or testimonials yet — the site currently argues from its own
+- No portfolio or testimonials yet. The site currently argues from its own
   quality, which only works until there is something better to point at.

@@ -7,8 +7,8 @@ import { useEffect } from "react";
  * Fades elements in as they scroll into view.
  *
  * Anything with `u-reveal` starts hidden and gets `is-in` once seen. If this
- * component never runs — JS disabled, old browser, an error elsewhere on the
- * page — the safety net below reveals everything, so content is never lost to
+ * component never runs. JS disabled, old browser, an error elsewhere on the
+ * page. The safety net below reveals everything, so content is never lost to
  * a broken animation.
  */
 export function Reveal() {

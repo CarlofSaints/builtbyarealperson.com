@@ -13,7 +13,7 @@
  *  - **Answer 200 to anything that is not our fault.** A provider that gets a
  *    non-2xx retries for hours. An event about a lead that has since been
  *    deleted, or a message id we have no pointer for, is not an error worth
- *    making Resend retry — it is worth logging.
+ *    making Resend retry. It is worth logging.
  */
 
 import { verifySvixSignature } from "@/lib/svix";
@@ -40,7 +40,7 @@ function detailOf(event: ResendEvent): string | undefined {
   const bounce = event.data?.bounce;
   const parts = [bounce?.type, bounce?.subType, bounce?.message ?? event.data?.reason]
     .filter((part): part is string => Boolean(part && part.trim()));
-  return parts.length ? parts.join(" — ") : undefined;
+  return parts.length ? parts.join(". ") : undefined;
 }
 
 export async function POST(request: Request) {
@@ -49,7 +49,7 @@ export async function POST(request: Request) {
     console.error(
       JSON.stringify({
         event: "resend.webhook.misconfigured",
-        message: "RESEND_WEBHOOK_SECRET is not set — refusing to accept unsigned events",
+        message: "RESEND_WEBHOOK_SECRET is not set. Refusing to accept unsigned events",
       }),
     );
     return Response.json({ error: "Webhook is not configured" }, { status: 503 });

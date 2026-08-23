@@ -17,7 +17,7 @@ const DURATION_MS = 420;
  *  - a timeout backstop settles on the true figure even if no frame ever
  *    arrives. requestAnimationFrame does not run in a background tab, and
  *    without this the headline price froze on a stale number the moment
- *    somebody switched tabs mid-answer — and never recovered.
+ *    somebody switched tabs mid-answer, and never recovered.
  */
 function useAnimatedNumber(target: number) {
   const [display, setDisplay] = useState(target);
