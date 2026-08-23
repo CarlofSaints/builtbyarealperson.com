@@ -15,8 +15,16 @@
  * anonymised, because a description specific enough to be useful is usually
  * specific enough to identify.
  *
- * No client screenshots. Someone else's live figures on my marketing site is a
- * bad day for both of us.
+ * Screenshots are of the real, working systems, with the data swapped out in
+ * the browser before the picture was taken. Names, figures, addresses, staff,
+ * barcodes and account references are all replaced; the layout and the
+ * behaviour are untouched. Nothing was saved and nothing was sent. Somebody
+ * else's live figures on my marketing site is a bad day for both of us, and a
+ * blurred-out screenshot looks like something to hide, so neither happens.
+ *
+ * Money and quantities are moved by ONE factor per screen rather than
+ * individually, so the columns still add up. Jittered numbers that do not
+ * total correctly read as fake even when nothing real is left in them.
  */
 
 export type Capability =
@@ -59,6 +67,12 @@ export type Project = {
    * absence of a link is honest rather than a gap.
    */
   url?: string;
+  /**
+   * Anonymised captures of the real thing. A caption per image, because a
+   * screenshot with no caption asks the reader to work out what they are
+   * looking at, and they will not bother.
+   */
+  shots?: { src: string; caption: string }[];
 };
 
 export const PROJECTS: Project[] = [
@@ -82,6 +96,14 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "colab-hub",
+    shots: [
+      { src: "/work/colab-hub/billing.jpg", caption: "The month's costs split across four businesses sharing one building, ready to invoice." },
+      { src: "/work/colab-hub/xero.jpg", caption: "Connected to Xero, so a figure raised here is never retyped into the accounts." },
+      { src: "/work/colab-hub/chat.jpg", caption: "Staff messaging built into the system itself, instead of living in WhatsApp." },
+      { src: "/work/colab-hub/room-bookings.jpg", caption: "Meeting rooms for the week. Click an empty slot to take it, click a booking to ask for it." },
+      { src: "/work/colab-hub/team.jpg", caption: "Everyone across the building, tagged by parking bay, keys, phone licence and first aid." },
+    ],
+
     client: "COLAB",
     headline: "A staff hub that talks to the accounting system",
     problem:
@@ -102,6 +124,13 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "cubana-register",
+    shots: [
+      { src: "/work/cubana-register/properties.jpg", caption: "Every property with its value, bond and equity, and the full record one click away." },
+      { src: "/work/cubana-register/tenants.jpg", caption: "Who is in each property, on what lease, and when it runs out." },
+      { src: "/work/cubana-register/reminders.jpg", caption: "Recurring emails that send themselves, so the council and the levies are never late." },
+      { src: "/work/cubana-register/dashboard.jpg", caption: "What needs attention today: renewals, expiring leases and anything overdue." },
+    ],
+
     client: "Cubana Properties",
     headline: "One place for every property, tenant and project",
     problem:
@@ -118,6 +147,14 @@ export const PROJECTS: Project[] = [
   },
   {
     slug: "iram-flow",
+    shots: [
+      { src: "/work/iram-flow/process.jpg", caption: "The whole job, from loading a spreadsheet to a signed delivery note filed automatically." },
+      { src: "/work/iram-flow/aged-stock.jpg", caption: "Thirty thousand lines of returned stock, filterable by client, store, barcode or product." },
+      { src: "/work/iram-flow/picking-slips.jpg", caption: "Every picking slip and where it has got to, across a thousand of them." },
+      { src: "/work/iram-flow/audit-log.jpg", caption: "Who did what and when. Every scan, receipt and release, kept." },
+      { src: "/work/iram-flow/guide.jpg", caption: "A written user guide inside the system, so a new starter is not somebody else's afternoon." },
+    ],
+
     client: "iRam",
     headline: "Warehouse returns tracked from the door to the credit note",
     problem:

@@ -3,6 +3,7 @@ import { CAPABILITY_LABELS, PROJECTS, capabilitiesInUse } from "@/lib/portfolio"
 import { INTEGRATION_FIRST, formatMoney } from "@/lib/rate-card";
 import { Section, H2, Lead, Eyebrow, Button, Card } from "@/components/ui";
 import { SITE } from "@/lib/site";
+import { Lightbox } from "@/components/Lightbox";
 
 export const metadata: Metadata = {
   title: "What a site can do",
@@ -95,6 +96,10 @@ export default function WorkPage() {
                   </span>
                 ))}
               </div>
+
+              {project.shots && (
+                <Lightbox shots={project.shots} label={`${project.client}: ${project.headline}`} />
+              )}
 
               {project.url && (
                 <a
