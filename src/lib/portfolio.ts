@@ -55,6 +55,23 @@ export type Project = {
 
 export const PROJECTS: Project[] = [
   {
+    slug: "price-my-prang",
+    client: "Price My Prang",
+    headline: "A public site where strangers get quotes for accident damage",
+    problem:
+      "Getting your car repaired meant ringing round panel beaters one at a time, describing the damage badly over the phone, and having no idea whether the price you were given was fair.",
+    does: [
+      "Anybody can arrive, photograph the damage on their phone and send it, with no account and no app",
+      "The job goes out to panel beaters, who quote against the same pictures rather than a description",
+      "Quotes come back in one place to be compared, instead of arriving as five phone calls",
+      "Everyone is kept up to date by email as it moves, without anybody chasing",
+    ],
+    capabilities: ["data", "notifications", "mobile"],
+    costsHere:
+      "This is the far end of what a website can be. Most businesses need nothing like it, but if you have ever thought your site could take the job rather than just describe it, this is what that looks like.",
+    live: true,
+  },
+  {
     slug: "colab-hub",
     client: "COLAB",
     headline: "A staff hub that talks to the accounting system",
