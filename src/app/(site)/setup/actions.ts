@@ -57,3 +57,59 @@ export async function submitTakeOn(reference: string, input: unknown): Promise<T
   );
   return { ok: true, error: null };
 }
+
+/* ------------------------------------------------------------------ */
+/* The review, asked at handover                                       */
+/* ------------------------------------------------------------------ */
+
+import { saveReview } from "@/lib/store";
+import { CONSENT_CHOICES, type Review, type ReviewConsent } from "@/lib/review";
+
+export type ReviewResult = { ok: boolean; error: string | null };
+
+export async function submitReview(
+  reference: string,
+  input: { stars: number; quote: string; consent: string; attributionName: string; privateNote: string },
+): Promise<ReviewResult> {
+  const ref = String(reference || "").trim();
+  if (!ref) return { ok: false, error: "Something went wrong. Please use the link I sent you." };
+
+  const stars = Number(input?.stars);
+  if (!Number.isInteger(stars) || stars < 1 || stars > 5) {
+    return { ok: false, error: "Pick between one and five stars." };
+  }
+  if (!CONSENT_CHOICES.some((c) => c.id === input?.consent)) {
+    return { ok: false, error: "Let me know whether I may use this." };
+  }
+
+  const lead = await readLead(ref);
+  if (!lead) return { ok: false, error: "I could not find that. Please use the link I sent you." };
+  if (lead.review) return { ok: true, error: null };
+
+  const review: Review = {
+    stars,
+    // Capped: free text from an unauthenticated form is the one thing here a
+    // stranger controls the size of.
+    quote: String(input.quote ?? "").trim().slice(0, 1200),
+    consent: input.consent as ReviewConsent,
+    attributionName: String(input.attributionName ?? "").trim().slice(0, 120),
+    privateNote: String(input.privateNote ?? "").trim().slice(0, 1200),
+    at: new Date().toISOString(),
+  };
+
+  const saved = await saveReview(ref, review);
+  if (!saved) return { ok: false, error: "That did not save. Try again, and tell me if it keeps failing." };
+
+  // A low score is the one that must never be missed in a log.
+  console.log(
+    JSON.stringify({
+      event: "review.submitted",
+      reference: ref,
+      stars,
+      consent: review.consent,
+      business: lead.answers.business,
+      needsAttention: stars <= 3,
+    }),
+  );
+  return { ok: true, error: null };
+}

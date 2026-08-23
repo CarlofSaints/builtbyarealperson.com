@@ -14,6 +14,7 @@ import type { Estimate } from "./estimate";
 import { DEFAULT_STATUS, isLeadStatus, type LeadStatus } from "./pipeline";
 import { mergeDelivery, type EmailDelivery, type EmailKind } from "./delivery";
 import type { HostingPlan, TakeOnAnswers } from "./take-on";
+import type { Review } from "./review";
 
 const PREFIX = "leads/";
 
@@ -95,6 +96,13 @@ export type LeadRecord = {
     /** The plan derived at the time, kept so a later logic change cannot rewrite history. */
     plan: HostingPlan;
   };
+
+  /**
+   * What they said at handover. Absent means it has not been asked or not been
+   * answered, which is not the same as a bad review and must never be counted
+   * as one.
+   */
+  review?: Review;
 };
 
 function pathFor(reference: string): string {
@@ -396,4 +404,33 @@ export async function saveTakeOn(
     ...lead,
     takeOn: { answers, completedAt: now.toISOString(), plan },
   }));
+}
+
+/**
+ * Record a review against a lead.
+ *
+ * Public, like the take-on form: a review behind a login is a review nobody
+ * leaves. It writes one field, will not create a lead, and refuses to overwrite
+ * one already given, so the worst a guessed reference achieves is one review.
+ */
+export async function saveReview(
+  reference: string,
+  review: Review,
+): Promise<LeadRecord | null> {
+  return patchLead(reference, (lead) => (lead.review ? lead : { ...lead, review }));
+}
+
+/** Everything publishable, newest first. What the website is allowed to show. */
+export async function listPublishableReviews(): Promise<
+  { review: Review; name: string; business: string; reference: string }[]
+> {
+  const leads = await listLeads();
+  return leads
+    .filter((lead) => lead.review && lead.review.consent !== "private" && lead.review.quote.trim())
+    .map((lead) => ({
+      review: lead.review as Review,
+      name: lead.answers.name,
+      business: lead.answers.business,
+      reference: lead.reference,
+    }));
 }

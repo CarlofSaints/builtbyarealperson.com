@@ -21,6 +21,7 @@ import { DeleteLead } from "@/components/admin/DeleteLead";
 import { DeliveryBadge } from "@/components/admin/DeliveryBadge";
 import { EMAIL_KIND_LABELS, EMAIL_KINDS } from "@/lib/delivery";
 import { QUESTIONS, recommend } from "@/lib/take-on";
+import { CONSENT_CHOICES, STAR_LABELS, attribution, isPublishable } from "@/lib/review";
 
 export const dynamic = "force-dynamic";
 
@@ -342,6 +343,69 @@ export default async function LeadPage({ params }: { params: Promise<{ reference
                 <span className="font-mono text-text">/setup/{lead.reference}</span> once the quote
                 is accepted, and the hosting arrangement works itself out from their answers.
               </p>
+            </Panel>
+          )}
+
+          {lead.review && (
+            <Panel title="Review">
+              <div className="flex flex-wrap items-center gap-3">
+                <span className="font-display text-2xl font-bold text-turq">
+                  {"★".repeat(lead.review.stars)}
+                  <span className="text-line-2">{"★".repeat(5 - lead.review.stars)}</span>
+                </span>
+                <span className="text-sm text-muted">{STAR_LABELS[lead.review.stars]}</span>
+                {lead.review.stars <= 3 && (
+                  <span className="rounded-md border border-pink/50 bg-pink/10 px-2 py-0.5 text-xs font-semibold text-pink">
+                    Talk to them
+                  </span>
+                )}
+              </div>
+
+              {lead.review.quote.trim() && (
+                <blockquote className="mt-4 border-l-2 border-turq/50 pl-4 text-sm leading-relaxed text-text">
+                  {lead.review.quote}
+                </blockquote>
+              )}
+
+              <div className="mt-4 border-t border-line pt-3">
+                {isPublishable(lead.review) ? (
+                  <>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-turq">
+                      Safe to publish
+                    </p>
+                    <p className="mt-1 text-sm text-text">
+                      Sign it: {attribution(lead.review, a.name, a.business) ?? "—"}
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="text-xs font-semibold uppercase tracking-wider text-muted-2">
+                      Do not publish
+                    </p>
+                    <p className="mt-1 text-sm text-muted">
+                      {lead.review.consent === "private"
+                        ? "They asked for this to stay private. It does."
+                        : "No quote given, so there is nothing to put up."}
+                    </p>
+                  </>
+                )}
+                <p className="mt-1 text-xs text-muted-2">
+                  {CONSENT_CHOICES.find((c) => c.id === lead.review!.consent)?.label}
+                </p>
+              </div>
+
+              {lead.review.privateNote.trim() && (
+                <div className="mt-4 rounded-xl border border-amber-400/30 bg-amber-400/5 p-3">
+                  <p className="text-xs font-semibold uppercase tracking-wider text-amber-300">
+                    For you only, never published
+                  </p>
+                  <p className="mt-1.5 whitespace-pre-wrap text-sm leading-relaxed text-amber-100">
+                    {lead.review.privateNote}
+                  </p>
+                </div>
+              )}
+
+              <p className="mt-3 text-xs text-muted-2">Left {when(lead.review.at)}</p>
             </Panel>
           )}
 
