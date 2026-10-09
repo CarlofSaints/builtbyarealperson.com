@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { CAPABILITY_LABELS, PROJECTS, capabilitiesInUse } from "@/lib/portfolio";
-import { INTEGRATION_FIRST, formatMoney } from "@/lib/rate-card";
+import { FROM_PRICE, INTEGRATION_FIRST, formatMoney } from "@/lib/rate-card";
 import { Section, H2, Lead, Eyebrow, Button, Card } from "@/components/ui";
 import { SITE } from "@/lib/site";
 import { Lightbox } from "@/components/Lightbox";
@@ -135,7 +135,7 @@ export default function WorkPage() {
           <H2>Most sites need none of this</H2>
           <Lead className="mt-5">
             If all you need is five good pages that load fast and get found, that is{" "}
-            {formatMoney(9500)} and nothing above applies to you. The extras are priced separately
+            {formatMoney(FROM_PRICE)} and nothing above applies to you. The extras are priced separately
             precisely so you are not quietly paying for machinery you will never switch on. The
             first integration is {formatMoney(INTEGRATION_FIRST)}, and the estimator will tell you
             before you speak to me.

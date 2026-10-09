@@ -16,7 +16,7 @@ import {
   MIGRATION,
   MULTILINGUAL,
   SELL_MODES,
-  SITE_SIZES,
+  OFFERED_SITE_SIZES,
   TIMELINES,
   formatMoney,
   type IntegrationId,
@@ -280,7 +280,7 @@ export function EstimateForm() {
             hint="A page is a separate destination with its own address: Home, About, each service, Contact. Sections inside a page do not count."
           >
             <div className="grid gap-3">
-              {SITE_SIZES.map((s) => (
+              {OFFERED_SITE_SIZES.map((s) => (
                 <OptionCard
                   key={s.id}
                   name="siteSize"

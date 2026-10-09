@@ -60,6 +60,11 @@ export type Choice<T extends string> = {
 
 export type SiteSize = "landing" | "brochure" | "standard" | "large";
 
+/**
+ * Every size a lead may have picked, including retired ones, so an old lead
+ * still shows its label and price in the admin. What is OFFERED today is
+ * OFFERED_SITE_SIZES below.
+ */
 export const SITE_SIZES: Choice<SiteSize>[] = [
   {
     id: "landing",
@@ -73,7 +78,7 @@ export const SITE_SIZES: Choice<SiteSize>[] = [
     label: "Small site (4 to 5 pages)",
     blurb:
       "Home, About, Services, Contact and one more. The size most small businesses actually need.",
-    price: 9500,
+    price: 5500,
   },
   {
     id: "standard",
@@ -90,6 +95,14 @@ export const SITE_SIZES: Choice<SiteSize>[] = [
     price: 26000,
   },
 ];
+
+/**
+ * The one-page site is retired: once 4 to 5 pages cost the same, a one-pager is
+ * the same price for less. Kept in SITE_SIZES only so old leads still render.
+ */
+const RETIRED_SITE_SIZES: SiteSize[] = ["landing"];
+
+export const OFFERED_SITE_SIZES = SITE_SIZES.filter((s) => !RETIRED_SITE_SIZES.includes(s.id));
 
 /* ── 2. Selling online ───────────────────────────────────────────────────── */
 
@@ -296,4 +309,4 @@ export function formatMoney(amount: number): string {
 }
 
 /** The lowest number we can honestly put on the homepage. */
-export const FROM_PRICE = Math.min(...SITE_SIZES.map((s) => s.price));
+export const FROM_PRICE = Math.min(...OFFERED_SITE_SIZES.map((s) => s.price));
