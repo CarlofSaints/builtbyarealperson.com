@@ -16,7 +16,7 @@ import {
   MULTILINGUAL,
   RUSH_SURCHARGE,
   SELL_MODES,
-  SITE_SIZES,
+  OFFERED_SITE_SIZES,
   formatMoney,
   type Choice,
 } from "@/lib/rate-card";
@@ -107,7 +107,7 @@ export default function PricingPage() {
             title="The build"
             intro="Pick one. This is the foundation and everything else is added to it. A page means a separate destination with its own web address, not a section you scroll past."
           >
-            {SITE_SIZES.map((s) => (
+            {OFFERED_SITE_SIZES.map((s) => (
               <PriceRow key={s.id} item={s} />
             ))}
           </Block>

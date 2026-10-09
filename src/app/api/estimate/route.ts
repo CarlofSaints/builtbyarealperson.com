@@ -19,7 +19,7 @@ export const maxDuration = 60;
 const integrationIds = INTEGRATIONS.map((i) => i.id) as [string, ...string[]];
 
 const AnswersSchema = z.object({
-  siteSize: z.enum(["landing", "brochure", "standard", "large"]),
+  siteSize: z.enum(["brochure", "standard", "large"]),
   sell: z.enum(["no", "simple", "full"]),
   integrations: z.array(z.enum(integrationIds)).max(INTEGRATIONS.length).default([]),
   integrationsDetail: z.string().max(2000).default(""),

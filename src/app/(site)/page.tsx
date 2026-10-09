@@ -26,7 +26,7 @@ const STEPS = [
     n: "02",
     title: "We talk for 30 minutes",
     body:
-      "A Teams call. I ask what your business actually does, who buys from you and what has to happen on the site for it to have been worth it. You get a fixed quote after this. No more estimating.",
+      "A Teams call. I ask what your business actually does, who buys from you and what has to happen on the site for it to have been worth it. You get a fixed quote after this, and the full plan in writing (see below). No more estimating.",
     note: "Within a day or two",
   },
   {
@@ -42,6 +42,83 @@ const STEPS = [
     body:
       "I point the domain, check it on real phones, submit it to Google and hand over every login. Walk away whenever you like. Nothing is held hostage.",
     note: "Yours, permanently",
+  },
+];
+
+/**
+ * The planning pack a client reads before deciding to go ahead. Each icon is a
+ * plain stroke SVG drawn in currentColor, so it follows the theme like text.
+ */
+const PLAN_DOCS = [
+  {
+    code: "PRD",
+    title: "Product Requirements Document",
+    body: "What the site has to do, in plain English. Who it is for, every page, every feature, and what success looks like. If it is not in here, it is not in the price.",
+    icon: (
+      <>
+        <rect x="8" y="2" width="8" height="4" rx="1" />
+        <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2" />
+        <path d="m9 14 2 2 4-4" />
+      </>
+    ),
+  },
+  {
+    code: "TRD",
+    title: "Technical Requirements Document",
+    body: "How it will be built. Where it is hosted, the tools underneath, the speed and security it has to meet, and anything it needs to connect to. Another developer could pick it up and follow it.",
+    icon: (
+      <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z" />
+    ),
+  },
+  {
+    code: "Flow",
+    title: "App Flow",
+    body: "Every route a visitor can take, drawn out step by step. From finding you on Google to sending an enquiry, making a booking or paying, so nothing is left to guesswork.",
+    icon: (
+      <>
+        <rect x="3" y="3" width="8" height="8" rx="2" />
+        <path d="M7 11v4a2 2 0 0 0 2 2h4" />
+        <rect x="13" y="13" width="8" height="8" rx="2" />
+      </>
+    ),
+  },
+  {
+    code: "Design",
+    title: "Design Brief",
+    body: "How it will look and feel. Colours, fonts, the tone of the words and examples of the style, agreed with you before a single page is designed.",
+    icon: (
+      <>
+        <circle cx="13.5" cy="6.5" r="1" />
+        <circle cx="17.5" cy="10.5" r="1" />
+        <circle cx="8.5" cy="7.5" r="1" />
+        <circle cx="6.5" cy="12.5" r="1" />
+        <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.93 0 1.65-.75 1.65-1.69 0-.44-.18-.84-.44-1.13-.29-.29-.44-.65-.44-1.13a1.64 1.64 0 0 1 1.67-1.67h2c3.05 0 5.55-2.5 5.55-5.55C21.97 6.01 17.46 2 12 2z" />
+      </>
+    ),
+  },
+  {
+    code: "Data",
+    title: "Backend Schema",
+    body: "What information the site keeps and where. Enquiries, bookings, products or customers, and who is allowed to see each one. Your data is mapped out before any of it exists.",
+    icon: (
+      <>
+        <ellipse cx="12" cy="5" rx="9" ry="3" />
+        <path d="M3 5v14a9 3 0 0 0 18 0V5" />
+        <path d="M3 12a9 3 0 0 0 18 0" />
+      </>
+    ),
+  },
+  {
+    code: "Plan",
+    title: "Implementation Plan",
+    body: "The build broken into steps, with dates. What I do first, what I need from you and by when, and when each piece appears on your preview link.",
+    icon: (
+      <>
+        <rect x="3" y="4" width="18" height="18" rx="2" />
+        <path d="M16 2v4M8 2v4M3 10h18" />
+        <path d="m9 16 2 2 4-4" />
+      </>
+    ),
   },
 ];
 
@@ -249,6 +326,56 @@ export default function Home() {
         </div>
       </Section>
 
+      {/* ── The planning pack ───────────────────────────────────────────── */}
+      <Section id="plan">
+        <div className="u-reveal max-w-3xl">
+          <Eyebrow>Before you decide</Eyebrow>
+          <H2>Six documents before you say yes</H2>
+          <Lead>
+            After our call, and before you decide to go ahead, you get the whole plan in
+            writing. Written by me, for your business, not filled in from a template. You
+            see exactly what you are buying before you pay for any of it.
+          </Lead>
+        </div>
+
+        <ul className="mt-14 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          {PLAN_DOCS.map((doc, i) => (
+            <li key={doc.code} className="u-reveal" data-reveal-delay={(i % 3) * 70}>
+              <Card className="h-full">
+                <div className="flex items-start justify-between gap-4">
+                  <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-turq/25 bg-turq/10 text-turq">
+                    <svg
+                      width="22"
+                      height="22"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="1.8"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      {doc.icon}
+                    </svg>
+                  </span>
+                  <span className="rounded-full border border-line bg-ink/60 px-3 py-1 text-[11px] font-medium text-muted-2">
+                    {String(i + 1).padStart(2, "0")} of 06
+                  </span>
+                </div>
+                <h3 className="mt-5 font-display text-[17px] font-bold text-text">{doc.title}</h3>
+                <p className="mt-3 text-[15px] leading-relaxed text-muted">{doc.body}</p>
+              </Card>
+            </li>
+          ))}
+        </ul>
+
+        <p className="u-reveal mt-10 max-w-3xl text-[15px] leading-relaxed text-muted">
+          Nothing gets built until you have read them and said yes. If something in them is
+          wrong, we change the document, not the invoice. And once the build starts, they are
+          the yardstick: the site either does what the documents say, or I fix it.
+        </p>
+      </Section>
+
       {/* ── Why cheaper ─────────────────────────────────────────────────── */}
       <Section>
         <div className="grid gap-12 lg:grid-cols-2 lg:items-center">
@@ -362,9 +489,8 @@ export default function Home() {
                 {formatMoney(FROM_PRICE)}
               </p>
               <p className="mt-4 text-sm leading-relaxed text-muted">
-                One page, live in under a week. Four to five pages is{" "}
-                <span className="font-semibold text-text">{formatMoney(9500)}</span>. Everything
-                else is an addition you can see and price yourself.
+                Four to five pages, live in about a week. Everything else is an addition
+                you can see and price yourself.
               </p>
               <p className="mt-5 border-t border-line pt-4 text-xs leading-relaxed text-muted-2">
                 Estimates land within 20% of the final quote. After our call the quote
