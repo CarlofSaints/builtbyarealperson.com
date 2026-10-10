@@ -3,13 +3,22 @@
  * component lives here or in an environment variable.
  */
 
+import { FROM_PRICE, formatMoney } from "./rate-card";
+
 export const SITE = {
   name: "Built By A Real Person",
   domain: "builtbyarealperson.com",
   url: "https://builtbyarealperson.com",
   tagline: "A real person builds your website. AI just makes me fast.",
+  /**
+   * The homepage title Google shows. Written in the words a customer types
+   * ("small business website design South Africa"), not the brand line. The
+   * "real person" pitch still reaches the search result through the name and
+   * the description.
+   */
+  searchTitle: `Small Business Website Design in South Africa, from ${formatMoney(FROM_PRICE)}`,
   description:
-    "Websites for South African small businesses, built by one person in days rather than months. AI speeds up the work: it does not do the work. Fixed price up front, from R5,500.",
+    `Websites for South African small businesses, built by one person in days rather than months. AI speeds up the work: it does not do the work. Fixed price up front, from ${formatMoney(FROM_PRICE)}.`,
 
   /**
    * The address shown on the site and used as the reply-to.
