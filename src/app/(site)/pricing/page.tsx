@@ -17,14 +17,14 @@ import {
   RUSH_SURCHARGE,
   SELL_MODES,
   OFFERED_SITE_SIZES,
+  FROM_PRICE,
   formatMoney,
   type Choice,
 } from "@/lib/rate-card";
 
 export const metadata: Metadata = {
-  title: "The rate card",
-  description:
-    "Every price, published. Base builds from R5,500, plus what each addition costs. Work out your own number before you speak to me.",
+  title: { absolute: "Website Design Prices in South Africa: Every Price Published" },
+  description: `What a small business website costs in South Africa, every price published. A 4 to 5 page site from ${formatMoney(FROM_PRICE)}, plus what each addition costs. Work out your own number before you speak to me.`,
   alternates: { canonical: "/pricing" },
 };
 

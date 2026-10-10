@@ -6,9 +6,9 @@ import { SITE } from "@/lib/site";
 import { Lightbox } from "@/components/Lightbox";
 
 export const metadata: Metadata = {
-  title: "What a site can do",
+  title: { absolute: "Website Examples: Online Booking, Client Logins, Integrations" },
   description:
-    "Most websites are a brochure, and that is usually the right answer. Some need to book, print, log people in or talk to something else. Here is what that looks like, built and running.",
+    "Small business website examples, built and running in South Africa. Most websites are a brochure, and that is usually the right answer. Some need to book, print, log people in or talk to something else. Here is what that looks like, built and running.",
   alternates: { canonical: "/work" },
 };
 
