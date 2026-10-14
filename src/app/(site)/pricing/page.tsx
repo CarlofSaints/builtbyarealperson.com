@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { shareMetadata } from "@/lib/share";
 import { Button, Card, Check, Eyebrow, H2, Lead, Section } from "@/components/ui";
 import {
   ACCURACY_BAND,
@@ -21,11 +22,17 @@ import {
   formatMoney,
   type Choice,
 } from "@/lib/rate-card";
+import { JsonLd, pricingSchema } from "@/lib/schema";
+
+const TITLE = "Website Design Prices in South Africa: Every Price Published";
+const DESCRIPTION =
+  `What a small business website costs in South Africa, every price published. A 4 to 5 page site from ${formatMoney(FROM_PRICE)}, plus what each addition costs. Work out your own number before you speak to me.`;
 
 export const metadata: Metadata = {
-  title: { absolute: "Website Design Prices in South Africa: Every Price Published" },
-  description: `What a small business website costs in South Africa, every price published. A 4 to 5 page site from ${formatMoney(FROM_PRICE)}, plus what each addition costs. Work out your own number before you speak to me.`,
+  title: { absolute: TITLE },
+  description: DESCRIPTION,
   alternates: { canonical: "/pricing" },
+  ...shareMetadata({ title: TITLE, description: DESCRIPTION, path: "/pricing" }),
 };
 
 function PriceRow({ item }: { item: Choice<string> }) {
@@ -74,6 +81,7 @@ function Block({
 export default function PricingPage() {
   return (
     <>
+      <JsonLd data={pricingSchema()} />
       <section className="u-glow relative overflow-hidden px-5 pb-4 pt-14 sm:px-8 sm:pt-20">
         <div className="u-grid pointer-events-none absolute inset-0" aria-hidden="true" />
         <div className="relative mx-auto max-w-6xl">

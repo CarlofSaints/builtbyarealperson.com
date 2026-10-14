@@ -1,13 +1,18 @@
 import type { Metadata } from "next";
+import { shareMetadata } from "@/lib/share";
 import Link from "next/link";
 import { EstimateForm } from "@/components/estimate/EstimateForm";
 import { ACCURACY_BAND } from "@/lib/rate-card";
 
+const TITLE = "Website Cost Calculator: Get a Price in 2 Minutes";
+const DESCRIPTION =
+  "How much will my website cost? Nine questions, two minutes, and a real number. The estimate updates as you answer and a PDF breakdown is emailed to you immediately.";
+
 export const metadata: Metadata = {
-  title: { absolute: "Website Cost Calculator: Get a Price in 2 Minutes" },
-  description:
-    "How much will my website cost? Nine questions, two minutes, and a real number. The estimate updates as you answer and a PDF breakdown is emailed to you immediately.",
+  title: { absolute: TITLE },
+  description: DESCRIPTION,
   alternates: { canonical: "/estimate" },
+  ...shareMetadata({ title: TITLE, description: DESCRIPTION, path: "/estimate" }),
 };
 
 export default function EstimatePage() {

@@ -2,6 +2,15 @@ import Link from "next/link";
 import { Button, Card, Check, Cross, Eyebrow, H2, Lead, Section } from "@/components/ui";
 import { FROM_PRICE, formatMoney } from "@/lib/rate-card";
 import { SITE } from "@/lib/site";
+import { JsonLd, homeSchema } from "@/lib/schema";
+import type { Metadata } from "next";
+
+/**
+ * The homepage title on its own: with the brand added it ran to 86 characters
+ * and Google cut it off. The brand still reaches the result as the site name.
+ * Set here rather than as the layout default, so other pages keep the brand.
+ */
+export const metadata: Metadata = { title: { absolute: SITE.searchTitle } };
 
 const TRUST = [
   "Live in days, not months",
@@ -556,22 +565,8 @@ export default function Home() {
         </div>
       </section>
 
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{
-          __html: JSON.stringify({
-            "@context": "https://schema.org",
-            "@type": "ProfessionalService",
-            name: SITE.name,
-            description: SITE.description,
-            url: SITE.url,
-            email: SITE.email,
-            areaServed: "ZA",
-            priceRange: `From ${formatMoney(FROM_PRICE)}`,
-            serviceType: "Website design and development",
-          }),
-        }}
-      />
+      {/* The FAQ above goes in as structured data so Google can read it as questions. */}
+      <JsonLd data={homeSchema(FAQ)} />
     </>
   );
 }

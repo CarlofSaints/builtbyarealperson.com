@@ -33,6 +33,11 @@ export function Footer() {
                     Get an estimate
                   </Link>
                 </li>
+                <li>
+                  <Link href="/guides" className="text-muted transition-colors hover:text-turq">
+                    Guides
+                  </Link>
+                </li>
               </ul>
             </div>
 
@@ -42,7 +47,7 @@ export function Footer() {
               </h2>
               <ul className="mt-4 space-y-2.5 text-sm">
                 <li>
-                  <a href={`mailto:${SITE.email}`} className="text-muted transition-colors hover:text-turq">
+                  <a href={`mailto:${SITE.email}`} className="break-all text-muted transition-colors hover:text-turq">
                     {SITE.email}
                   </a>
                 </li>

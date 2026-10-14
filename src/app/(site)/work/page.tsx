@@ -1,15 +1,20 @@
 import type { Metadata } from "next";
+import { shareMetadata } from "@/lib/share";
 import { CAPABILITY_LABELS, PROJECTS, capabilitiesInUse } from "@/lib/portfolio";
 import { FROM_PRICE, INTEGRATION_FIRST, formatMoney } from "@/lib/rate-card";
 import { Section, H2, Lead, Eyebrow, Button, Card } from "@/components/ui";
 import { SITE } from "@/lib/site";
 import { Lightbox } from "@/components/Lightbox";
 
+const TITLE = "Website Examples: Online Booking, Client Logins, Integrations";
+const DESCRIPTION =
+  "Small business website examples, built and running in South Africa. Most websites are a brochure, and that is usually the right answer. Some need to book, print, log people in or talk to something else. Here is what that looks like, built and running.";
+
 export const metadata: Metadata = {
-  title: { absolute: "Website Examples: Online Booking, Client Logins, Integrations" },
-  description:
-    "Small business website examples, built and running in South Africa. Most websites are a brochure, and that is usually the right answer. Some need to book, print, log people in or talk to something else. Here is what that looks like, built and running.",
+  title: { absolute: TITLE },
+  description: DESCRIPTION,
   alternates: { canonical: "/work" },
+  ...shareMetadata({ title: TITLE, description: DESCRIPTION, path: "/work" }),
 };
 
 export default function WorkPage() {
