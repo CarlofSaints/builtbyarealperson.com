@@ -4,7 +4,7 @@ import Link from "next/link";
 import { EstimateForm } from "@/components/estimate/EstimateForm";
 import { ACCURACY_BAND } from "@/lib/rate-card";
 
-const TITLE = "Website Cost Calculator: Get a Price in 2 Minutes";
+const TITLE = "Website Price Calculator (South Africa): 2 Minutes";
 const DESCRIPTION =
   "How much will my website cost? Nine questions, two minutes, and a real number. The estimate updates as you answer and a PDF breakdown is emailed to you immediately.";
 

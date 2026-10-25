@@ -98,7 +98,7 @@ export const GUIDES: Guide[] = [
   {
     slug: "how-much-does-a-website-cost-in-south-africa",
     title: "How much does a website cost in South Africa?",
-    metaTitle: "How Much Does a Website Cost in South Africa? Real Prices",
+    metaTitle: `5 Page Website Price in South Africa: From ${m(FROM_PRICE)}`,
     description: `What a small business website really costs in South Africa, with real published prices. A 4 to 5 page site from ${m(FROM_PRICE)}, what pushes the price up, and four worked examples.`,
     published: "2026-10-14",
     updated: "2026-10-14",
