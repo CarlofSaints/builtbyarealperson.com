@@ -53,14 +53,14 @@ type ButtonProps = {
 
 export function Button({ href, children, variant = "primary", className = "" }: ButtonProps) {
   const base =
-    "group inline-flex items-center justify-center gap-2 rounded-xl px-6 py-3.5 font-display text-[15px] font-semibold transition-all duration-200";
+    "group inline-flex items-center justify-center gap-2 rounded-full px-6 py-3.5 font-display text-base font-semibold transition-[background-color,color,scale] duration-200 active:scale-95";
   const styles =
     variant === "primary"
-      ? "bg-turq text-ink shadow-[0_10px_40px_-12px_rgba(42,232,206,0.6)] hover:-translate-y-0.5 hover:shadow-[0_16px_50px_-12px_rgba(42,232,206,0.75)]"
-      : "border border-line-2 text-text hover:-translate-y-0.5 hover:border-turq/50 hover:text-turq";
+      ? "bg-turq text-ink hover:bg-white"
+      : "bg-surface-2 text-text hover:text-turq";
 
   return (
-    <Link href={href} className={`${base} ${styles} ${className}`}>
+    <Link href={href} data-magnetic="0.15" className={`${base} ${styles} ${className}`}>
       {children}
       <svg
         width="16"

@@ -73,11 +73,11 @@ export function Nav() {
     <header
       className={`sticky top-0 z-40 transition-colors duration-300 ${
         scrolled || open
-          ? "border-b border-line bg-ink/80 backdrop-blur-xl"
-          : "border-b border-transparent"
+          ? "bg-ink"
+          : "bg-transparent"
       }`}
     >
-      <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5 sm:px-8">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-8">
         <Logo />
 
         <nav className="hidden items-center gap-1 md:flex" aria-label="Main">
@@ -92,14 +92,15 @@ export function Nav() {
           ))}
           <Link
             href={ADMIN_HREF}
-            className="ml-1 inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm text-muted-2 transition-colors hover:text-turq"
+            className="ml-1 inline-flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm text-muted transition-colors hover:text-turq"
           >
             <LockIcon />
             Sign in
           </Link>
           <Link
             href="/estimate"
-            className="ml-2 rounded-lg bg-turq px-4 py-2 text-sm font-semibold text-ink transition-transform duration-200 hover:-translate-y-0.5 hover:bg-turq/90"
+            data-magnetic="0.15"
+            className="ml-2 rounded-full bg-turq px-5 py-2.5 text-sm font-semibold text-ink transition-[background-color,scale] duration-200 hover:bg-white active:scale-95"
           >
             Get an estimate
           </Link>
@@ -128,26 +129,26 @@ export function Nav() {
       </div>
 
       {open && (
-        <div ref={panelRef} id="mobile-nav" className="border-t border-line bg-ink/95 px-5 pb-5 pt-2 backdrop-blur-xl md:hidden">
+        <div ref={panelRef} id="mobile-nav" className="bg-ink px-5 pb-6 pt-2 md:hidden">
           <nav className="flex flex-col" aria-label="Mobile">
             {NAV_LINKS.map((link) => (
               <Link
                 key={link.href}
                 href={link.href}
-                className="border-b border-line/60 py-3.5 text-[15px] text-muted transition-colors hover:text-text"
+                className="py-3 font-display text-2xl font-bold text-text transition-colors hover:text-turq"
               >
                 {link.label}
               </Link>
             ))}
             <Link
               href="/estimate"
-              className="mt-4 rounded-xl bg-turq px-4 py-3 text-center text-[15px] font-semibold text-ink"
+              className="mt-4 rounded-full bg-turq px-4 py-3.5 text-center text-base font-semibold text-ink"
             >
               Get an estimate
             </Link>
             <Link
               href={ADMIN_HREF}
-              className="mt-3 inline-flex items-center justify-center gap-1.5 py-2 text-sm text-muted-2 transition-colors hover:text-turq"
+              className="mt-3 inline-flex items-center justify-center gap-1.5 py-2 text-sm text-muted transition-colors hover:text-turq"
             >
               <LockIcon />
               Sign in
