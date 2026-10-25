@@ -17,7 +17,7 @@ export const ACCURACY_BAND = 0.2;
 
 /** Optional monthly care plan. Quoted separately, never inside the total. */
 export const CARE_PLAN = {
-  monthly: 450,
+  monthly: 350,
   label: "Care plan (optional)",
   blurb:
     "Hosting, security updates, daily backups, uptime monitoring and up to 30 minutes of small tweaks a month. Cancel any time. You keep the site either way.",
@@ -85,14 +85,14 @@ export const SITE_SIZES: Choice<SiteSize>[] = [
     label: "Standard site (6 to 12 pages)",
     blurb:
       "Separate pages per service, team, case studies, a news or blog section.",
-    price: 16500,
+    price: 10500,
   },
   {
     id: "large",
     label: "Large site (12+ pages)",
     blurb:
       "Bigger structure, custom sections, member or client area, more moving parts.",
-    price: 26000,
+    price: 18500,
   },
 ];
 
@@ -120,22 +120,22 @@ export const SELL_MODES: Choice<SellMode>[] = [
     label: "A small catalogue",
     blurb:
       "Up to about 20 products or services, with an enquiry or a pay-by-link checkout. No stock tracking.",
-    price: 7500,
+    price: 4500,
   },
   {
     id: "full",
     label: "A proper online shop",
     blurb:
       "Cart, secure checkout (Payfast, Yoco or Stripe), stock levels, order confirmations and delivery options.",
-    price: 14000,
+    price: 9500,
   },
 ];
 
 /* ── 3. Integrations ─────────────────────────────────────────────────────── */
 
 /** First integration costs this; each one after it costs the lower rate. */
-export const INTEGRATION_FIRST: Money = 4500;
-export const INTEGRATION_ADDITIONAL: Money = 3500;
+export const INTEGRATION_FIRST: Money = 3000;
+export const INTEGRATION_ADDITIONAL: Money = 2000;
 
 export const INTEGRATIONS = [
   { id: "xero", label: "Xero" },
@@ -170,7 +170,7 @@ export const MARKETS: Choice<Market>[] = [
     label: "South Africa and abroad",
     blurb:
       "More than one currency, international delivery zones, foreign tax rules and time zones.",
-    price: 3500,
+    price: 2500,
   },
 ];
 
@@ -190,14 +190,14 @@ export const BRAND_STATES: Choice<BrandState>[] = [
     label: "I have a logo, nothing else",
     blurb:
       "I design a colour palette, type scale and full component set around your existing logo.",
-    price: 3500,
+    price: 2500,
   },
   {
     id: "need-all",
     label: "I need the lot designed",
     blurb:
       "Logo, colour palette, typography and a one-page brand sheet you can use everywhere else too.",
-    price: 8500,
+    price: 6000,
   },
 ];
 
@@ -218,7 +218,7 @@ export const COPY_MODES: Choice<CopyMode>[] = [
     label: "Please write it for me",
     blurb:
       "I interview you, then write the words for up to six pages. You approve every line before it goes live.",
-    price: 3000,
+    price: 2500,
   },
 ];
 
@@ -257,14 +257,14 @@ export const MIGRATION: Choice<"migrate"> = {
   label: "Move content from the old site",
   blurb:
     "Pages, text and images carried across and cleaned up, so nothing is lost and your Google ranking survives the move.",
-  price: 2500,
+  price: 1500,
 };
 
 export const MULTILINGUAL: Choice<"multilingual"> = {
   id: "multilingual",
   label: "A second language",
   blurb: "The whole site in a second language, with a switcher.",
-  price: 4500,
+  price: 3000,
 };
 
 /* ── 9. Timeline ─────────────────────────────────────────────────────────── */
