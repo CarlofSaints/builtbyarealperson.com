@@ -21,7 +21,7 @@ function sanitise(input: unknown): TakeOnAnswers | null {
   if (!input || typeof input !== "object") return null;
   const raw = input as Record<string, unknown>;
   // Reject, rather than ignore, anything the form never sends.
-  if (Object.keys(raw).some((key) => !(key in EMPTY_TAKE_ON))) return null;
+  if (Object.keys(raw).some((key) => !Object.hasOwn(EMPTY_TAKE_ON, key))) return null;
   const out: TakeOnAnswers = { ...EMPTY_TAKE_ON };
 
   for (const q of QUESTIONS) {
