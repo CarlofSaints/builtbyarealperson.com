@@ -42,12 +42,12 @@ const AnswersSchema = z.object({
   notes: z.string().max(4000).default(""),
 
   website: z.string().max(200).default(""),
-});
+}).strict(); // unknown fields are rejected, not silently dropped
 
 const BodySchema = z.object({
   answers: AnswersSchema,
   elapsedMs: z.number().int().nonnegative().max(1000 * 60 * 60 * 24).default(0),
-});
+}).strict();
 
 /** Nobody reads nine questions in under four seconds. */
 const MIN_ELAPSED_MS = 4000;
