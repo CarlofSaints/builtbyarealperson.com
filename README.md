@@ -139,8 +139,12 @@ than they mean to.
   a summary blob written alongside each lead, not a shared index.
 - Stage writes are a read-modify-write with no lock. One operator and an hourly
   cron do not collide in practice; a second login would change that.
-- The login has no shared rate limit. Failures are slowed by a fixed delay, but
-  serverless instances do not share a counter.
+- Guessing the password is limited by a **Vercel Firewall rule**, not by code:
+  POST `/admin/login` is rate-limited per IP (10 per minute, then blocked for
+  15 minutes). Serverless instances share no counter, so the platform does it.
+  The firewall lives in the Vercel dashboard (Firewall tab), not in this repo:
+  if the project is ever recreated, add the rule again. POST `/api/estimate` has
+  a similar rule (5 per 10 minutes per IP) against form floods.
 
 ---
 

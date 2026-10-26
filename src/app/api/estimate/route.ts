@@ -172,7 +172,7 @@ export async function POST(request: Request) {
     let saved = false;
     if (isBlobConfigured()) {
       try {
-        await saveLead(lead);
+        await saveLead(lead, { create: true });
         saved = true;
       } catch (err) {
         warnings.push(`blob save: ${err instanceof Error ? err.message : String(err)}`);

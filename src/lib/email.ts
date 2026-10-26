@@ -70,7 +70,7 @@ function shell(opts: { preheader: string; heading: string; body: string }): stri
 </td></tr>
 
 <tr><td style="padding:32px 28px 8px;">
-  <h1 style="margin:0;font-size:23px;line-height:1.25;color:${INK};font-weight:800;letter-spacing:-0.4px;">${opts.heading}</h1>
+  <h1 style="margin:0;font-size:23px;line-height:1.25;color:${INK};font-weight:800;letter-spacing:-0.4px;">${esc(opts.heading)}</h1>
 </td></tr>
 
 <tr><td style="padding:8px 28px 32px;font-size:15px;line-height:1.62;color:#38424f;">
