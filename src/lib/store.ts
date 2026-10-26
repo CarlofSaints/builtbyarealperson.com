@@ -8,6 +8,7 @@
  * Leads hold personal information, so every blob is private.
  */
 
+import { randomInt } from "node:crypto";
 import { del, get, list, put } from "@vercel/blob";
 import type { Answers } from "./estimate";
 import type { Estimate } from "./estimate";
@@ -160,12 +161,16 @@ export function toStoredEstimate(estimate: Estimate): LeadRecord["estimate"] {
   };
 }
 
-export async function saveLead(lead: LeadRecord): Promise<string> {
+/**
+ * `create` refuses to replace a lead that already exists at this reference, so
+ * a new submission can never silently wipe an existing customer's record.
+ */
+export async function saveLead(lead: LeadRecord, opts: { create?: boolean } = {}): Promise<string> {
   const { url } = await put(pathFor(lead.reference), JSON.stringify(lead, null, 2), {
     access: "private",
     contentType: "application/json",
     addRandomSuffix: false,
-    allowOverwrite: true,
+    allowOverwrite: !opts.create,
     cacheControlMaxAge: 0,
   });
   return url;
@@ -226,12 +231,13 @@ export async function listLeadReferences(): Promise<string[]> {
  */
 const ALPHABET = "ACDEFGHJKLMNPQRTUVWXY34679";
 
-export function makeReference(now: Date, random: () => number = Math.random): string {
+/** Six crypto-random characters: about 300 million per month, so a collision is not a real risk. */
+export function makeReference(now: Date, pick: (max: number) => number = randomInt): string {
   const yy = String(now.getUTCFullYear()).slice(2);
   const mm = String(now.getUTCMonth() + 1).padStart(2, "0");
   let tail = "";
-  for (let i = 0; i < 4; i += 1) {
-    tail += ALPHABET[Math.floor(random() * ALPHABET.length)];
+  for (let i = 0; i < 6; i += 1) {
+    tail += ALPHABET[pick(ALPHABET.length)];
   }
   return `BRP-${yy}${mm}-${tail}`;
 }

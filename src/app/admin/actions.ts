@@ -43,9 +43,9 @@ export async function loginAction(
   if (!password) return { error: "Enter the password." };
 
   if (!checkPassword(password)) {
-    // Slow every failure down a little. It does not stop a determined attacker
-    // on serverless, where there is no shared counter between instances, but
-    // it does make an unattended dictionary run meaningfully more expensive.
+    // Slow every failure down a little. The real limit on guessing is the
+    // Vercel Firewall rate-limit rule on POST /admin/login (see README), since
+    // serverless instances share no counter.
     await new Promise((resolve) => setTimeout(resolve, 600));
     return { error: "That is not the password." };
   }
