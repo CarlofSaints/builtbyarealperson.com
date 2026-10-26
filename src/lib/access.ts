@@ -7,9 +7,9 @@
  * invitation or a shared document, and like those, it lives or dies on
  * entropy.
  *
- * WHY NOT THE REFERENCE. The lead reference is four characters from a 26 letter
- * alphabet behind a predictable prefix: about 457,000 possibilities, walkable by
- * a script in minutes. Fine as a human-readable label to quote in an email.
+ * WHY NOT THE REFERENCE. The lead reference is six characters from a 26 letter
+ * alphabet behind a predictable prefix: about 300 million possibilities, which
+ * stops collisions but is still far too small to be a secret. Fine as a human-readable label to quote in an email.
  * Useless as a secret. These tokens are 32 random bytes, which is not walkable
  * by anything.
  *

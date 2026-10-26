@@ -6,9 +6,9 @@
  * DELIBERATELY PUBLIC. The customer filling this in has no login and should not
  * need one. A questionnaire behind a password is a questionnaire nobody fills
  * in. The protections are that it writes exactly one field on exactly one lead,
- * it will not create a lead that does not exist, and it refuses to overwrite an
- * answer that has already been given. Someone who guesses a reference can
- * answer a questionnaire once. That is the whole blast radius.
+ * found only through that customer's unguessable access token, it will not
+ * create a lead that does not exist, and it refuses to overwrite an answer that
+ * has already been given.
  */
 
 import { leadByAccessToken, saveTakeOn } from "@/lib/store";
@@ -20,6 +20,8 @@ export type TakeOnResult = { ok: boolean; error: string | null };
 function sanitise(input: unknown): TakeOnAnswers | null {
   if (!input || typeof input !== "object") return null;
   const raw = input as Record<string, unknown>;
+  // Reject, rather than ignore, anything the form never sends.
+  if (Object.keys(raw).some((key) => !Object.hasOwn(EMPTY_TAKE_ON, key))) return null;
   const out: TakeOnAnswers = { ...EMPTY_TAKE_ON };
 
   for (const q of QUESTIONS) {
@@ -71,6 +73,10 @@ export async function submitReview(
   token: string,
   input: { stars: number; quote: string; consent: string; attributionName: string; privateNote: string },
 ): Promise<ReviewResult> {
+  const REVIEW_KEYS = ["stars", "quote", "consent", "attributionName", "privateNote"];
+  if (!input || typeof input !== "object" || Object.keys(input).some((key) => !REVIEW_KEYS.includes(key))) {
+    return { ok: false, error: "That form did not validate." };
+  }
   const stars = Number(input?.stars);
   if (!Number.isInteger(stars) || stars < 1 || stars > 5) {
     return { ok: false, error: "Pick between one and five stars." };
