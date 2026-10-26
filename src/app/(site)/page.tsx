@@ -387,7 +387,7 @@ export default function Home() {
                 }`}
                 {...d(i)}
               >
-                <span className={kept ? "" : "u-strike"}>{label}</span>
+                {kept ? <span>{label}</span> : <del className="u-strike no-underline">{label}</del>}
                 {kept ? <span className="text-lg font-bold tracking-normal text-turq">that&rsquo;s me</span> : null}
               </li>
             ))}

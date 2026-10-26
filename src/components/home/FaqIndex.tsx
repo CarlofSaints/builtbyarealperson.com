@@ -20,6 +20,7 @@ export function FaqIndex({ items }: { items: { q: string; a: string }[] }) {
               <button
                 type="button"
                 aria-expanded={on}
+                aria-controls="faq-answer"
                 onClick={() => setOpen(i)}
                 onMouseEnter={() => setOpen(i)}
                 onFocus={() => setOpen(i)}
@@ -40,7 +41,7 @@ export function FaqIndex({ items }: { items: { q: string; a: string }[] }) {
       </ul>
 
       <div className="hidden lg:col-span-6 lg:col-start-7 lg:block">
-        <p key={open} className="u-fade sticky top-32 text-[1.625rem] leading-[1.35] text-text">
+        <p key={open} id="faq-answer" aria-live="polite" className="u-fade sticky top-32 text-[1.625rem] leading-[1.35] text-text">
           {items[open].a}
         </p>
       </div>

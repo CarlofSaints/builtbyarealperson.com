@@ -59,9 +59,20 @@ export function Pointer() {
       if (!raf) raf = requestAnimationFrame(tick);
     };
 
+    // A move is the only thing that recentres a button, so leaving the window must too.
+    const onLeave = () => {
+      cancelAnimationFrame(raf);
+      raf = 0;
+      document.querySelectorAll<HTMLElement>("[data-magnetic]").forEach((el) => (el.style.translate = ""));
+    };
+
     window.addEventListener("pointermove", onMove, { passive: true });
+    document.documentElement.addEventListener("pointerleave", onLeave);
+    window.addEventListener("blur", onLeave);
     return () => {
       window.removeEventListener("pointermove", onMove);
+      document.documentElement.removeEventListener("pointerleave", onLeave);
+      window.removeEventListener("blur", onLeave);
       cancelAnimationFrame(raf);
     };
   }, [pathname]);

@@ -62,17 +62,20 @@ export function PricePicker() {
           const [name, pages] = splitLabel(s.label);
           const on = s.id === size;
           return (
-            <button
+            <label
               key={s.id}
-              type="button"
-              role="radio"
-              aria-checked={on}
-              onClick={() => setSize(s.id)}
-              onFocus={() => setSize(s.id)}
-              className={`group flex w-full items-baseline gap-4 py-2 text-left font-display text-[clamp(2.25rem,4.6vw,4.5rem)] font-extrabold leading-[1.05] tracking-[-0.03em] transition-[color,translate] duration-200 hover:translate-x-2 ${
+              className={`group flex w-full cursor-pointer items-baseline rounded-2xl has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-4 has-[:focus-visible]:outline-turq gap-4 py-2 text-left font-display text-[clamp(2.25rem,4.6vw,4.5rem)] font-extrabold leading-[1.05] tracking-[-0.03em] transition-[color,translate] duration-200 hover:translate-x-2 ${
                 on ? "text-text" : "text-muted-2 hover:text-muted"
               }`}
             >
+              <input
+                type="radio"
+                name="site-size"
+                value={s.id}
+                checked={on}
+                onChange={() => setSize(s.id)}
+                className="sr-only"
+              />
               <span
                 className={`inline-block h-[0.28em] w-[0.28em] shrink-0 -translate-y-[0.12em] rounded-full bg-turq transition-transform duration-300 ${on ? "scale-100" : "scale-0"}`}
                 aria-hidden="true"
@@ -81,7 +84,7 @@ export function PricePicker() {
                 {name}
                 <span className="block font-sans text-base font-medium tracking-normal text-muted">{pages}</span>
               </span>
-            </button>
+            </label>
           );
         })}
       </div>
@@ -90,10 +93,13 @@ export function PricePicker() {
         <div className="lg:sticky lg:top-28">
           <p
             className="font-display text-[clamp(3.5rem,8vw,8rem)] font-extrabold leading-none tracking-[-0.04em] text-turq tabular-nums"
-            aria-live="polite"
+            aria-hidden="true"
           >
             {formatMoney(shown)}
           </p>
+          <span className="sr-only" aria-live="polite">
+            {formatMoney(total)}
+          </span>
           <p className="mt-3 text-base text-muted">From, once-off, excluding VAT</p>
           <p className="mt-6 max-w-[46ch] text-lg leading-relaxed text-text">{sizeChoice.blurb}</p>
 
