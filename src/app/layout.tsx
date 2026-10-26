@@ -55,7 +55,7 @@ export default function RootLayout({
         <noscript>
           <style
             dangerouslySetInnerHTML={{
-              __html: `.u-reveal{opacity:1!important;transform:none!important}`,
+              __html: `.u-reveal{opacity:1!important;transform:none!important}.u-strike{background-size:100% .09em!important}`,
             }}
           />
         </noscript>

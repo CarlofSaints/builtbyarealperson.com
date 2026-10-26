@@ -124,8 +124,8 @@ a:focus-visible {
    blocked script never gets a blank page. */
 .u-reveal {
   opacity: 0;
-  transform: translateY(14px);
-  transition: opacity 600ms ease, transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  transform: translateY(24px);
+  transition: opacity 700ms ease, transform 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
 }
 .u-reveal.is-in {
   opacity: 1;
@@ -194,4 +194,97 @@ a:focus-visible {
 }
 @media (prefers-reduced-motion: reduce) {
   .u-dialog[open] { animation: none; }
+}
+
+/* ── Homepage motion (Oct 2026) ─────────────────────────────────────────── */
+
+/* The cursor position, animatable, so phones get a slow drift instead. */
+@property --mx { syntax: "<length-percentage>"; inherits: true; initial-value: 72%; }
+@property --my { syntax: "<length-percentage>"; inherits: true; initial-value: 32%; }
+
+/* The blueprint shows only where the light falls: a spotlight on the cursor,
+   a faint trace everywhere else. The radial here is a mask, not a fill. */
+.u-blueprint {
+  color: var(--color-turq);
+  -webkit-mask-image: radial-gradient(circle 320px at var(--mx) var(--my), #000 0%, rgb(0 0 0 / 0.5) 40%, rgb(0 0 0 / 0.07) 100%);
+  mask-image: radial-gradient(circle 320px at var(--mx) var(--my), #000 0%, rgb(0 0 0 / 0.5) 40%, rgb(0 0 0 / 0.07) 100%);
+  animation: u-wander 16s ease-in-out infinite alternate;
+}
+[data-pointer-on] > .u-blueprint { animation: none; }
+/* On a phone the drawing sits behind the words, so it stays a whisper. */
+@media (max-width: 1023px) {
+  .u-blueprint { opacity: 0.55; }
+  .u-blueprint text { display: none; }
+}
+@keyframes u-wander {
+  0%   { --mx: 75%; --my: 28%; }
+  35%  { --mx: 30%; --my: 72%; }
+  70%  { --mx: 88%; --my: 78%; }
+  100% { --mx: 18%; --my: 22%; }
+}
+
+/* The hero screenshots: a stack in 3D that leans toward the cursor. */
+.u-stack { perspective: 1400px; }
+.u-stack-inner {
+  transform-style: preserve-3d;
+  transform: rotateY(calc(var(--px, 0) * 10deg - 12deg)) rotateX(calc(var(--py, 0) * -8deg + 5deg));
+  transition: transform 600ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.u-stack-card {
+  transform: translateZ(var(--z, 0));
+  animation: u-float 7s ease-in-out infinite alternate;
+  transition: transform 400ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.u-stack-card:hover { transform: translateZ(calc(var(--z, 0px) + 60px)); }
+@keyframes u-float {
+  from { translate: 0 0; }
+  to   { translate: 0 -14px; }
+}
+
+/* A work screenshot tilts a little toward the cursor while you hover it. */
+.u-tilt > div {
+  transition: transform 500ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+.u-tilt:hover > div {
+  transform: perspective(1200px) rotateY(calc(var(--px, 0) * 4deg)) rotateX(calc(var(--py, 0) * -4deg)) scale(1.02);
+}
+
+/* The giant step verbs drift against the cursor. */
+.u-verb {
+  translate: calc(var(--px, 0) * -28px) calc(var(--py, 0) * -18px);
+  transition: translate 700ms cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+/* Screenshots grow into place as they scroll in, where the browser can tie
+   an animation to scrolling. Elsewhere they are simply there. */
+@supports (animation-timeline: view()) {
+  .u-scroll-in {
+    animation: u-scroll-in linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 32%;
+  }
+}
+@keyframes u-scroll-in {
+  from { opacity: 0.15; transform: translateY(60px) scale(0.92) rotate(-1.5deg); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* The agency, crossed out: the line draws itself once the row is in view,
+   across every line of a label that wraps. A one-colour background, not a
+   gradient fill: it is the only way to draw a line that follows the wrap. */
+.u-strike {
+  background: linear-gradient(var(--color-pink), var(--color-pink)) no-repeat 0 58% / 0% 0.09em;
+  transition: background-size 800ms cubic-bezier(0.7, 0, 0.2, 1) 250ms;
+}
+.is-in > .u-strike { background-size: 100% 0.09em; }
+
+/* A swapped answer fades in rather than jumping. */
+@keyframes u-fade-in { from { opacity: 0; translate: 0 8px; } to { opacity: 1; translate: 0 0; } }
+.u-fade { animation: u-fade-in 220ms ease-out; }
+
+@media (prefers-reduced-motion: reduce) {
+  .u-blueprint, .u-stack-card, .u-scroll-in { animation: none; }
+  .u-stack-inner { transform: rotateY(-12deg) rotateX(5deg); }
+  .u-verb { translate: none; }
+  .u-strike { background-size: 100% 0.09em; transition: none; }
 }
