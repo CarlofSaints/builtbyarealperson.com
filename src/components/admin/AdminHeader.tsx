@@ -14,6 +14,12 @@ export function AdminHeader({ children }: { children?: React.ReactNode }) {
 
         <div className="ml-auto flex items-center gap-4">
           {children}
+          <Link href="/admin" className="text-sm text-muted transition-colors hover:text-turq">
+            Pipeline
+          </Link>
+          <Link href="/admin/prospects" className="text-sm text-muted transition-colors hover:text-turq">
+            Prospects
+          </Link>
           <Link href="/" className="text-sm text-muted transition-colors hover:text-turq">
             View site
           </Link>

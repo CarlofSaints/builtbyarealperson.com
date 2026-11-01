@@ -1,6 +1,8 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // A prospect upload carries a mock-up (up to 3 MB) and a screenshot. Vercel caps a request at 4.5 MB anyway.
+  experimental: { serverActions: { bodySizeLimit: "4mb" } },
   /**
    * One address for Google. www and the vercel.app alias both served the full
    * site, so Google could see three copies of every page. The canonical tags
