@@ -49,7 +49,7 @@ const PINK = "#d9357f";
 const BORDER = "#e4e9ee";
 const MUTED = "#6b7785";
 
-function shell(opts: { preheader: string; heading: string; body: string }): string {
+function shell(opts: { preheader: string; heading: string; body: string; footer?: string }): string {
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -84,7 +84,7 @@ ${opts.body}
     &nbsp;&middot;&nbsp;
     <a href="mailto:${esc(SITE.email)}" style="color:${TURQ};text-decoration:none;">${esc(SITE.email)}</a>
   </p>
-  <p style="margin:10px 0 0;">You are receiving this because you asked for an estimate on my website. You are not on any mailing list.</p>
+  <p style="margin:10px 0 0;">${opts.footer ?? "You are receiving this because you asked for an estimate on my website. You are not on any mailing list."}</p>
 </td></tr>
 
 </table>
@@ -409,3 +409,69 @@ The same PDF the customer received is attached. Their booking email goes out aut
  * traced back. Wiring the Resend delivery webhook to flip a `delivered` flag on
  * the lead is the next thing worth doing here.
  */
+
+/* ── Prospect: the one cold email ────────────────────────────────────────── */
+
+/**
+ * No link, on purpose. A stranger's link is what phishing looks like, and
+ * POPIA s69 allows one approach to ask for consent, not a sales pitch. The
+ * screenshot travels inline (cid:) so they can see it is real without
+ * clicking anything. The link goes in my reply once they say yes.
+ */
+type IntroArgs = { contactName: string; business: string; foundVia: string };
+
+/** The exact subject and body, shared by the send and by the admin preview so the two can never differ. */
+export function prospectIntroEmail(args: IntroArgs, imageSrc = "cid:mockup") {
+  const firstName = args.contactName.trim().split(/\s+/)[0] || "there";
+  const sign = [SITE.builder.name, SITE.name, SITE.phone].filter(Boolean).map(esc).join("<br>");
+
+  const body = `
+<p style="margin:0 0 18px;">Hi ${esc(firstName)},</p>
+<p style="margin:0 0 18px;">I came across the ${esc(args.business)} website ${esc(args.foundVia)}. It's clearly a good business, but the site looks dated and is hard to use on a phone.</p>
+<p style="margin:0 0 18px;">I build websites for small businesses, so I made a quick mock-up of how yours could look. Here's a screenshot:</p>
+<img src="${esc(imageSrc)}" alt="A mock-up of a new ${esc(args.business)} website" width="544" style="display:block;width:100%;max-width:544px;height:auto;border:1px solid ${BORDER};border-radius:10px;margin:0 0 22px;">
+<p style="margin:0 0 18px;">It's yours to look at, no strings attached. Would you like me to send you the link?</p>
+<p style="margin:0 0 18px;">${sign}</p>
+<p style="margin:0;font-size:13px;color:${MUTED};">If you'd rather not hear from me, just say so and I won't email again.</p>`;
+
+  return {
+    subject: `A new look for the ${args.business} website`,
+    html: shell({
+      preheader: `I made a mock-up of a new ${args.business} website. Screenshot inside.`,
+      heading: `An idea for ${args.business}`,
+      body,
+      footer: "This is a one-off email. You are not on any mailing list and I won't contact you again unless you reply.",
+    }),
+    text: [
+      `Hi ${firstName},`,
+      `I came across the ${args.business} website ${args.foundVia}. It's clearly a good business, but the site looks dated and is hard to use on a phone.`,
+      "I build websites for small businesses, so I made a quick mock-up of how yours could look. There's a screenshot attached.",
+      "It's yours to look at, no strings attached. Would you like me to send you the link?",
+      [SITE.builder.name, SITE.name, SITE.phone].filter(Boolean).join("\n"),
+      "If you'd rather not hear from me, just say so and I won't email again.",
+    ].join("\n\n"),
+  };
+}
+
+export async function sendProspectIntro(args: IntroArgs & { to: string; screenshot: Buffer; screenshotType: string }): Promise<SendResult> {
+  const resend = client();
+  if (!resend) return { ok: false, error: "RESEND_API_KEY is not set" };
+  const ext = args.screenshotType === "image/png" ? "png" : "jpg";
+  const email = prospectIntroEmail(args);
+
+  try {
+    const { data, error } = await resend.emails.send({
+      from: FROM,
+      to: args.to,
+      replyTo: REPLY_TO,
+      ...email,
+      attachments: [
+        { filename: `mockup.${ext}`, content: args.screenshot, contentType: args.screenshotType, contentId: "mockup" },
+      ],
+    });
+    if (error) return { ok: false, error: error.message };
+    return { ok: true, id: data?.id };
+  } catch (e) {
+    return { ok: false, error: e instanceof Error ? e.message : String(e) };
+  }
+}
