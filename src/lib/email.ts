@@ -20,6 +20,7 @@ import { INTEGRATIONS } from "./rate-card";
 const FROM = process.env.EMAIL_FROM || `${SITE.name} <hello@${SITE.domain}>`;
 const REPLY_TO = process.env.EMAIL_REPLY_TO || SITE.email;
 const OWNER = process.env.NOTIFY_EMAIL || "";
+const PROSPECT_FROM = `${SITE.builder.name} <carl@${SITE.domain}>`;
 
 export type SendResult = {
   ok: boolean;
@@ -461,9 +462,10 @@ export async function sendProspectIntro(args: IntroArgs & { to: string; screensh
 
   try {
     const { data, error } = await resend.emails.send({
-      from: FROM,
+      // From Carl himself, not the shared hello@ box: a cold email from a person reads less like spam, and replies land in his inbox.
+      from: PROSPECT_FROM,
       to: args.to,
-      replyTo: REPLY_TO,
+      replyTo: PROSPECT_FROM,
       ...email,
       attachments: [
         { filename: `mockup.${ext}`, content: args.screenshot, contentType: args.screenshotType, contentId: "mockup" },
