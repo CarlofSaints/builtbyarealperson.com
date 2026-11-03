@@ -419,38 +419,49 @@ The same PDF the customer received is attached. Their booking email goes out aut
  * screenshot travels inline (cid:) so they can see it is real without
  * clicking anything. The link goes in my reply once they say yes.
  */
-type IntroArgs = { contactName: string; business: string; foundVia: string };
+type IntroArgs = { contactName: string; business: string; foundVia: string; draft?: IntroDraft };
+export type IntroDraft = { subject: string; body: string };
 
-/** The exact subject and body, shared by the send and by the admin preview so the two can never differ. */
-export function prospectIntroEmail(args: IntroArgs, imageSrc = "cid:mockup") {
+/** Where the screenshot goes in the editable text. Must appear exactly once. */
+export const SCREENSHOT_MARK = "[screenshot]";
+
+/** The starting text Carl edits. Plain text; a blank line starts a new paragraph. */
+export function defaultIntroDraft(args: IntroArgs): IntroDraft {
   const firstName = args.contactName.trim().split(/\s+/)[0] || "there";
-  const sign = [SITE.builder.name, SITE.name, SITE.phone].filter(Boolean).map(esc).join("<br>");
-
-  const body = `
-<p style="margin:0 0 18px;">Hi ${esc(firstName)},</p>
-<p style="margin:0 0 18px;">I came across the ${esc(args.business)} website ${esc(args.foundVia)}. It's clearly a good business, but the site looks dated and is hard to use on a phone.</p>
-<p style="margin:0 0 18px;">I build websites for small businesses, so I made a quick mock-up of how yours could look. Here's a screenshot:</p>
-<img src="${esc(imageSrc)}" alt="A mock-up of a new ${esc(args.business)} website" width="544" style="display:block;width:100%;max-width:544px;height:auto;border:1px solid ${BORDER};border-radius:10px;margin:0 0 22px;">
-<p style="margin:0 0 18px;">It's yours to look at, no strings attached. Would you like me to send you the link?</p>
-<p style="margin:0 0 18px;">${sign}</p>
-<p style="margin:0;font-size:13px;color:${MUTED};">If you'd rather not hear from me, just say so and I won't email again.</p>`;
-
   return {
     subject: `A new look for the ${args.business} website`,
-    html: shell({
-      preheader: `I made a mock-up of a new ${args.business} website. Screenshot inside.`,
-      heading: `An idea for ${args.business}`,
-      body,
-      footer: "This is a one-off email. You are not on any mailing list and I won't contact you again unless you reply.",
-    }),
-    text: [
+    body: [
       `Hi ${firstName},`,
       `I came across the ${args.business} website ${args.foundVia}. It's clearly a good business, but the site looks dated and is hard to use on a phone.`,
-      "I build websites for small businesses, so I made a quick mock-up of how yours could look. There's a screenshot attached.",
+      "I build websites for small businesses, so I made a quick mock-up of how yours could look. Here's a screenshot:",
+      SCREENSHOT_MARK,
       "It's yours to look at, no strings attached. Would you like me to send you the link?",
       [SITE.builder.name, SITE.name, SITE.phone].filter(Boolean).join("\n"),
       "If you'd rather not hear from me, just say so and I won't email again.",
     ].join("\n\n"),
+  };
+}
+
+/** The exact subject and body, shared by the send and by the admin preview so the two can never differ. */
+export function prospectIntroEmail(args: IntroArgs, imageSrc = "cid:mockup") {
+  const { subject, body } = args.draft ?? defaultIntroDraft(args);
+  const img = `<img src="${esc(imageSrc)}" alt="A mock-up of a new ${esc(args.business)} website" width="544" style="display:block;width:100%;max-width:544px;height:auto;border:1px solid ${BORDER};border-radius:10px;margin:0 0 22px;">`;
+  const html = body
+    .split(/\n\s*\n/)
+    .map((para) => para.trim())
+    .filter(Boolean)
+    .map((para) => (para === SCREENSHOT_MARK ? img : `<p style="margin:0 0 18px;">${esc(para).replace(/\n/g, "<br>")}</p>`))
+    .join("\n");
+
+  return {
+    subject,
+    html: shell({
+      preheader: `I made a mock-up of a new ${args.business} website. Screenshot inside.`,
+      heading: `An idea for ${args.business}`,
+      body: html,
+      footer: "This is a one-off email. You are not on any mailing list and I won't contact you again unless you reply.",
+    }),
+    text: body.replace(SCREENSHOT_MARK, "(The screenshot is attached.)"),
   };
 }
 
