@@ -480,6 +480,8 @@ export async function sendProspectIntro(args: IntroArgs & { to: string; screensh
       from: PROSPECT_FROM,
       to: args.to,
       replyTo: PROSPECT_FROM,
+      // Resend never touches Outlook, so this is Carl's only copy of what went out.
+      bcc: PROSPECT_EMAIL,
       ...email,
       attachments: [
         { filename: `mockup.${ext}`, content: args.screenshot, contentType: args.screenshotType, contentId: "mockup" },
