@@ -76,6 +76,11 @@ export default async function ProspectsPage() {
                       <a href={`/admin/prospects/${p.id}/email`} target="_blank" rel="noopener" className="mt-1 block text-xs text-turq hover:underline">
                         Preview email
                       </a>
+                      {!p.intro?.id && (
+                        <a href={`/admin/prospects/${p.id}/edit`} className="mt-1 block text-xs text-turq hover:underline">
+                          {p.draft ? "Edit email (edited)" : "Edit email"}
+                        </a>
+                      )}
                     </td>
                     <td className="px-4 py-3">
                       <ProspectButtons id={p.id} email={p.email} canSend={!p.intro?.id && !expired} />

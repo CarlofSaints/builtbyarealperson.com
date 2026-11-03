@@ -20,7 +20,7 @@ import {
   readProspectScreenshot,
   saveProspect,
 } from "@/lib/prospects";
-import { sendProspectIntro } from "@/lib/email";
+import { SCREENSHOT_MARK, sendProspectIntro } from "@/lib/email";
 
 export type ActionResult = { error: string | null };
 
@@ -94,6 +94,7 @@ export async function sendIntro(id: string): Promise<ActionResult> {
     contactName: p.contactName,
     business: p.business,
     foundVia: p.foundVia,
+    draft: p.draft,
     screenshot: shot,
     screenshotType: p.screenshotType,
   });
@@ -101,6 +102,30 @@ export async function sendIntro(id: string): Promise<ActionResult> {
   console.log(JSON.stringify({ event: "prospect.intro", id, ok: result.ok, error: result.error }));
   revalidatePath("/admin/prospects");
   return { error: result.ok ? null : `Not sent: ${result.error}` };
+}
+
+const Draft = z.strictObject({
+  subject: z.string().trim().min(1, "The subject is empty.").max(150),
+  body: z
+    .string()
+    .trim()
+    .min(1, "The email is empty.")
+    .max(5000)
+    .refine((b) => b.split(SCREENSHOT_MARK).length === 2, `Keep the ${SCREENSHOT_MARK} line exactly once. It is where the picture goes.`)
+    // The no-link rule: a stranger's link looks like phishing. The link goes in your reply once they say yes.
+    .refine((b) => !/https?:\/\/|www\./i.test(b), "No links in the first email. Send the link when they reply yes."),
+});
+
+export async function saveDraft(id: string, subject: string, body: string): Promise<ActionResult> {
+  if (!(await isSignedIn())) return { error: "Signed out. Reload and sign in again." };
+  const parsed = Draft.safeParse({ subject, body: String(body).replace(/\r\n/g, "\n") });
+  if (!parsed.success) return { error: parsed.error.issues[0]?.message ?? "Check the email." };
+  const p = await readProspect(id);
+  if (!p) return { error: "Could not read that prospect." };
+  if (p.intro?.id) return { error: "Already sent, so there is nothing left to edit." };
+  await saveProspect({ ...p, draft: parsed.data });
+  revalidatePath("/admin/prospects");
+  return { error: null };
 }
 
 export async function removeProspect(id: string): Promise<ActionResult> {

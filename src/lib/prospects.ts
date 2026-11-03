@@ -33,6 +33,8 @@ export type Prospect = {
   screenshotType: string;
   /** The ONE cold email. Set once; a second send is refused. */
   intro?: { sentAt: string; id?: string; error?: string };
+  /** Carl's edited email. Absent = the default text. */
+  draft?: { subject: string; body: string };
 };
 
 /** Lower-case slug plus 8 random hex chars, so preview links cannot be guessed by trying business names. */

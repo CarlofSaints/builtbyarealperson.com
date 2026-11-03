@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
-import { addProspect, removeProspect, sendIntro } from "@/app/admin/prospects/actions";
+import { addProspect, removeProspect, saveDraft, sendIntro } from "@/app/admin/prospects/actions";
 
 const input =
   "mt-1 w-full rounded-lg border border-line-2 bg-ink-2 px-3 py-2 text-sm text-text outline-none focus:border-turq";
@@ -123,5 +123,51 @@ export function ProspectButtons({ id, email, canSend }: { id: string; email: str
       </div>
       {error && <p role="alert" className="max-w-xs text-right text-xs text-pink">{error}</p>}
     </div>
+  );
+}
+
+/** Subject and body of the one cold email, edited before it goes. Not a form action, so a refused save keeps the typing. */
+export function EditEmailForm({ id, subject, body }: { id: string; subject: string; body: string }) {
+  const [error, setError] = useState<string | null>(null);
+  const [saved, setSaved] = useState(false);
+  const [pending, start] = useTransition();
+
+  return (
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        const data = new FormData(e.currentTarget);
+        setSaved(false);
+        start(async () => {
+          const r = await saveDraft(id, String(data.get("subject") ?? ""), String(data.get("body") ?? ""));
+          setError(r.error);
+          setSaved(!r.error);
+        });
+      }}
+      className="mt-6 grid gap-4 rounded-xl border border-line bg-surface p-5"
+    >
+      <label className="text-sm text-muted">
+        Subject
+        <input name="subject" required maxLength={150} defaultValue={subject} className={input} />
+      </label>
+      <label className="text-sm text-muted">
+        Email
+        <textarea name="body" required maxLength={5000} rows={18} defaultValue={body} className={`${input} font-mono leading-relaxed`} />
+      </label>
+      <div className="flex flex-wrap items-center gap-4">
+        <button
+          type="submit"
+          disabled={pending}
+          className="rounded-lg bg-turq px-4 py-2 text-sm font-bold text-ink transition-opacity disabled:opacity-50"
+        >
+          {pending ? "Saving..." : "Save email"}
+        </button>
+        <a href={`/admin/prospects/${id}/email`} target="_blank" rel="noopener" className="text-sm text-turq hover:underline">
+          Preview email
+        </a>
+        {error && <p role="alert" className="text-sm text-pink">{error}</p>}
+        {saved && <p className="text-sm text-turq">Saved. Preview and Send now use this text.</p>}
+      </div>
+    </form>
   );
 }
