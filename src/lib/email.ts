@@ -20,7 +20,8 @@ import { INTEGRATIONS } from "./rate-card";
 const FROM = process.env.EMAIL_FROM || `${SITE.name} <hello@${SITE.domain}>`;
 const REPLY_TO = process.env.EMAIL_REPLY_TO || SITE.email;
 const OWNER = process.env.NOTIFY_EMAIL || "";
-const PROSPECT_FROM = `${SITE.builder.name} <carl@${SITE.domain}>`;
+const PROSPECT_EMAIL = `carl@${SITE.domain}`;
+const PROSPECT_FROM = `${SITE.builder.name} <${PROSPECT_EMAIL}>`;
 
 export type SendResult = {
   ok: boolean;
@@ -50,7 +51,8 @@ const PINK = "#d9357f";
 const BORDER = "#e4e9ee";
 const MUTED = "#6b7785";
 
-function shell(opts: { preheader: string; heading: string; body: string; footer?: string }): string {
+function shell(opts: { preheader: string; heading: string; body: string; footer?: string; email?: string }): string {
+  const contact = opts.email ?? SITE.email;
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -83,7 +85,7 @@ ${opts.body}
   <p style="margin:0;">
     <a href="https://${esc(SITE.domain)}" style="color:${TURQ};text-decoration:none;">${esc(SITE.domain)}</a>
     &nbsp;&middot;&nbsp;
-    <a href="mailto:${esc(SITE.email)}" style="color:${TURQ};text-decoration:none;">${esc(SITE.email)}</a>
+    <a href="mailto:${esc(contact)}" style="color:${TURQ};text-decoration:none;">${esc(contact)}</a>
   </p>
   <p style="margin:10px 0 0;">${opts.footer ?? "You are receiving this because you asked for an estimate on my website. You are not on any mailing list."}</p>
 </td></tr>
@@ -460,6 +462,7 @@ export function prospectIntroEmail(args: IntroArgs, imageSrc = "cid:mockup") {
       heading: `An idea for ${args.business}`,
       body: html,
       footer: "This is a one-off email. You are not on any mailing list and I won't contact you again unless you reply.",
+      email: PROSPECT_EMAIL,
     }),
     text: body.replace(SCREENSHOT_MARK, "(The screenshot is attached.)"),
   };
