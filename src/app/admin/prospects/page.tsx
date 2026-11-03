@@ -19,7 +19,7 @@ export default async function ProspectsPage() {
       <main className="mx-auto max-w-[1200px] px-4 py-7 sm:px-6">
         <h1 className="font-display text-2xl font-bold text-text sm:text-3xl">Prospects</h1>
         <p className="mt-1 max-w-3xl text-sm text-muted">
-          Businesses you have made a mock-up for. Each gets ONE email with a screenshot and no link.
+          Businesses you have made a mock-up for. Each gets ONE email with a screenshot.
           When they reply yes, send them their preview link from Outlook. Links stop working after{" "}
           {PREVIEW_DAYS} days.
         </p>

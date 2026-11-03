@@ -416,10 +416,10 @@ The same PDF the customer received is attached. Their booking email goes out aut
 /* ── Prospect: the one cold email ────────────────────────────────────────── */
 
 /**
- * No link, on purpose. A stranger's link is what phishing looks like, and
- * POPIA s69 allows one approach to ask for consent, not a sales pitch. The
- * screenshot travels inline (cid:) so they can see it is real without
- * clicking anything. The link goes in my reply once they say yes.
+ * The default text has no link: a stranger's link is what phishing looks like,
+ * and POPIA s69 allows one approach to ask for consent. Carl may add his own
+ * preview link (3 Nov, his call); saveDraft refuses any other site. The
+ * screenshot travels inline (cid:) so they can see it without clicking.
  */
 type IntroArgs = { contactName: string; business: string; foundVia: string; draft?: IntroDraft };
 export type IntroDraft = { subject: string; body: string };
@@ -444,6 +444,9 @@ export function defaultIntroDraft(args: IntroArgs): IntroDraft {
   };
 }
 
+/** Makes the (already escaped) https links clickable; only our own domain gets past saveDraft. */
+const linkify = (s: string) => s.replace(/https:\/\/[^\s<]*[^\s<.,;:!?)]/g, (u) => `<a href="${u}" style="color:${TURQ};">${u}</a>`);
+
 /** The exact subject and body, shared by the send and by the admin preview so the two can never differ. */
 export function prospectIntroEmail(args: IntroArgs, imageSrc = "cid:mockup") {
   const { subject, body } = args.draft ?? defaultIntroDraft(args);
@@ -452,7 +455,7 @@ export function prospectIntroEmail(args: IntroArgs, imageSrc = "cid:mockup") {
     .split(/\n\s*\n/)
     .map((para) => para.trim())
     .filter(Boolean)
-    .map((para) => (para === SCREENSHOT_MARK ? img : `<p style="margin:0 0 18px;">${esc(para).replace(/\n/g, "<br>")}</p>`))
+    .map((para) => (para === SCREENSHOT_MARK ? img : `<p style="margin:0 0 18px;">${linkify(esc(para)).replace(/\n/g, "<br>")}</p>`))
     .join("\n");
 
   return {
