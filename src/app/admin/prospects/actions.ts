@@ -21,6 +21,7 @@ import {
   saveProspect,
 } from "@/lib/prospects";
 import { SCREENSHOT_MARK, sendProspectIntro } from "@/lib/email";
+import { SITE } from "@/lib/site";
 
 export type ActionResult = { error: string | null };
 
@@ -104,6 +105,8 @@ export async function sendIntro(id: string): Promise<ActionResult> {
   return { error: result.ok ? null : `Not sent: ${result.error}` };
 }
 
+const OWN_LINK = new RegExp(`^(https?://)?(www\\.)?${SITE.domain.replace(/\./g, "\\.")}(/|$)`, "i");
+
 const Draft = z.strictObject({
   subject: z.string().trim().min(1, "The subject is empty.").max(150),
   body: z
@@ -112,8 +115,11 @@ const Draft = z.strictObject({
     .min(1, "The email is empty.")
     .max(5000)
     .refine((b) => b.split(SCREENSHOT_MARK).length === 2, `Keep the ${SCREENSHOT_MARK} line exactly once. It is where the picture goes.`)
-    // The no-link rule: a stranger's link looks like phishing. The link goes in your reply once they say yes.
-    .refine((b) => !/https?:\/\/|www\./i.test(b), "No links in the first email. Send the link when they reply yes."),
+    // Carl's call (3 Nov): his own preview link is allowed. Any other site's link is still refused, so a paste slip can't send them elsewhere.
+    .refine(
+      (b) => (b.match(/(https?:\/\/|www\.)\S+/gi) ?? []).every((u) => OWN_LINK.test(u)),
+      `Only links to ${SITE.domain} can go in this email.`,
+    ),
 });
 
 export async function saveDraft(id: string, subject: string, body: string): Promise<ActionResult> {

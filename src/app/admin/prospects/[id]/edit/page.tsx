@@ -23,7 +23,7 @@ export default async function EditProspectEmail({ params }: { params: Promise<{ 
         <h1 className="mt-2 font-display text-2xl font-bold text-text">Email to {p.business}</h1>
         <p className="mt-1 text-sm text-muted">
           To {p.email}. A blank line starts a new paragraph. The <code className="text-text">{SCREENSHOT_MARK}</code> line is
-          where the picture goes. No links: send the link when they reply yes.
+          where the picture goes. The only links allowed are to builtbyarealperson.com, such as their preview link.
         </p>
         {p.intro?.id ? (
           <p className="mt-6 text-sm text-pink">Already sent, so it can&rsquo;t be edited.</p>
