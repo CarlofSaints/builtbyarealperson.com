@@ -6,7 +6,7 @@
  *  PDF comes from this file. Change a number here and it changes everywhere.
  *  Nothing else in the codebase should contain a rand amount.
  *
- *  All amounts are in ZAR, excluding VAT.
+ *  All amounts are in ZAR. Not VAT registered, so no VAT is added.
  * ─────────────────────────────────────────────────────────────────────────────
  */
 

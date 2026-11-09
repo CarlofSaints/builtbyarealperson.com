@@ -93,7 +93,6 @@ export function pricingSchema() {
         "@type": "PriceSpecification",
         price: s.price,
         priceCurrency: "ZAR",
-        valueAddedTaxIncluded: false,
       },
       seller: { "@id": BUSINESS_ID },
     })),

@@ -100,7 +100,7 @@ export function PricePicker() {
           <span className="sr-only" aria-live="polite">
             {formatMoney(total)}
           </span>
-          <p className="mt-3 text-base text-muted">From, once-off, excluding VAT</p>
+          <p className="mt-3 text-base text-muted">From, once-off</p>
           <p className="mt-6 max-w-[46ch] text-lg leading-relaxed text-text">{sizeChoice.blurb}</p>
 
           <fieldset className="mt-8">

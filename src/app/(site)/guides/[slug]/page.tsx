@@ -41,7 +41,7 @@ function Example({ b }: { b: Extract<Block, { type: "example" }> }) {
         ))}
       </ul>
       <div className="mt-4 flex items-baseline justify-between gap-6">
-        <span className="font-display font-semibold text-text">Total, excluding VAT</span>
+        <span className="font-display font-semibold text-text">Total</span>
         <span className="font-display text-xl font-bold tabular-nums text-turq">{formatMoney(e.total)}</span>
       </div>
       <p className="mt-2 text-sm text-muted-2">

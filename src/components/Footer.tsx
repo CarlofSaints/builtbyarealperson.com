@@ -66,6 +66,12 @@ export function Footer() {
           </p>
           <p>This very site is a live sample of the work.</p>
         </div>
+        <p className="mt-3 text-[13px] text-muted">
+          Invoiced by {SITE.legal.name}, registration {SITE.legal.registration}. Not VAT registered.{" "}
+          <Link href="/privacy" className="underline underline-offset-4 hover:text-turq">Privacy</Link>
+          {" · "}
+          <Link href="/terms" className="underline underline-offset-4 hover:text-turq">Terms and refunds</Link>
+        </p>
       </div>
     </footer>
   );
