@@ -318,7 +318,12 @@ export async function listLeads(): Promise<LeadRecord[]> {
 export async function deleteLead(reference: string): Promise<LeadRecord | null> {
   const existing = await readLead(reference);
   if (!existing) return null;
-  await del(pathFor(reference));
+  // The record goes last in the list: it is what makes a failed call retryable.
+  const pointers = [existing.emails.customerEstimateId, existing.emails.ownerNotifyId, existing.emails.bookingRequestId]
+    .filter((id): id is string => Boolean(id))
+    .map(emailPath);
+  if (existing.accessToken) pointers.push(accessPath(existing.accessToken));
+  await del([...pointers, pathFor(reference)]);
   return existing;
 }
 

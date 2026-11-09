@@ -499,3 +499,19 @@ export async function sendProspectIntro(args: IntroArgs & { to: string; screensh
     return { ok: false, error: e instanceof Error ? e.message : String(e) };
   }
 }
+
+/** A plain note to the owner when a background job fails. Never throws: it runs inside error handling. */
+export async function sendOwnerAlert(subject: string, text: string): Promise<SendResult> {
+  try {
+    const resend = client();
+    if (!resend) return { ok: false, error: "RESEND_API_KEY is not set" };
+    if (!OWNER) return { ok: false, error: "NOTIFY_EMAIL is not set" };
+    const { data, error } = await resend.emails.send({ from: FROM, to: OWNER, subject, text });
+    if (error) throw new Error(error.message);
+    return { ok: true, id: data?.id };
+  } catch (err) {
+    const message = err instanceof Error ? err.message : String(err);
+    console.error(JSON.stringify({ event: "email.alert.failed", message }));
+    return { ok: false, error: message };
+  }
+}
