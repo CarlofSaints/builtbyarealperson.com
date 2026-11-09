@@ -149,7 +149,7 @@ export function RunningTotal({ estimate, compact = false }: { estimate: Estimate
 
       <div className="border-t border-line bg-ink/50 p-5">
         <p className="text-[12px] leading-relaxed text-muted-2">
-          Excludes VAT. {CARE_PLAN.label} is {formatMoney(CARE_PLAN.monthly)}/month and is never
+          No VAT is added. {CARE_PLAN.label} is {formatMoney(CARE_PLAN.monthly)}/month and is never
           included in the total above.
         </p>
       </div>

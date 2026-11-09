@@ -101,7 +101,7 @@ export default function PricingPage() {
               <Button href="/estimate">Let the estimator do it</Button>
             </div>
             <p className="mt-6 text-sm text-muted-2">
-              All amounts in rands, excluding VAT. Prices apply to work quoted in{" "}
+              All amounts in rands. I am not VAT registered, so no VAT is added. Prices apply to work quoted in{" "}
               {new Date().getFullYear()}.
             </p>
           </div>

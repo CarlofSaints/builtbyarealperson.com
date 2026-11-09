@@ -102,7 +102,7 @@ export const GUIDES: Guide[] = [
     description: `What a small business website really costs in South Africa, with real published prices. A 4 to 5 page site from ${m(FROM_PRICE)}, what pushes the price up, and four worked examples.`,
     published: "2026-10-14",
     updated: "2026-10-14",
-    answer: `A 4 to 5 page website for a South African small business costs ${SIZE("brochure")} with me, excluding VAT. A 6 to 12 page site is ${SIZE("standard")}. The price goes up for three things above all: selling online, connecting the site to other systems, and having the design and the words done for you. Agency quotes for the same site often come in at several times that, and the difference is mostly who else is being paid.`,
+    answer: `A 4 to 5 page website for a South African small business costs ${SIZE("brochure")} with me. A 6 to 12 page site is ${SIZE("standard")}. The price goes up for three things above all: selling online, connecting the site to other systems, and having the design and the words done for you. Agency quotes for the same site often come in at several times that, and the difference is mostly who else is being paid.`,
     body: [
       { type: "h2", text: "Why website prices are so hard to compare" },
       {
@@ -151,8 +151,8 @@ export const GUIDES: Guide[] = [
     ],
     faq: [
       {
-        q: "Are these prices including VAT?",
-        a: "No. Every price on the site is in rands and excludes VAT.",
+        q: "Is VAT added to these prices?",
+        a: "No. Every price on the site is in rands, and I am not VAT registered, so no VAT is added.",
       },
       {
         q: "Is there a monthly fee?",
@@ -412,7 +412,7 @@ export const GUIDES: Guide[] = [
       },
       {
         q: "What is the cheapest proper website?",
-        a: `With me, a 4 to 5 page site is ${m(FROM_PRICE)} excluding VAT, with the domain and every login in your name.`,
+        a: `With me, a 4 to 5 page site is ${m(FROM_PRICE)}, with the domain and every login in your name.`,
       },
     ],
     related: ["how-much-does-a-website-cost-in-south-africa", "wix-or-a-web-designer"],

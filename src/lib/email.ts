@@ -136,8 +136,7 @@ export async function sendCustomerEstimate(args: {
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f7fafa;border:1px solid ${BORDER};border-radius:12px;margin:0 0 24px;">
 <tr><td style="padding:22px 24px;">
   <p style="margin:0 0 4px;font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:${MUTED};font-weight:700;">Estimated total</p>
-  <p style="margin:0;font-size:32px;font-weight:800;color:${INK};letter-spacing:-1px;">${esc(formatMoney(estimate.total))}
-    <span style="font-size:13px;font-weight:400;color:${MUTED};">excl. VAT</span></p>
+  <p style="margin:0;font-size:32px;font-weight:800;color:${INK};letter-spacing:-1px;">${esc(formatMoney(estimate.total))}</p>
   <p style="margin:10px 0 0;font-size:13px;color:#38424f;">Likely final range: <strong>${esc(formatMoney(estimate.low))} &ndash; ${esc(formatMoney(estimate.high))}</strong><br>
   Estimated build time: <strong>${estimate.daysLow}&ndash;${estimate.daysHigh} working days</strong></p>
 </td></tr>
@@ -202,7 +201,7 @@ function customerText(answers: Answers, estimate: Estimate, reference: string): 
 
 Thanks for going through the estimator. Your preliminary estimate is attached as a PDF.
 
-ESTIMATED TOTAL: ${formatMoney(estimate.total)} (excl. VAT)
+ESTIMATED TOTAL: ${formatMoney(estimate.total)}
 Likely final range: ${formatMoney(estimate.low)} - ${formatMoney(estimate.high)}
 Estimated build time: ${estimate.daysLow}-${estimate.daysHigh} working days
 

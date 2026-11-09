@@ -37,6 +37,13 @@ export const SITE = {
   /** Optional. Leave blank and the site simply will not show a phone number. */
   phone: process.env.NEXT_PUBLIC_PHONE || "",
 
+  /** The company that invoices, shown in the footer and legal pages. */
+  legal: {
+    name: "SERENEO (Pty) Ltd",
+    registration: "2026/781334/07",
+    informationOfficer: "Carl Dos Santos",
+  },
+
   /** Who is behind it. Used in the emails and the about copy. */
   builder: {
     name: "Carl",

@@ -307,13 +307,6 @@ export async function buildEstimatePdf({
     font: bold,
     color: INK,
   });
-  ctx.page.drawText(safe("excluding VAT"), {
-    x: MARGIN + 22 + bold.widthOfTextAtSize(safe(formatMoney(estimate.total)), 30),
-    y: ctx.y - 60,
-    size: 8.5,
-    font: regular,
-    color: MUTED,
-  });
   ctx.page.drawText(
     safe(
       `The final fixed quote will land between ${formatMoney(estimate.low)} and ${formatMoney(
@@ -410,7 +403,7 @@ export async function buildEstimatePdf({
 
   const totalStr = safe(formatMoney(estimate.total));
   ctx.page.drawRectangle({ x: MARGIN, y: ctx.y - 34, width: CONTENT_W, height: 34, color: INK });
-  ctx.page.drawText(safe("ESTIMATED TOTAL (excl. VAT)"), {
+  ctx.page.drawText(safe("ESTIMATED TOTAL"), {
     x: MARGIN + 14,
     y: ctx.y - 22,
     size: 9,
