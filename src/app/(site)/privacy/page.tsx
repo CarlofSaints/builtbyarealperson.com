@@ -44,7 +44,7 @@ const SECTIONS = [
   {
     h: "How long I keep it",
     p: [
-      "I have not set a fixed deletion period yet, and nothing is deleted automatically. I delete your information when you ask me to, unless the law requires me to keep it as a business record.",
+      "I delete estimates that never became a project, and the details of businesses I contacted first, 12 months after the last activity on them. If your project goes ahead, I keep its records for as long as accounting and tax law requires. You can ask me to delete your information sooner, unless the law requires me to keep it as a business record.",
     ],
   },
   {
