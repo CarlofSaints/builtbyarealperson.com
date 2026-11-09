@@ -18,17 +18,19 @@ const SECTIONS = [
   {
     h: "Estimates and quotes",
     p: [
-      "An estimate from this site is preliminary and commits neither of us. Work starts only once you have accepted a fixed quote in writing, and that quote sets out what is included and when payment is due.",
+      "An estimate from this site is preliminary and commits neither of us. Work starts only once you have accepted a fixed quote in writing, and that quote sets out what is included.",
     ],
   },
   {
-    h: "Deposits",
-    p: ["No deposit is needed to get an estimate or a quote, and nothing is owed until you accept a quote."],
+    h: "Payment",
+    p: [
+      "Payment is 50% to start and 50% on the day the site goes live. Getting an estimate or a quote costs nothing, and nothing is owed until you accept a quote.",
+    ],
   },
   {
     h: "Refunds",
     p: [
-      "You get a refund if I could not execute what you asked for in the accepted quote. Refunds are not given for any other reason, including a change of mind once the work has been delivered as quoted.",
+      "You get a refund of what you have paid, including the 50% paid to start, if I could not execute what you asked for in the accepted quote. Refunds are not given for any other reason, including a change of mind once the work has been delivered as quoted.",
       "Nothing in these terms takes away any right you have under the Consumer Protection Act or other South African law that cannot be excluded.",
     ],
   },
