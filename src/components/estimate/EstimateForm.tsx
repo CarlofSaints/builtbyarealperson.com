@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { OptionCard, Question, TextField, Toggle } from "./Fields";
 import { RunningTotal } from "./RunningTotal";
 import { calculateEstimate, EMPTY_ANSWERS, type Answers } from "@/lib/estimate";
@@ -557,7 +558,11 @@ export function EstimateForm() {
             <p className="mt-6 text-[13px] leading-relaxed text-muted-2">
               By sending this you are asking me for an estimate, nothing more. It is not
               an order, it does not commit you to anything, and I will not add you to a
-              mailing list.
+              mailing list. Read the{" "}
+              <Link href="/privacy" target="_blank" rel="noopener" className="underline underline-offset-2">
+                privacy notice
+              </Link>
+              .
             </p>
 
             {submitError ? (

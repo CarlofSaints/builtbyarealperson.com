@@ -1,3 +1,4 @@
+import { SITE } from "@/lib/site";
 import type { Metadata } from "next";
 import { shareMetadata } from "@/lib/share";
 import { Button, Card, Check, Eyebrow, H2, Lead, Section } from "@/components/ui";
@@ -101,7 +102,7 @@ export default function PricingPage() {
               <Button href="/estimate">Let the estimator do it</Button>
             </div>
             <p className="mt-6 text-sm text-muted-2">
-              All amounts in rands. I am not VAT registered, so no VAT is added. Prices apply to work quoted in{" "}
+              All amounts in rands. The company is {SITE.legal.vatStatus}, so no VAT is added. Prices apply to work quoted in{" "}
               {new Date().getFullYear()}.
             </p>
           </div>
@@ -236,7 +237,7 @@ export default function PricingPage() {
                 {[
                   "Never bundled into the build price",
                   "Cancel whenever and the site keeps working",
-                  "You keep the domain, the code and every login either way",
+                  "Once paid in full, you keep the domain, the code and every login either way (see terms)",
                 ].map((t) => (
                   <li key={t} className="flex gap-3">
                     <Check />

@@ -148,7 +148,7 @@ const FAQ = [
   },
   {
     q: "Who owns it when it is finished?",
-    a: "You do. The domain is registered in your name, the code is yours, the accounts are yours. There is no version of this where leaving me costs you your website.",
+    a: "You do. The domain is registered in your name, and once you have paid in full the code and accounts are yours too, apart from my reusable toolkit, which you can keep using as part of your site. There is no version of this where leaving me costs you your website.",
   },
   {
     q: "Do I have to pay you monthly?",

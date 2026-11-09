@@ -12,27 +12,29 @@ const SECTIONS = [
   {
     h: "Who is responsible",
     p: [
-      `${SITE.name} is invoiced by ${SITE.legal.name}, registration ${SITE.legal.registration}. Our Information Officer under the Protection of Personal Information Act (POPIA) is ${SITE.legal.informationOfficer}.`,
+      `${SITE.name} is a trading name of ${SITE.legal.name}, registration ${SITE.legal.registration}. Our Information Officer under the Protection of Personal Information Act (POPIA) is ${SITE.legal.informationOfficer}.`,
     ],
   },
   {
     h: "What I collect",
     p: [
       "When you ask for an estimate: your name, business, email address, phone number if you give it, your notes and your answers about the website you want.",
+      "When you send the estimate form, the site also records your IP address, your browser details and the page that sent you there.",
       "When we work together: what you tell me in the setup questions, your comments on the work, and any review you choose to leave.",
-      "If I contacted you about your business website first, I used business contact details that were publicly available.",
+      "If I contacted you about your business website first, I used business contact details that were publicly available. I keep your business name, contact name, email address, how I found you, and a screenshot and mock-up I made for you.",
     ],
   },
   {
     h: "Why I use it",
     p: [
       "To send your estimate, quote you, build what you asked for, and contact you about that work. You are not put on a mailing list. A review is only published in the way you chose when you left it.",
+      "If I contacted you first, I use your details to send you one email offering a new website, because it may be useful to your business. To stop this, reply to that email or write to the address below and I will delete your details and not contact you again.",
     ],
   },
   {
     h: "Who else handles it",
     p: [
-      "The site runs on Vercel, where enquiries are stored, and email is sent through Resend. These service providers may process the information outside South Africa. I do not sell your information.",
+      "The site runs on Vercel, where enquiries are stored, and email is sent through Resend. Emails to me arrive in a Microsoft mailbox. If you book a call, the booking tool and Microsoft Teams receive what you enter there. These service providers may process the information outside South Africa. I do not sell your information.",
     ],
   },
   {
@@ -42,7 +44,7 @@ const SECTIONS = [
   {
     h: "How long I keep it",
     p: [
-      "Only for as long as it is needed for your enquiry or project, and for any period the law requires business records to be kept.",
+      "I have not set a fixed deletion period yet, and nothing is deleted automatically. I delete your information when you ask me to, unless the law requires me to keep it as a business record.",
     ],
   },
   {

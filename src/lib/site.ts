@@ -42,6 +42,7 @@ export const SITE = {
     name: "SERENEO (Pty) Ltd",
     registration: "2026/781334/07",
     informationOfficer: "Carl Dos Santos",
+    vatStatus: "not VAT registered",
   },
 
   /** Who is behind it. Used in the emails and the about copy. */
