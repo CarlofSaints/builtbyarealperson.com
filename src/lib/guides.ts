@@ -10,6 +10,7 @@
  */
 
 import { calculateEstimate, EMPTY_ANSWERS, type Answers } from "./estimate";
+import { SITE } from "./site";
 import {
   ACCURACY_BAND,
   BRAND_STATES,
@@ -101,7 +102,7 @@ export const GUIDES: Guide[] = [
     metaTitle: `5 Page Website Price in South Africa: From ${m(FROM_PRICE)}`,
     description: `What a small business website really costs in South Africa, with real published prices. A 4 to 5 page site from ${m(FROM_PRICE)}, what pushes the price up, and four worked examples.`,
     published: "2026-10-14",
-    updated: "2026-10-14",
+    updated: "2026-11-09",
     answer: `A 4 to 5 page website for a South African small business costs ${SIZE("brochure")} with me. A 6 to 12 page site is ${SIZE("standard")}. The price goes up for three things above all: selling online, connecting the site to other systems, and having the design and the words done for you. Agency quotes for the same site often come in at several times that, and the difference is mostly who else is being paid.`,
     body: [
       { type: "h2", text: "Why website prices are so hard to compare" },
@@ -152,7 +153,7 @@ export const GUIDES: Guide[] = [
     faq: [
       {
         q: "Is VAT added to these prices?",
-        a: "No. Every price on the site is in rands, and I am not VAT registered, so no VAT is added.",
+        a: `No. Every price on the site is in rands, and the company is ${SITE.legal.vatStatus}, so no VAT is added.`,
       },
       {
         q: "Is there a monthly fee?",
@@ -365,7 +366,7 @@ export const GUIDES: Guide[] = [
     description:
       "An honest answer for South African small businesses: when a Facebook page and a Google profile are enough, and when a website earns its keep.",
     published: "2026-10-14",
-    updated: "2026-10-14",
+    updated: "2026-11-09",
     answer:
       "Not always. If all your work comes from word of mouth and people only need your number, a Facebook page plus a free Google Business Profile can be enough. You need a website when people search Google for what you do and compare you with others, when you want to show prices or take bookings, or when you do not want your business to depend on a platform you do not control.",
     body: [

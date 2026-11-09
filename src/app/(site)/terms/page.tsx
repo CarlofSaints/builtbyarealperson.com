@@ -12,7 +12,7 @@ const SECTIONS = [
   {
     h: "Who you are dealing with",
     p: [
-      `${SITE.name} is invoiced by ${SITE.legal.name}, registration ${SITE.legal.registration}. The company is not VAT registered, so no VAT is added to any price.`,
+      `${SITE.name} is a trading name of ${SITE.legal.name}, registration ${SITE.legal.registration}. The company is ${SITE.legal.vatStatus}, so no VAT is added to any price.`,
     ],
   },
   {
@@ -31,6 +31,7 @@ const SECTIONS = [
     h: "Refunds",
     p: [
       "You get a refund of what you have paid, including the 50% paid to start, if I could not execute what you asked for in the accepted quote. Refunds are not given for any other reason, including a change of mind once the work has been delivered as quoted.",
+      "Depending on how we agreed the work, you may be able to cancel without giving a reason: within 5 business days under section 16 of the Consumer Protection Act if the agreement resulted from direct marketing, or within 7 days under section 44 of the Electronic Communications and Transactions Act if it was concluded electronically. Whether either applies depends on the circumstances. Where one does, it applies despite the refund rule above.",
       "Nothing in these terms takes away any right you have under the Consumer Protection Act or other South African law that cannot be excluded.",
     ],
   },

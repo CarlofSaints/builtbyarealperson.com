@@ -447,6 +447,8 @@ export function defaultIntroDraft(args: IntroArgs): IntroDraft {
 const linkify = (s: string) => s.replace(/https:\/\/[^\s<]*[^\s<.,;:!?)]/g, (u) => `<a href="${u}" style="color:${TURQ};">${u}</a>`);
 
 /** The exact subject and body, shared by the send and by the admin preview so the two can never differ. */
+const PROSPECT_OPT_OUT = "This is a one-off email. You are not on any mailing list and I won't contact you again unless you reply. If you would rather I deleted your details, reply and say so.";
+
 export function prospectIntroEmail(args: IntroArgs, imageSrc = "cid:mockup") {
   const { subject, body } = args.draft ?? defaultIntroDraft(args);
   const img = `<img src="${esc(imageSrc)}" alt="A mock-up of a new ${esc(args.business)} website" width="544" style="display:block;width:100%;max-width:544px;height:auto;border:1px solid ${BORDER};border-radius:10px;margin:0 0 22px;">`;
@@ -463,10 +465,12 @@ export function prospectIntroEmail(args: IntroArgs, imageSrc = "cid:mockup") {
       preheader: `I made a mock-up of a new ${args.business} website. Screenshot inside.`,
       heading: `An idea for ${args.business}`,
       body: html,
-      footer: "This is a one-off email. You are not on any mailing list and I won't contact you again unless you reply.",
+      footer: PROSPECT_OPT_OUT,
       email: PROSPECT_EMAIL,
     }),
-    text: body.replace(SCREENSHOT_MARK, "(The screenshot is attached.)"),
+    text: `${body.replace(SCREENSHOT_MARK, "(The screenshot is attached.)")}
+
+${PROSPECT_OPT_OUT}`,
   };
 }
 
