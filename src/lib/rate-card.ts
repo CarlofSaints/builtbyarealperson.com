@@ -45,7 +45,7 @@ export const HOSTING_NOTE =
  * kind of thing that should not be a surprise.
  */
 export const OWNERSHIP_NOTE =
-  "Your domain, your site, your content and your accounts are yours outright, and stay yours whether or not you carry on working with me. What I keep is the reusable toolkit underneath: the components and build setup I use across every project. You are not buying a share of my tools, and I am not taking a share of your website.";
+  "Once you have paid in full, your domain, your site, your content and your accounts are yours, and stay yours whether or not you carry on working with me. What I keep is the reusable toolkit underneath: the components and build setup I use across every project. You are not buying a share of my tools, and I am not taking a share of your website.";
 
 export type Money = number;
 

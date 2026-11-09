@@ -177,8 +177,8 @@ export const GUIDES: Guide[] = [
     metaTitle: `What a ${m(FROM_PRICE)} Small Business Website Includes`,
     description: `Exactly what is in a ${m(FROM_PRICE)} small business website: the pages, the speed, Google setup, forms and ownership, and what costs extra. No upsell list.`,
     published: "2026-10-14",
-    updated: "2026-10-14",
-    answer: `For ${m(FROM_PRICE)} you get a 4 to 5 page website designed for phones first, fast enough to pass Google's speed checks, set up and submitted to Google, with contact forms that save every enquiry, and with the domain, the code and every login in your name. What costs extra is selling online, connecting to other systems, designing a brand from scratch and writing the words for you.`,
+    updated: "2026-11-09",
+    answer: `For ${m(FROM_PRICE)} you get a 4 to 5 page website designed for phones first, fast enough to pass Google's speed checks, set up and submitted to Google, with contact forms that save every enquiry, and once it is paid in full, the domain, the code and every login are yours (see my terms). What costs extra is selling online, connecting to other systems, designing a brand from scratch and writing the words for you.`,
     body: [
       { type: "h2", text: "The pages" },
       {
@@ -194,7 +194,7 @@ export const GUIDES: Guide[] = [
           "Set up for Google. Page titles, descriptions, a sitemap, structured data and Search Console, all done and submitted. Not an add-on.",
           "Forms that arrive. Every enquiry is emailed to you and stored, so a mail problem never quietly costs you a customer.",
           "Accessible. Proper contrast, keyboard navigation and labelled fields.",
-          "Yours. The domain, the code, the analytics and every login are in your name. Hosting for the first year is included.",
+          "Yours once paid in full. The domain, the code, the analytics and every login are yours (my terms cover the reusable toolkit). Hosting for the first year is included.",
         ],
       },
       { type: "h2", text: "Six planning documents before you pay" },

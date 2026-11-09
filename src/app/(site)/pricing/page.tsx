@@ -237,7 +237,7 @@ export default function PricingPage() {
                 {[
                   "Never bundled into the build price",
                   "Cancel whenever and the site keeps working",
-                  "You keep the domain, the code and every login either way",
+                  "Once paid in full, you keep the domain, the code and every login either way (see terms)",
                 ].map((t) => (
                   <li key={t} className="flex gap-3">
                     <Check />

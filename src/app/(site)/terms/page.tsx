@@ -38,7 +38,7 @@ const SECTIONS = [
   {
     h: "What you own",
     p: [
-      "Your domain, your site, your content and your accounts are yours. I keep the reusable toolkit I use across projects.",
+      "Once you have paid in full, your site's code, content, domain and accounts are yours. If you ask, I will give you a copy of the code through GitHub or as a zip file. Some of the code comes from my own reusable toolkit. I keep ownership of that, and you get a permanent right to keep using it as part of your site. Moving your site to another host is separate work, which I will quote for.",
     ],
   },
   {
